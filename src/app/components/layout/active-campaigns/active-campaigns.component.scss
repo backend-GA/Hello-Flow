@@ -1,0 +1,20 @@
+.Schedule-btn {}
+
+.active-campaigns {
+    .container {
+        .d-flex {
+            .Schedule-btn {
+                outline: none;
+                background-color: transparent;
+                border: #D0D5DD 1px solid;
+                outline: none;
+                color: #344054;
+                border-radius: 8px;
+                -webkit-border-radius: 8px;
+                -moz-border-radius: 8px;
+                -ms-border-radius: 8px;
+                -o-border-radius: 8px;
+            }
+        }
+    }
+}

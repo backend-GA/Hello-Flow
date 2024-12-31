@@ -3,9 +3,11 @@
   ngSkipHydration
 >
   <div class="sidebar-header">
-    <img src="../assets/logo/img-logo.png" alt="img" class="" />
+    <img src="../assets/logo/img-logo.png" alt="img" class="" routerLink="/" />
     <div class="d-flex justify-content-start align-items-center py-4">
-      <button class="btn-new-camp">+ Create New Campaign</button>
+      <button class="btn-new-camp" routerLink="/Create_New_Campaign">
+        + Create New Campaign
+      </button>
     </div>
     <ul>
       <li
@@ -33,7 +35,7 @@
       >
         <div class="d-flex gap-2">
           <img src="../assets/overview/icon-3.svg" alt="img" />
-          <a routerLink="/settings" routerLinkActive="back-G">Past Campaigns</a>
+          <a routerLink="/Past_Campaigns">Past Campaigns</a>
         </div>
         <div class="num">
           <small>10</small>
@@ -44,7 +46,7 @@
         routerLinkActive="back-G"
       >
         <img src="../assets/overview/icon-4.svg" alt="img" />
-        <a routerLink="/settings">Draft Campaigns</a>
+        <a routerLink="/Draft_Campaigns">Draft Campaigns</a>
       </li>
       <li
         class="d-flex gap-2 justify-content-start align-items-center"
@@ -58,7 +60,7 @@
         routerLinkActive="back-G"
       >
         <img src="../assets/overview/icon-6.svg" alt="img" />
-        <a routerLink="/settings">Settings</a>
+        <a routerLink="/Settings">Settings</a>
       </li>
     </ul>
   </div>
