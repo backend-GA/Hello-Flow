@@ -41,59 +41,65 @@
 <section class="charts py-4">
   <div class="container">
     <div class="row d-flex justify-content-start gap-2">
-      <div class="col-md-9 bg-white p-3 rounded">
-        <div class="d-flex justify-content-between align-items-center py-3">
-          <h6 class="fw-bold">Campaigns Performance</h6>
-          <p-autocomplete [(ngModel)]="value" [dropdown]="true" />
+      <div class="col-md-9">
+        <div class="bg-white p-3 rounded">
+          <div
+            class="d-flex justify-content-between align-items-center py-3 bg-white p-3 rounded"
+          >
+            <h6 class="fw-bold">Campaigns Performance</h6>
+            <p-autocomplete [(ngModel)]="value" [dropdown]="true" />
+          </div>
+          <p-chart
+            type="bar"
+            [data]="data"
+            [options]="options"
+            class="h-[30rem]"
+          />
+          <hr />
+          <div
+            class="d-flex gap-5 align-items-start justify-content-between mx-5"
+          >
+            <div
+              class="d-flex flex-column gap-3 align-items-center justify-content-start"
+            >
+              <div class="d-flex gap-2">
+                <i class="pi pi-thumbs-up"></i>
+                <small>Likes</small>
+              </div>
+              <div>
+                <h3 class="fw-bold">4,003</h3>
+              </div>
+              <i></i>
+            </div>
+            <div
+              class="d-flex flex-column gap-3 align-items-center justify-content-start"
+            >
+              <div
+                class="d-flex gap-2 justify-content-center align-items-center"
+              >
+                <i class="pi pi-comment"></i>
+                <small>Replies / Comments</small>
+              </div>
+              <div>
+                <h3 class="fw-bold">342</h3>
+              </div>
+              <i></i>
+            </div>
+            <div
+              class="d-flex flex-column gap-3 align-items-center justify-content-start"
+            >
+              <div class="d-flex gap-2">
+                <i class="pi pi-comment"></i>
+                <small>Repost</small>
+              </div>
+              <div>
+                <h3 class="fw-bold">98</h3>
+              </div>
+              <i></i>
+            </div>
+          </div>
         </div>
-        <p-chart
-          type="bar"
-          [data]="data"
-          [options]="options"
-          class="h-[30rem]"
-        />
-        <hr />
-        <div
-          class="d-flex gap-5 align-items-start justify-content-between mx-5"
-        >
-          <div
-            class="d-flex flex-column gap-3 align-items-center justify-content-start"
-          >
-            <div class="d-flex gap-2">
-              <i class="pi pi-thumbs-up"></i>
-              <small>Likes</small>
-            </div>
-            <div>
-              <h3 class="fw-bold">4,003</h3>
-            </div>
-            <i></i>
-          </div>
-          <div
-            class="d-flex flex-column gap-3 align-items-center justify-content-start"
-          >
-            <div class="d-flex gap-2 justify-content-center align-items-center">
-              <i class="pi pi-comment"></i>
-              <small>Replies / Comments</small>
-            </div>
-            <div>
-              <h3 class="fw-bold">342</h3>
-            </div>
-            <i></i>
-          </div>
-          <div
-            class="d-flex flex-column gap-3 align-items-center justify-content-start"
-          >
-            <div class="d-flex gap-2">
-              <i class="pi pi-comment"></i>
-              <small>Repost</small>
-            </div>
-            <div>
-              <h3 class="fw-bold">98</h3>
-            </div>
-            <i></i>
-          </div>
-        </div>
-        <div class="table">
+        <div class="table bg-white p-3 rounded" style="margin: 15px 0">
           <div class="d-flex justify-content-between align-items-center py-3">
             <h6 class="fw-bold">Active Campaigns</h6>
             <button class="View_All p-2">View All</button>
