@@ -8,3 +8,20 @@ body {
     background-color: #F9FAFB;
 
 }
+
+.btn-top {
+    background-color: transparent;
+    outline: none;
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    width: 123px;
+    height: 40px;
+}
+
+.p-ripple {
+    background-color: transparent !important;
+}

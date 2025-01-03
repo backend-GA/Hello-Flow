@@ -1,0 +1,57 @@
+.active-campaigns {
+    .container {
+        .d-flex {
+            .Schedule-btn {
+                outline: none;
+                background-color: transparent;
+                border: #D0D5DD 1px solid;
+                outline: none;
+                color: #344054;
+                border-radius: 8px;
+                -webkit-border-radius: 8px;
+                -moz-border-radius: 8px;
+                -ms-border-radius: 8px;
+                -o-border-radius: 8px;
+            }
+        }
+    }
+}
+
+.card-container {
+    border: 1px solid #ddd;
+    /* Light grey border */
+    border-radius: 8px;
+    /* Rounded corners */
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+}
+
+.card-container .header h5 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.card-container .top p {
+    color: #6c757d;
+    /* Muted color for date */
+    margin-top: 8px;
+}
+
+.card-container .bottom .action {
+    color: #002726;
+    /* Action icon and text color */
+    cursor: pointer;
+}
+
+.card-container .bottom .action i:hover {
+    color: #39a6d3;
+    /* Hover effect */
+}
+
+.card-container:hover {
+    border-color: #39a6d3;
+    /* Highlight border on hover */
+    transition: border-color 0.3s;
+}

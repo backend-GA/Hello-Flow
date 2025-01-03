@@ -1,0 +1,128 @@
+.p-tablist-tab-list {
+    justify-content: space-between !important;
+    align-items: center !important;
+    display: flex !important;
+    gap: 320px;
+}
+
+.p-tab-active {
+    background-color: #002726 !important;
+    color: white !important;
+    border-radius: 10px 0px 0px 0px;
+    -webkit-border-radius: 10px 0px 0px 0px;
+    -moz-border-radius: 10px 0px 0px 0px;
+    -ms-border-radius: 10px 0px 0px 0px;
+    -o-border-radius: 10px 0px 0px 0px;
+    border: none !important;
+}
+
+.p-tablist-content {
+    flex-grow: 0 !important;
+}
+
+input {
+    background-color: transparent;
+    border: 1px solid #D0D5DD;
+    height: 48px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    padding: 0px 18px;
+
+}
+
+.info-icon {
+    background: #F2F4F7;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 50%;
+}
+
+label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 55px;
+    justify-content: start;
+    align-items: center;
+}
+
+.styled-radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.styled-radio input[type="radio"] {
+    display: none;
+}
+
+.custom-radio-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #002726;
+    border-radius: 4px;
+    /* Adjust for rounded corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.custom-radio-box::after {
+    content: '✔';
+    /* Unicode for checkmark */
+    font-size: 14px;
+    color: white;
+    display: none;
+}
+
+.styled-radio input[type="radio"]:checked+.custom-radio-box {
+    background-color: #002726;
+}
+
+.styled-radio input[type="radio"]:checked+.custom-radio-box::after {
+    display: block;
+}
+
+.custom-radio-label {
+    font-size: 16px;
+    color: #333;
+}
+
+.save-btn {
+    outline: none;
+    background-color: transparent;
+    border: #D0D5DD 1px solid;
+    outline: none;
+    color: #344054;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+.draft-btn {
+    background-color: #002726;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
