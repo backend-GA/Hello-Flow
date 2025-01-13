@@ -1,5 +1,6 @@
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { TableModule } from 'primeng/table';
+import { TwitterAccountService } from '../../../services/twitter-account.service';
 
 @Component({
   selector: 'app-billing',
@@ -33,4 +34,23 @@ export class BillingComponent {
 
     // Add more campaigns as needed
   ];
+  subscriptions: any[] = [];
+
+  constructor(private TwitterAccountService: TwitterAccountService) {}
+
+  ngOnInit(): void {
+    this.fetchSubscriptions();
+  }
+
+  fetchSubscriptions(): void {
+    this.TwitterAccountService.getsubScriptions().subscribe(
+      (response) => {
+        this.subscriptions = response; // Adjust depending on the structure
+        console.log('Subscriptions:', this.subscriptions);
+      },
+      (error) => {
+        console.error('Error fetching subscriptions:', error);
+      }
+    );
+  }
 }
