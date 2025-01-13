@@ -1,0 +1,27 @@
+.twitterAccount {
+    .container {
+        .row {
+            .d-flex {
+                a {
+                    text-decoration: none;
+                    outline: none;
+                    background-color: #004E4C;
+                    color: white;
+                    font-weight: 400;
+                    border: none;
+                    border-radius: 8px;
+                    -webkit-border-radius: 8px;
+                    -moz-border-radius: 8px;
+                    -ms-border-radius: 8px;
+                    -o-border-radius: 8px;
+                    width: 500px;
+                    height: 50px;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    font-size: 25px;
+                }
+            }
+        }
+    }
+}

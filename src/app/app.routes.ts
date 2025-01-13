@@ -4,8 +4,8 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./components/layout/overview/overview.component').then(
-        (m) => m.OverviewComponent
+      import('./components/auth/login/login.component').then(
+        (m) => m.LoginComponent
       ),
   },
   {

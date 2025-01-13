@@ -31,7 +31,9 @@ export class AppComponent {
     if (
       this.Router.url == '/login' ||
       this.Router.url == '/register' ||
-      this.Router.url == '/plans'
+      this.Router.url == '/plans' ||
+      this.Router.url == '/' ||
+      this.Router.url == '/twitter-account'
     ) {
       this.sidebarshow = false;
     } else {
