@@ -86,11 +86,4 @@ export const routes: Routes = [
         (m) => m.PlansComponent
       ),
   },
-  {
-    path: 'subscriptions',
-    loadComponent: () =>
-      import('./components/auth/subscriptions/subscriptions.component').then(
-        (m) => m.SubscriptionsComponent
-      ),
-  },
 ];

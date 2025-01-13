@@ -61,7 +61,7 @@ export class CampaignsService {
     const params = new HttpParams().set('active', 'true').set('draft', 'false');
 
     return this._HttpClient.get<any>(
-      `${environment.apiUrl}accounts/${accountId}/campaigns`,
+      `${environment.apiUrl}accounts/6/campaigns`,
       {
         headers,
         params,

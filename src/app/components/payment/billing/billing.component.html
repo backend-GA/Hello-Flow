@@ -1,4 +1,4 @@
-<section class="active-campaigns">
+<section class="active-campaigns py-3">
   <div class="container">
     <div class="justify-content-start align-items-center">
       <h3>Billing</h3>
@@ -21,13 +21,15 @@
         </div>
 
         <div>
-          <h5 class="fw-bold">Pro plan</h5>
-          <small>Expires on: 23 Oct, 2025</small>
+          <h5 class="fw-bold">{{ subscriptions[0]?.plan.name }} Plan</h5>
+          <small *ngIf="subscriptions?.length > 0"
+            >Expires on: {{ subscriptions[0]?.expires_at | date }}</small
+          >
         </div>
       </div>
       <div>
         <button class="edit-btn">
-          <i class="pi pi-pencil me-1"></i>Edit Plan
+          <i class="pi pi-pencil me-1" routerLink="/plans"></i>Edit Plan
         </button>
       </div>
     </div>
@@ -42,12 +44,13 @@
           <i class="pi pi-filter fs-6 mx-1"></i> Filters
         </button>
       </div>
-      <p-table [value]="plans" [tableStyle]="{ 'min-width': '50rem' }">
+      <p-table [value]="subscriptions" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header">
           <tr>
             <th>Date</th>
             <th>Plan</th>
             <th>Amount</th>
+            <th>Type</th>
             <th>Download Invoice</th>
 
             <th style="width: 5rem"></th>
@@ -55,9 +58,11 @@
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
-            <td>{{ product.code }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.like }}</td>
+            <td>{{ product.expires_at | date }}</td>
+            <td>{{ product.plan.name }}</td>
+            <td>${{ product.plan.price }}</td>
+            <td>{{ product.plan.type }}</td>
+
             <td>
               <button class="edit-btn">
                 <i class="pi pi-download me-2"></i> Download Invoice
