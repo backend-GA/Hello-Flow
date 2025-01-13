@@ -57,4 +57,40 @@ export const routes: Routes = [
         './components/layout/create-new-campaign/create-new-campaign.component'
       ).then((m) => m.CreateNewCampaignComponent),
   },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./components/auth/login/login.component').then(
+        (m) => m.LoginComponent
+      ),
+  },
+
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./components/auth/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
+  },
+  {
+    path: 'twitter-account',
+    loadComponent: () =>
+      import(
+        './components/auth/twitter-account/twitter-account.component'
+      ).then((m) => m.TwitterAccountComponent),
+  },
+  {
+    path: 'plans',
+    loadComponent: () =>
+      import('./components/auth/plans/plans.component').then(
+        (m) => m.PlansComponent
+      ),
+  },
+  {
+    path: 'subscriptions',
+    loadComponent: () =>
+      import('./components/auth/subscriptions/subscriptions.component').then(
+        (m) => m.SubscriptionsComponent
+      ),
+  },
 ];

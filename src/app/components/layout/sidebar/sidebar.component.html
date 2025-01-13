@@ -1,0 +1,101 @@
+<div
+  class="sidebar d-flex flex-column align-items-start justify-content-between"
+  ngSkipHydration
+>
+  <div class="sidebar-header">
+    <img src="../assets/logo/img-logo.png" alt="img" class="" routerLink="/" />
+    <div class="d-flex justify-content-start align-items-center py-4">
+      <button class="btn-new-camp" routerLink="/Create_New_Campaign">
+        + Create New Campaign
+      </button>
+    </div>
+    <ul>
+      <li
+        class="d-flex gap-2 justify-content-start align-items-center"
+        routerLinkActive="back-G"
+      >
+        <img src="../assets/overview/icon-1.svg" alt="img" />
+        <a routerLink="/overview">Overview</a>
+      </li>
+      <li
+        class="d-flex gap-2 justify-content-between align-items-center"
+        routerLinkActive="back-G"
+      >
+        <div class="d-flex gap-2">
+          <img src="../assets/overview/icon-2.svg" alt="img" />
+          <a routerLink="/Active_Campaigns">Active Campaigns</a>
+        </div>
+        <div class="num">
+          <small>23</small>
+        </div>
+      </li>
+      <li
+        class="d-flex gap-2 justify-content-between align-items-center"
+        routerLinkActive="back-G"
+      >
+        <div class="d-flex gap-2">
+          <img src="../assets/overview/icon-3.svg" alt="img" />
+          <a routerLink="/Past_Campaigns">Past Campaigns</a>
+        </div>
+        <div class="num">
+          <small>10</small>
+        </div>
+      </li>
+      <li
+        class="d-flex gap-2 justify-content-start align-items-center"
+        routerLinkActive="back-G"
+      >
+        <img src="../assets/overview/icon-4.svg" alt="img" />
+        <a routerLink="/Draft_Campaigns">Draft Campaigns</a>
+      </li>
+      <li
+        class="d-flex gap-2 justify-content-start align-items-center"
+        routerLinkActive="back-G"
+      >
+        <img src="../assets/overview/icon-5.svg" alt="img" />
+        <a routerLink="Billing">Billing</a>
+      </li>
+      <li
+        class="d-flex gap-2 justify-content-start align-items-center"
+        routerLinkActive="back-G"
+      >
+        <img src="../assets/overview/icon-6.svg" alt="img" />
+        <a routerLink="/Settings">Settings</a>
+      </li>
+    </ul>
+  </div>
+  <div class="bottom">
+    <div class="Upgrade p-3" *ngIf="isOpen">
+      <div class="d-flex justify-content-between align-items-center gap-3">
+        <h6>Upgrade Plan</h6>
+        <i *ngIf="isOpen" class="pi pi-times" (click)="closeUpgrade()"></i>
+      </div>
+      <small style="font-size: 13px; font-weight: 300"
+        >You have used 80% of your free campaign credits.</small
+      >
+      <progress value="80" max="100" class="custom-progress">70 %</progress>
+    </div>
+    <hr />
+    <div class="user d-flex justify-content-between align-items-center gap-2">
+      <div class="d-flex gap-2">
+        <div>
+          <img
+            src="../assets/overview/Avatar.png"
+            style="width: 40px; height: 40px; border-radius: 50%"
+          />
+        </div>
+        <div>
+          <h6 class="m-0">{{ userName }}</h6>
+          <small style="font-size: 10px">{{ userEmail }}</small>
+        </div>
+      </div>
+      <div>
+        <i
+          class="pi pi-sign-out"
+          style="color: red; cursor: pointer"
+          (click)="logout()"
+        ></i>
+      </div>
+    </div>
+  </div>
+</div>

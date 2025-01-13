@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
   templateUrl: './draft-campaigns.component.html',
   styleUrl: './draft-campaigns.component.scss',
   providers: [ConfirmationService, MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DraftCampaignsComponent {
   constructor(

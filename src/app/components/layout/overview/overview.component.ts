@@ -23,6 +23,7 @@ import { TableModule } from 'primeng/table';
 })
 export class OverviewComponent {
   data: any;
+  userName: string | null = '';
   options: any;
   value = 'Justice Campaign';
   suggestions: string[] = []; // Should be an array
@@ -56,6 +57,8 @@ export class OverviewComponent {
 
   ngOnInit() {
     this.initChart();
+
+    this.userName = localStorage.getItem('userName'); // Retrieve name
   }
 
   initChart() {

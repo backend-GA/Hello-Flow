@@ -1,0 +1,107 @@
+.sidebar {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    background-color: #002726;
+    height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.btn-new-camp {
+    background-color: var(--Btn, #B7CCCC);
+    outline: none;
+    border: none;
+    height: 32px;
+    width: 100%;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    color: #002726;
+
+}
+
+.num {
+    width: 32px;
+    height: 22px;
+    color: white;
+    background-color: #002726;
+    border: 2px solid #004E4C;
+    border-radius: 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.Upgrade {
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    background: #FFFFFF1A;
+
+}
+
+/* General progress element styles */
+.custom-progress {
+    width: 100%;
+    /* Adjust width as needed */
+    appearance: none;
+    /* Reset default browser styles */
+    -webkit-appearance: none;
+    /* For WebKit browsers */
+    background-color: white;
+    /* Background of the progress bar */
+    border: none;
+    border-radius: 8px;
+    /* Optional rounded corners */
+    overflow: hidden;
+    height: 10px;
+}
+
+.custom-progress::-webkit-progress-bar {
+    background-color: white;
+    border-radius: 8px;
+}
+
+.custom-progress::-webkit-progress-value {
+    background-color: #B7CCCC;
+    /* Color of the progress indicator */
+    border-radius: 8px;
+    /* Optional rounded corners for smooth animation */
+}
+
+/* Firefox-specific styling */
+.custom-progress::-moz-progress-bar {
+    background-color: #B7CCCC;
+    /* Color of the progress indicator */
+    border-radius: 8px;
+    /* Optional rounded corners */
+}
+
+h6,
+small,
+hr,
+.pi-times {
+    color: white;
+}

@@ -1,135 +1,26 @@
-/* Reset */
-body,
-html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    width: 300px;
-    height: 100vh;
-    /* Full height */
-    background-color: var(--BG, #002726);
-    color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 35px;
-    box-sizing: border-box;
-}
-
-.btn-new-camp {
-    background-color: var(--Btn, #B7CCCC);
-    outline: none;
-    border: none;
-    height: 32px;
-    width: 100%;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    color: #002726;
-
-}
-
-.num {
-    width: 32px;
-    height: 22px;
-    color: white;
-    background-color: #002726;
-    border: 2px solid #004E4C;
-    border-radius: 15px;
-    font-size: 14px;
+/* app.component.scss */
+.app-layout {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* Use Flexbox to align children */
+    flex-direction: row;
+    /* Place sidebar and main content horizontally */
+    height: 100vh;
+    /* Ensure full height */
 }
 
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+// app-sidebar {
+//     width: 250px;
+//     /* Set sidebar width */
+//     background-color: #f4f4f4;
+//     /* Sidebar background color */
+//     height: 100%;
+//     /* Sidebar takes full height */
+//     flex-shrink: 0;
+//     /* Prevent sidebar from shrinking */
+// }
 
-.sidebar ul li {
-    margin: 20px 0;
-}
-
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-}
-
-
-
-
-
-/* Main Content Styles */
 .main-content {
-    margin-left: 300px;
-    padding: 20px;
-    box-sizing: border-box;
-}
+    flex-grow: 1;
+    overflow-y: auto;
 
-.back-G {
-    background-color: #004e4b6f;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    height: 22px;
-    padding: 19px 5px;
-}
-
-.Upgrade {
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    background: #FFFFFF1A;
-
-}
-
-/* General progress element styles */
-.custom-progress {
-    width: 100%;
-    /* Adjust width as needed */
-    appearance: none;
-    /* Reset default browser styles */
-    -webkit-appearance: none;
-    /* For WebKit browsers */
-    background-color: white;
-    /* Background of the progress bar */
-    border: none;
-    border-radius: 8px;
-    /* Optional rounded corners */
-    overflow: hidden;
-    height: 10px;
-}
-
-.custom-progress::-webkit-progress-bar {
-    background-color: white;
-    border-radius: 8px;
-}
-
-.custom-progress::-webkit-progress-value {
-    background-color: #B7CCCC;
-    /* Color of the progress indicator */
-    border-radius: 8px;
-    /* Optional rounded corners for smooth animation */
-}
-
-/* Firefox-specific styling */
-.custom-progress::-moz-progress-bar {
-    background-color: #B7CCCC;
-    /* Color of the progress indicator */
-    border-radius: 8px;
-    /* Optional rounded corners */
 }

@@ -1,0 +1,90 @@
+$primary-color :#004E4C;
+$white: #fff;
+$box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    height: 100vh; // يأخذ كامل الشاشة
+    box-shadow: $box-shadow;
+    overflow: hidden;
+
+    .welcome-section {
+        flex: 1;
+        background-color: $primary-color;
+        color: $white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
+    }
+
+    .form-section {
+        flex: 1;
+        padding: 60px;
+        background-color: $white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        form {
+            width: 100%;
+            max-width: 400px;
+
+            h2 {
+                margin-bottom: 20px;
+                font-size: 2rem;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                border-radius: $border-radius;
+                font-size: 1rem;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+                font-size: 1rem;
+                background-color: $primary-color;
+                color: $white;
+                border: none;
+                border-radius: $border-radius;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: darken($primary-color, 10%);
+                }
+
+                &:disabled {
+                    background-color: lighten($primary-color, 20%);
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

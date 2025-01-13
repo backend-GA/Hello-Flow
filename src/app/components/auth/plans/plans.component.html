@@ -1,0 +1,57 @@
+<section class="plans py-5">
+  <div class="container">
+    <div class="justify-content-start align-items-center d-flex">
+      <img
+        src="../assets/logo/img-logo.png"
+        alt="img"
+        class=""
+        routerLink="/"
+      />
+    </div>
+    <div>
+      <h3 class="text-center">Choose Your Plan</h3>
+      <p class="text-center">
+        Flexible plans and solutions for businesses of all sizes.
+      </p>
+    </div>
+    <div>
+      <div
+        class="row justify-content-center align-items-center d-flex gap-3 py-4"
+      >
+        @for (item of plans; track item) {
+        <div class="col-md-3 col-8 card p-3">
+          <h5>{{ item.name }}</h5>
+          <p>Learn how to create your first app.</p>
+          <p>
+            <span class="price">${{ item.price }} </span> / {{ item.type }}
+          </p>
+          <p>Credits: {{ item.credits }}</p>
+          <div class="justify-content-center align-items-center d-flex">
+            <button
+              class="btn-start-plan px-5 py-2"
+              (click)="createPlan(item.id, item.price)"
+            >
+              Get Started
+            </button>
+          </div>
+          <p>Usage</p>
+          <p><i class="pi pi-check me-1"></i>Managers : {{ item.managers }}</p>
+          <p><i class="pi pi-check me-1"></i>Credits : {{ item.credits }}</p>
+          <p>
+            <i class="pi pi-check me-1"></i>Campaigns :
+            {{ item.benefits.campaigns }}
+          </p>
+        </div>
+        }@empty {
+        <div
+          class="justify-content-center align-items-center d-flex py-5 gap-3"
+        >
+          <h3>No Plans</h3>
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        </div>
+
+        }
+      </div>
+    </div>
+  </div>
+</section>
