@@ -13,15 +13,16 @@ export class CampaignsService {
     private cookieService: CookieService
   ) {}
 
-  createCampaign(accountId: string): Observable<any> {
+  createCampaign(accountId: number, payload: any): Observable<any> {
     const token = this.cookieService.get('token'); // Retrieve token from cookies
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
 
-    return this._HttpClient.get<any>(
+    return this._HttpClient.post<any>( // POST request should be used for creation
       `${environment.apiUrl}accounts/${accountId}/campaigns`,
+      payload,
       {
         headers,
       }
@@ -29,7 +30,7 @@ export class CampaignsService {
   }
 
   getPastCampaign(
-    accountId: string,
+    accountId: number, // Ensure accountId is a number
     active: boolean = false,
     draft: boolean = false
   ): Observable<any> {
@@ -44,14 +45,15 @@ export class CampaignsService {
       .set('draft', draft.toString());
 
     return this._HttpClient.get<any>(
-      `${environment.apiUrl}accounts/${accountId}/campaigns`,
+      `${environment.apiUrl}accounts/${accountId}/campaigns?active=false&draft=false`,
       {
         headers,
         params,
       }
     );
   }
-  getActiveCampaigns(accountId: string): Observable<any> {
+
+  getActiveCampaigns(accountId: number): Observable<any> {
     const token = this.cookieService.get('token'); // Retrieve token from cookies
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -61,7 +63,39 @@ export class CampaignsService {
     const params = new HttpParams().set('active', 'true').set('draft', 'false');
 
     return this._HttpClient.get<any>(
-      `${environment.apiUrl}accounts/6/campaigns`,
+      `${environment.apiUrl}accounts/${accountId}/campaigns?active=true&draft=false`, // Use dynamic accountId here
+      {
+        headers,
+        params,
+      }
+    );
+  }
+
+  getCampaignCounts(accountId: string): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.get<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns/counts`, // The new endpoint
+      {
+        headers,
+      }
+    );
+  }
+  getDraft(accountId: string, draft: boolean = true): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    const params = new HttpParams().set('draft', draft.toString()); // Add the draft query parameter
+
+    return this._HttpClient.get<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns`,
       {
         headers,
         params,

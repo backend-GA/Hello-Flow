@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { TabsModule } from 'primeng/tabs';
 import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
+import { CampaignsService } from '../../../services/campaigns.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-create-new-campaign',
@@ -26,29 +28,97 @@ import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 })
 export class CreateNewCampaignComponent {
   hashtagForm: FormGroup;
-  value1 = 'United States';
-  options: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private campaignService: CampaignsService,
+    private cookieService: CookieService
+  ) {
     this.hashtagForm = this.fb.group({
       hashtag: ['', [Validators.required, Validators.maxLength(500)]],
-      action: ['autoReply', Validators.required],
+      action: ['', Validators.required],
       comment: ['', [Validators.required, Validators.maxLength(500)]],
-      duration: ['stopDate', Validators.required],
-      stopDate: [''],
-      selectedCountry: ['United States'],
-      state: ['New York'],
-      city: ['New York'],
+      duration: ['', Validators.required],
+      end_date: ['', Validators.required],
+      include_retweets: [false], // Boolean for include_retweets
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.hashtagForm.valid) {
-      console.log('Form Data:', this.hashtagForm.value);
+      const hashtagInput = this.hashtagForm.value.hashtag;
+      const hashtagsArray = hashtagInput
+        .split(/\s*[,،]\s*|\s*و\s*/g) // Handle splitting by commas or "و"
+        .map((tag: string) => tag.trim()) // Trim extra spaces
+        .filter((tag: string) => tag); // Remove empty entries
+
+      const payload = {
+        search_terms: hashtagsArray,
+        action: this.hashtagForm.value.action, // Action selected
+        draft: false, // Assuming this is always false for now
+        comments: [this.hashtagForm.value.comment], // Comments array
+        include_retweets: this.hashtagForm.value.include_retweets, // Whether to include retweets
+        end_date: this.hashtagForm.value.end_date, // End date for the campaign
+      };
+
+      console.log('Payload:', payload);
+
+      // Get the account ID from cookies and convert it to a number
+      const accountId = Number(this.cookieService.get('accountId')); // Convert to number
+
+      if (accountId) {
+        this.campaignService.createCampaign(accountId, payload).subscribe(
+          (response) => {
+            console.log('Campaign created successfully', response);
+          },
+          (error) => {
+            console.error('Error creating campaign:', error);
+          }
+        );
+      } else {
+        console.error('Account ID is not available in cookies');
+      }
+    } else {
+      console.error('Form is invalid');
     }
   }
 
   saveDraft() {
-    console.log('Draft Saved:', this.hashtagForm.value);
+    if (this.hashtagForm.valid) {
+      const hashtagInput = this.hashtagForm.value.hashtag;
+      const hashtagsArray = hashtagInput
+        .split(/\s*[,،]\s*|\s*و\s*/g) // Handle splitting by commas or "و"
+        .map((tag: string) => tag.trim()) // Trim extra spaces
+        .filter((tag: string) => tag); // Remove empty entries
+
+      const payload = {
+        search_terms: hashtagsArray,
+        action: this.hashtagForm.value.action, // Action selected
+        draft: true, // Assuming this is always false for now
+        comments: [this.hashtagForm.value.comment], // Comments array
+        include_retweets: this.hashtagForm.value.include_retweets, // Whether to include retweets
+        end_date: this.hashtagForm.value.end_date, // End date for the campaign
+      };
+
+      console.log('Payload:', payload);
+
+      // Get the account ID from cookies and convert it to a number
+      const accountId = Number(this.cookieService.get('accountId')); // Convert to number
+
+      if (accountId) {
+        this.campaignService.createCampaign(accountId, payload).subscribe(
+          (response) => {
+            console.log('Campaign created successfully', response);
+          },
+          (error) => {
+            console.error('Error creating campaign:', error);
+          }
+        );
+      } else {
+        console.error('Account ID is not available in cookies');
+      }
+    } else {
+      console.error('Form is invalid');
+    }
   }
 }

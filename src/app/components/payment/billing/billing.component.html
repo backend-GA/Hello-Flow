@@ -58,7 +58,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
-            <td>{{ product.expires_at | date }}</td>
+            <td>{{ product.created_at | date }}</td>
             <td>{{ product.plan.name }}</td>
             <td>${{ product.plan.price }}</td>
             <td>{{ product.plan.type }}</td>

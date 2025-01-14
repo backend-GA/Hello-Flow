@@ -41,15 +41,22 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful:', response);
           this._CookieService.set('token', response.token);
+          this._CookieService.set('accountId', response.user.account_id);
+
           if (response.token) {
             localStorage.setItem('userName', response.user.username); // Save user name
             localStorage.setItem('userEmail', response.user.email); // Save user email
           }
-          this.router.navigate(['/plans']);
+
+          if (response.user.isSubscribed === true) {
+            this.router.navigate(['/twitter-account']);
+          } else {
+            this.router.navigate(['/plans']);
+          }
         },
         error: (err) => {
           console.error('Login failed:', err);
-          // Handle login failure (e.g., show error message)
+          // Handle login failure (e.g., show an error message)
         },
       });
     }

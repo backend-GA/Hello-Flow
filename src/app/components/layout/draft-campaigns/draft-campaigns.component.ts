@@ -3,6 +3,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { CampaignsService } from '../../../services/campaigns.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-draft-campaigns',
@@ -16,7 +18,9 @@ import { ToastModule } from 'primeng/toast';
 export class DraftCampaignsComponent {
   constructor(
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private campaignService: CampaignsService,
+    private cookieService: CookieService //
   ) {}
 
   confirm2(event: Event) {
@@ -52,5 +56,27 @@ export class DraftCampaignsComponent {
         });
       },
     });
+  }
+
+  ngOnInit(): void {
+    // Retrieve accountId from cookies
+    const accountIdFromCookie = this.cookieService.get('accountId'); // Assuming the cookie name is 'accountId'
+
+    // Check if accountId exists in cookies
+    if (accountIdFromCookie) {
+      const accountId = accountIdFromCookie; // Use accountId as string
+
+      // Call the service with draft=true
+      this.campaignService.getDraft(accountId, true).subscribe(
+        (data) => {
+          console.log('Campaigns with draft=true:', data); // Handle the response data
+        },
+        (error) => {
+          console.error('Error fetching campaigns:', error); // Handle error
+        }
+      );
+    } else {
+      console.error('Account ID not found in cookies.');
+    }
   }
 }
