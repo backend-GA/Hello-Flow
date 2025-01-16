@@ -102,4 +102,18 @@ export class CampaignsService {
       }
     );
   }
+  deleteCampaign(accountId: string, campaignId: string): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.delete<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns/${campaignId}`,
+      {
+        headers,
+      }
+    );
+  }
 }

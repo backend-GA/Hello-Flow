@@ -26,7 +26,7 @@
           <a routerLink="/Active_Campaigns">Active Campaigns</a>
         </div>
         <div class="num">
-          <small>{{ counts.active }}</small>
+          <small>{{ counts?.active }}</small>
         </div>
       </li>
       <li
@@ -38,11 +38,11 @@
           <a routerLink="/Past_Campaigns">Past Campaigns</a>
         </div>
         <div class="num">
-          <small>{{ counts.inactive }}</small>
+          <small>{{ counts?.inactive }}</small>
         </div>
       </li>
       <li
-        class="d-flex gap-2 justify-content-start align-items-center"
+        class="d-flex gap-2 justify-content-between align-items-center"
         routerLinkActive="back-G"
       >
         <div class="d-flex gap-2">
@@ -50,7 +50,7 @@
           <a routerLink="/Draft_Campaigns">Draft Campaigns</a>
         </div>
         <div class="num">
-          <small>{{ counts.draft }}</small>
+          <small>{{ counts?.draft }}</small>
         </div>
       </li>
       <li

@@ -16,6 +16,8 @@ import { CookieService } from 'ngx-cookie-service';
   encapsulation: ViewEncapsulation.None,
 })
 export class DraftCampaignsComponent {
+  private accountId: string = '11'; // Replace with dynamic value or get from cookies
+  private campaignId: string = '12345';
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
@@ -23,13 +25,13 @@ export class DraftCampaignsComponent {
     private cookieService: CookieService //
   ) {}
 
-  confirm2(event: Event) {
+  confirm2(event: Event): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message:
         'Are you sure you want to delete this campaign? This action cannot be undone.',
       header: 'Delete Campaign',
-      icon: 'pi pi-trash ',
+      icon: 'pi pi-trash',
       rejectLabel: 'Cancel',
       rejectButtonProps: {
         label: 'Cancel',
@@ -42,17 +44,33 @@ export class DraftCampaignsComponent {
       },
 
       accept: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'success',
-          detail: 'Campaign deleted',
-        });
+        // Call deleteCampaign when the user confirms
+        this.campaignService
+          .deleteCampaign(this.accountId, this.campaignId)
+          .subscribe(
+            (response) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Campaign deleted successfully',
+              });
+              // Optionally, handle additional logic like removing the deleted campaign from the UI
+            },
+            (error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to delete the campaign. Please try again.',
+              });
+            }
+          );
       },
+
       reject: () => {
         this.messageService.add({
-          severity: 'error',
-          summary: 'Rejected',
-          detail: 'You have rejected',
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'You have cancelled the delete action.',
         });
       },
     });
@@ -78,5 +96,20 @@ export class DraftCampaignsComponent {
     } else {
       console.error('Account ID not found in cookies.');
     }
+  }
+
+  deleteCampaign(): void {
+    this.campaignService
+      .deleteCampaign(this.accountId, this.campaignId)
+      .subscribe(
+        (response) => {
+          console.log('Campaign deleted successfully:', response);
+          // Handle successful deletion (e.g., update UI, notify user)
+        },
+        (error) => {
+          console.error('Error deleting campaign:', error);
+          // Handle error (e.g., show error message)
+        }
+      );
   }
 }

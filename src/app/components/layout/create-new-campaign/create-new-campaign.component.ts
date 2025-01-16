@@ -28,6 +28,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class CreateNewCampaignComponent {
   hashtagForm: FormGroup;
+  accountId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -43,31 +44,43 @@ export class CreateNewCampaignComponent {
       include_retweets: [false], // Boolean for include_retweets
     });
   }
-
+  ngOnInit(): void {
+    this.accountId = Number(this.cookieService.get('accountId')); // Convert to number
+    if (!this.accountId) {
+      console.error('Account ID is not available or invalid');
+    }
+  }
   onSubmit(): void {
     if (this.hashtagForm.valid) {
-      const hashtagInput = this.hashtagForm.value.hashtag;
-      const hashtagsArray = hashtagInput
-        .split(/\s*[,،]\s*|\s*و\s*/g) // Handle splitting by commas or "و"
-        .map((tag: string) => tag.trim()) // Trim extra spaces
-        .filter((tag: string) => tag); // Remove empty entries
+      const actionMap: { [key: string]: string } = {
+        autoLike: 'like',
+        autoReply: 'comment',
+        autoLikeReply: 'like&comment',
+      };
+
+      const action = actionMap[this.hashtagForm.value.action];
+
+      if (!action) {
+        console.error('Invalid action selected');
+        return;
+      }
+
+      const hashtagsArray = this.hashtagForm.value.hashtag
+        .split(/\s*[,،]\s*|\s*و\s*/g)
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag);
 
       const payload = {
         search_terms: hashtagsArray,
-        action: this.hashtagForm.value.action, // Action selected
-        draft: false, // Assuming this is always false for now
-        comments: [this.hashtagForm.value.comment], // Comments array
-        include_retweets: this.hashtagForm.value.include_retweets, // Whether to include retweets
-        end_date: this.hashtagForm.value.end_date, // End date for the campaign
+        action: action,
+        draft: false,
+        comments: [this.hashtagForm.value.comment],
+        include_retweets: this.hashtagForm.value.include_retweets,
+        end_date: this.hashtagForm.value.end_date,
       };
 
-      console.log('Payload:', payload);
-
-      // Get the account ID from cookies and convert it to a number
-      const accountId = Number(this.cookieService.get('accountId')); // Convert to number
-
-      if (accountId) {
-        this.campaignService.createCampaign(accountId, payload).subscribe(
+      if (this.accountId) {
+        this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
           },
@@ -76,37 +89,45 @@ export class CreateNewCampaignComponent {
           }
         );
       } else {
-        console.error('Account ID is not available in cookies');
+        console.error('Account ID is not available');
       }
     } else {
       console.error('Form is invalid');
     }
   }
 
-  saveDraft() {
+  saveDraft(): void {
     if (this.hashtagForm.valid) {
-      const hashtagInput = this.hashtagForm.value.hashtag;
-      const hashtagsArray = hashtagInput
-        .split(/\s*[,،]\s*|\s*و\s*/g) // Handle splitting by commas or "و"
-        .map((tag: string) => tag.trim()) // Trim extra spaces
-        .filter((tag: string) => tag); // Remove empty entries
+      const actionMap: { [key: string]: string } = {
+        autoLike: 'like',
+        autoReply: 'comment',
+        autoLikeReply: 'like&comment',
+      };
+
+      const action = actionMap[this.hashtagForm.value.action];
+
+      if (!action) {
+        console.error('Invalid action selected');
+        return;
+      }
+
+      const hashtagsArray = this.hashtagForm.value.hashtag
+        .split(/\s*[,،]\s*|\s*و\s*/g)
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag);
 
       const payload = {
         search_terms: hashtagsArray,
-        action: this.hashtagForm.value.action, // Action selected
-        draft: true, // Assuming this is always false for now
-        comments: [this.hashtagForm.value.comment], // Comments array
-        include_retweets: this.hashtagForm.value.include_retweets, // Whether to include retweets
-        end_date: this.hashtagForm.value.end_date, // End date for the campaign
+        action: action,
+        is_active: false,
+        is_draft: true,
+        comments: [this.hashtagForm.value.comment],
+        include_retweets: this.hashtagForm.value.include_retweets,
+        end_date: this.hashtagForm.value.end_date,
       };
 
-      console.log('Payload:', payload);
-
-      // Get the account ID from cookies and convert it to a number
-      const accountId = Number(this.cookieService.get('accountId')); // Convert to number
-
-      if (accountId) {
-        this.campaignService.createCampaign(accountId, payload).subscribe(
+      if (this.accountId) {
+        this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
           },
@@ -115,7 +136,7 @@ export class CreateNewCampaignComponent {
           }
         );
       } else {
-        console.error('Account ID is not available in cookies');
+        console.error('Account ID is not available');
       }
     } else {
       console.error('Form is invalid');
