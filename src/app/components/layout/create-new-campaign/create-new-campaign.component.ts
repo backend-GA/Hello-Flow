@@ -29,6 +29,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class CreateNewCampaignComponent {
   hashtagForm: FormGroup;
   accountId: number | null = null;
+  searchTermsList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -65,10 +66,7 @@ export class CreateNewCampaignComponent {
         return;
       }
 
-      const hashtagsArray = this.hashtagForm.value.hashtag
-        .split(/\s*[,،]\s*|\s*و\s*/g)
-        .map((tag: string) => tag.trim())
-        .filter((tag: string) => tag);
+      const hashtagsArray = this.hashtagForm.value.hashtag.split(/\s+/);
 
       const payload = {
         search_terms: hashtagsArray,
@@ -83,6 +81,7 @@ export class CreateNewCampaignComponent {
         this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
+            this.hashtagForm.reset();
           },
           (error) => {
             console.error('Error creating campaign:', error);
@@ -111,16 +110,13 @@ export class CreateNewCampaignComponent {
         return;
       }
 
-      const hashtagsArray = this.hashtagForm.value.hashtag
-        .split(/\s*[,،]\s*|\s*و\s*/g)
-        .map((tag: string) => tag.trim())
-        .filter((tag: string) => tag);
+      const hashtagsArray = this.hashtagForm.value.hashtag.split(/\s+/);
 
       const payload = {
         search_terms: hashtagsArray,
         action: action,
-        is_active: false,
         is_draft: true,
+        is_active: true,
         comments: [this.hashtagForm.value.comment],
         include_retweets: this.hashtagForm.value.include_retweets,
         end_date: this.hashtagForm.value.end_date,
@@ -130,6 +126,7 @@ export class CreateNewCampaignComponent {
         this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
+            this.hashtagForm.reset();
           },
           (error) => {
             console.error('Error creating campaign:', error);
@@ -140,6 +137,14 @@ export class CreateNewCampaignComponent {
       }
     } else {
       console.error('Form is invalid');
+    }
+  }
+  addSearchTerm(): void {
+    const inputValue = this.hashtagForm.get('hashtag')?.value.trim();
+    if (inputValue) {
+      // تقسيم المدخلات باستخدام المسافات أو الفواصل
+      const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/)));
+      this.searchTermsList = uniqueTerms; // تحديث قائمة المصطلحات
     }
   }
 }

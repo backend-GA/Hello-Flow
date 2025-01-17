@@ -17,7 +17,12 @@
           <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
             <div class="py-3 d-flex flex-column">
               <p class="fw-bold">Type in the #hashtag you want discovered</p>
-              <input formControlName="hashtag" placeholder="Enter hashtag" />
+              <input
+                formControlName="hashtag"
+                placeholder="Enter hashtag"
+                (input)="addSearchTerm()"
+              />
+
               <small class="py-1">Less than 500 characters</small>
               <div
                 *ngIf="

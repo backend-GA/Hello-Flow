@@ -49,7 +49,7 @@ export class LoginComponent {
           }
 
           if (response.user.isSubscribed === true) {
-            this.router.navigate(['/twitter-account']);
+            this.router.navigate(['/overview']);
           } else {
             this.router.navigate(['/plans']);
           }

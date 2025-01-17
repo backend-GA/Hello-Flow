@@ -5,27 +5,38 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { CookieService } from 'ngx-cookie-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-draft-campaigns',
   standalone: true,
-  imports: [ConfirmDialogModule, ButtonModule, ToastModule],
+  imports: [ConfirmDialogModule, ButtonModule, ToastModule, CommonModule],
   templateUrl: './draft-campaigns.component.html',
   styleUrl: './draft-campaigns.component.scss',
   providers: [ConfirmationService, MessageService],
   encapsulation: ViewEncapsulation.None,
 })
 export class DraftCampaignsComponent {
-  private accountId: string = '11'; // Replace with dynamic value or get from cookies
-  private campaignId: string = '12345';
+  draftArray: any;
+
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private campaignService: CampaignsService,
     private cookieService: CookieService //
   ) {}
+  confirm2(event: Event, campaignId: string): void {
+    const accountId = this.cookieService.get('accountId'); // Retrieve accountId from cookies
 
-  confirm2(event: Event): void {
+    if (!accountId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Account ID not found. Please try again.',
+      });
+      return; // Exit if accountId is not available
+    }
+
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message:
@@ -42,11 +53,9 @@ export class DraftCampaignsComponent {
         label: 'Delete',
         severity: 'danger',
       },
-
       accept: () => {
-        // Call deleteCampaign when the user confirms
         this.campaignService
-          .deleteCampaign(this.accountId, this.campaignId)
+          .deleteCampaign(String(accountId), campaignId) // Convert accountId to number
           .subscribe(
             (response) => {
               this.messageService.add({
@@ -54,7 +63,9 @@ export class DraftCampaignsComponent {
                 summary: 'Success',
                 detail: 'Campaign deleted successfully',
               });
-              // Optionally, handle additional logic like removing the deleted campaign from the UI
+              this.draftArray = this.draftArray.filter(
+                (campaign: { id: string }) => campaign.id !== campaignId
+              );
             },
             (error) => {
               this.messageService.add({
@@ -65,7 +76,6 @@ export class DraftCampaignsComponent {
             }
           );
       },
-
       reject: () => {
         this.messageService.add({
           severity: 'info',
@@ -87,7 +97,9 @@ export class DraftCampaignsComponent {
       // Call the service with draft=true
       this.campaignService.getDraft(accountId, true).subscribe(
         (data) => {
-          console.log('Campaigns with draft=true:', data); // Handle the response data
+          this.draftArray = data.campaigns;
+
+          console.log('res', this.draftArray); // Handle the response data
         },
         (error) => {
           console.error('Error fetching campaigns:', error); // Handle error
@@ -98,18 +110,18 @@ export class DraftCampaignsComponent {
     }
   }
 
-  deleteCampaign(): void {
-    this.campaignService
-      .deleteCampaign(this.accountId, this.campaignId)
-      .subscribe(
-        (response) => {
-          console.log('Campaign deleted successfully:', response);
-          // Handle successful deletion (e.g., update UI, notify user)
-        },
-        (error) => {
-          console.error('Error deleting campaign:', error);
-          // Handle error (e.g., show error message)
-        }
-      );
-  }
+  // deleteCampaign(): void {
+  //   this.campaignService
+  //     .deleteCampaign(this.accountId, this.campaignId)
+  //     .subscribe(
+  //       (response) => {
+  //         console.log('Campaign deleted successfully:', response);
+  //         // Handle successful deletion (e.g., update UI, notify user)
+  //       },
+  //       (error) => {
+  //         console.error('Error deleting campaign:', error);
+  //         // Handle error (e.g., show error message)
+  //       }
+  //     );
+  // }
 }

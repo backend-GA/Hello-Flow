@@ -16,3 +16,114 @@
         }
     }
 }
+
+/* Form Container */
+.campaign-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+    justify-content: start;
+    align-items: start;
+    display: flex;
+    gap: 10px
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    color: #333;
+}
+
+/* Input Fields */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #39A6D3;
+    /* Blue color */
+    outline: none;
+}
+
+/* Checkbox Inputs */
+.form-control-checkbox {
+    margin-top: 8px;
+}
+
+/* Button Styling */
+.add-term-btn,
+.submit-btn,
+.cancel-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.add-term-btn {
+    background-color: #39A6D3;
+    color: white;
+}
+
+.add-term-btn:hover {
+    background-color: #308fbc;
+}
+
+.submit-btn {
+    background-color: #4caf50;
+    color: white;
+    width: 45%;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    width: 45%;
+    margin-left: 10px;
+}
+
+.cancel-btn:hover {
+    background-color: #e53935;
+}
+
+/* List of Search Terms */
+.search-terms-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.search-terms-list li {
+    background-color: #e3f2fd;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}

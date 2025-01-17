@@ -1,4 +1,4 @@
-<section class="active-campaigns">
+<section class="active-campaigns py-3">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
       <h3>Active Campaigns</h3>
@@ -7,191 +7,24 @@
     <p>Track, manage and forecast campaign performance here.</p>
     <div class="cards-campaigns py-5">
       <div class="row gap-3 justify-content-start align-items-center d-flex">
-        <div class="col-10 col-md-3 flex-grow-1">
+        <div
+          class="col-10 col-md-3 flex-grow-1"
+          *ngFor="let item of ActiveCampaigns"
+        >
           <div class="border p-4 rounded bg-white">
+            <p-menu #menu [model]="items" [popup]="true" />
+
             <div class="top">
               <div
                 class="d-flex justify-content-between align-items-center gap-4"
               >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
+                <h5>{{ item.search_terms }}</h5>
+                <i
+                  class="pi pi-ellipsis-v"
+                  (click)="selectCampaign(item.id); menu.toggle($event)"
+                ></i>
               </div>
-              <p>Launched: 11/29/24</p>
-            </div>
-            <div
-              class="bottom d-flex justify-content-between align-items-center border-top py-2"
-            >
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-thumbs-up fs-5" style="color: #002726"></i>
-                <p class="m-0">2301</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-comment fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-sync fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-10 col-md-3 flex-grow-1">
-          <div class="border p-4 rounded bg-white">
-            <div class="top">
-              <div
-                class="d-flex justify-content-between align-items-center gap-4"
-              >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
-              </div>
-              <p>Launched: 11/29/24</p>
-            </div>
-            <div
-              class="bottom d-flex justify-content-between align-items-center border-top py-2"
-            >
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-thumbs-up fs-5" style="color: #002726"></i>
-                <p class="m-0">2301</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-comment fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-sync fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-10 col-md-3 flex-grow-1">
-          <div class="border p-4 rounded bg-white">
-            <div class="top">
-              <div
-                class="d-flex justify-content-between align-items-center gap-4"
-              >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
-              </div>
-              <p>Launched: 11/29/24</p>
-            </div>
-            <div
-              class="bottom d-flex justify-content-between align-items-center border-top py-2"
-            >
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-thumbs-up fs-5" style="color: #002726"></i>
-                <p class="m-0">2301</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-comment fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-sync fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-10 col-md-3 flex-grow-1">
-          <div class="border p-4 rounded bg-white">
-            <div class="top">
-              <div
-                class="d-flex justify-content-between align-items-center gap-4"
-              >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
-              </div>
-              <p>Launched: 11/29/24</p>
-            </div>
-            <div
-              class="bottom d-flex justify-content-between align-items-center border-top py-2"
-            >
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-thumbs-up fs-5" style="color: #002726"></i>
-                <p class="m-0">2301</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-comment fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-sync fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-10 col-md-3 flex-grow-1">
-          <div class="border p-4 rounded bg-white">
-            <div class="top">
-              <div
-                class="d-flex justify-content-between align-items-center gap-4"
-              >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
-              </div>
-              <p>Launched: 11/29/24</p>
-            </div>
-            <div
-              class="bottom d-flex justify-content-between align-items-center border-top py-2"
-            >
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-thumbs-up fs-5" style="color: #002726"></i>
-                <p class="m-0">2301</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-comment fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-              <div
-                class="d-flex gap-2 justify-content-center align-items-center"
-              >
-                <i class="pi pi-sync fs-5" style="color: #002726"></i>
-                <p class="m-0">29</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-10 col-md-3 flex-grow-1">
-          <div class="border p-4 rounded bg-white">
-            <div class="top">
-              <div
-                class="d-flex justify-content-between align-items-center gap-4"
-              >
-                <h5>I love country Music</h5>
-                <i class="pi pi-ellipsis-v"></i>
-              </div>
-              <p>Launched: 11/29/24</p>
+              <p>Launched: {{ item.created_at | date }}</p>
             </div>
             <div
               class="bottom d-flex justify-content-between align-items-center border-top py-2"
@@ -221,3 +54,77 @@
     </div>
   </div>
 </section>
+
+<!-- Dialog for editing the campaign -->
+<p-dialog
+  [(visible)]="displayEditDialog"
+  [modal]="true"
+  [closable]="true"
+  [resizable]="false"
+  header="Edit Campaign"
+  [style]="{ width: '40rem' }"
+>
+  <form
+    [formGroup]="campaignForm"
+    (ngSubmit)="submitCampaignForm()"
+    class="campaign-form"
+  >
+    <div class="form-group">
+      <label for="searchTerms">Search Terms</label>
+      <input
+        formControlName="search_terms"
+        type="text"
+        placeholder="Enter hashtag"
+        class="form-control"
+        (input)="addSearchTerm()"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="isActive">Active</label>
+      <input
+        id="isActive"
+        formControlName="is_active"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="isDraft">Draft</label>
+      <input
+        id="isDraft"
+        formControlName="is_draft"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="includeRetweets">Include Retweets</label>
+      <input
+        id="includeRetweets"
+        formControlName="include_retweets"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="endDate">End Date</label>
+      <input
+        id="endDate"
+        formControlName="end_date"
+        type="date"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">Update Campaign</button>
+      <button type="button" (click)="closeDialog()" class="cancel-btn">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

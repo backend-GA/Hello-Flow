@@ -40,15 +40,16 @@ export class CampaignsService {
       'Content-Type': 'application/json',
     });
 
+    // Construct query parameters dynamically
     const params = new HttpParams()
-      .set('active', active.toString())
+      .set('active', active.toString()) // Use method parameters
       .set('draft', draft.toString());
 
     return this._HttpClient.get<any>(
-      `${environment.apiUrl}accounts/${accountId}/campaigns?active=false&draft=false`,
+      `${environment.apiUrl}accounts/${accountId}/campaigns`, // Use base URL without hardcoded query params
       {
         headers,
-        params,
+        params, // Automatically appends the correct query params
       }
     );
   }
@@ -114,6 +115,23 @@ export class CampaignsService {
       {
         headers,
       }
+    );
+  }
+  updateCampaign(
+    accountId: string | number,
+    campaignId: string | number,
+    payload: any
+  ): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.patch<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns/${campaignId}`, // Ensure the endpoint is correct
+      payload,
+      { headers }
     );
   }
 }
