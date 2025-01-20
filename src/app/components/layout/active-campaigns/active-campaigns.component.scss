@@ -20,18 +20,17 @@
 /* Form Container */
 .campaign-form {
     width: 100%;
-    max-width: 500px;
+
     margin: 0 auto;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Groups */
 .form-group {
     margin-bottom: 20px;
     justify-content: start;
-    align-items: start;
+    align-items: center;
     display: flex;
     gap: 10px
 }
@@ -40,6 +39,7 @@ label {
     font-weight: bold;
     display: block;
     color: #333;
+    white-space: nowrap;
 }
 
 /* Input Fields */

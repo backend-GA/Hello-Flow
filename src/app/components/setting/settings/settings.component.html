@@ -1,1 +1,42 @@
-<p>settings works!</p>
+<section class="profile py-5">
+  <div class="container bg-white p-4 rounded-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center gap-4">
+      <div class="d-flex align-items-center gap-3">
+        <div class="profile-avatar">
+          <img
+            src="../assets/profile/man-user.png"
+            alt="User Avatar"
+            class="rounded-circle p-2"
+          />
+        </div>
+        <div>
+          <h3 class="m-0">{{ dataarray.username }}</h3>
+          <p class="text-muted mb-1">{{ dataarray.email }}</p>
+          <span class="badge bg-success text-white">Active Subscription</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-details mt-5">
+      <table class="profile-table table table-striped table-hover">
+        <tbody>
+          <tr>
+            <th>Role</th>
+            <td>{{ dataarray.role }}</td>
+          </tr>
+          <tr>
+            <th>Subscription Status</th>
+            <td>{{ dataarray.isSubscribed }}</td>
+          </tr>
+          <tr>
+            <th>Account ID</th>
+            <td>{{ dataarray.account_id }}</td>
+          </tr>
+          <tr>
+            <th>User ID</th>
+            <td>{{ dataarray.id }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

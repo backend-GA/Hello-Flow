@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
@@ -8,6 +8,8 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly tokenName = 'auth_token';
+
   constructor(
     private _HttpClient: HttpClient,
     private cookieService: CookieService
@@ -30,5 +32,27 @@ export class AuthService {
     localStorage.removeItem('token'); // Example for localStorage
     sessionStorage.clear(); // Clear session storage
     this.cookieService.deleteAll(); // Clear cookies if necessary
+  }
+  saveToken(token: string): void {
+    const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); // 24 hours
+    this.cookieService.set(this.tokenName, token, expirationDate, '/overview'); // Set cookie path to root
+  }
+
+  getToken(): string | null {
+    return this.cookieService.get(this.tokenName) || null;
+  }
+
+  isTokenValid(): boolean {
+    const token = this.getToken();
+    return !!token; // Checks if token exists
+  }
+
+  fetchUserData(): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this._HttpClient.get(`${environment.apiUrl}auth/me`, { headers });
   }
 }

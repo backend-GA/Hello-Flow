@@ -11,6 +11,8 @@
           *ngFor="let item of draftArray"
         >
           <div class="border p-4 rounded bg-white">
+            <p-menu #menu [model]="items" [popup]="true" />
+
             <div class="top">
               <div
                 class="d-flex justify-content-between align-items-center gap-4"
@@ -41,7 +43,11 @@
               <div
                 class="d-flex gap-2 justify-content-center align-items-center"
               >
-                <i class="pi pi-pencil fs-5" style="color: #002726"></i>
+                <i
+                  class="pi pi-pencil fs-5"
+                  style="color: #002726"
+                  (click)="selectCampaign(item.id); openDialog()"
+                ></i>
                 <p class="m-0">Edit</p>
               </div>
             </div>
@@ -54,3 +60,75 @@
 
 <p-confirmdialog />
 <p-toast />
+<p-dialog
+  [(visible)]="displayEditDialog"
+  [modal]="true"
+  [closable]="true"
+  [resizable]="false"
+  header="Edit Campaign"
+  [style]="{ width: '50rem' }"
+>
+  <form
+    [formGroup]="campaignForm"
+    (ngSubmit)="submitCampaignForm()"
+    class="campaign-form"
+  >
+    <div class="form-group">
+      <label for="searchTerms">Search Terms</label>
+      <input
+        formControlName="search_terms"
+        type="text"
+        placeholder="Enter hashtag"
+        class="form-control"
+        (keydown)="addSearchTerm($event)"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="isActive">Active</label>
+      <input
+        id="isActive"
+        formControlName="is_active"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="isDraft">Draft</label>
+      <input
+        id="isDraft"
+        formControlName="is_draft"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="includeRetweets">Include Retweets</label>
+      <input
+        id="includeRetweets"
+        formControlName="include_retweets"
+        type="checkbox"
+        class="form-control-checkbox"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="endDate">End Date</label>
+      <input
+        id="endDate"
+        formControlName="end_date"
+        type="date"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">Update Campaign</button>
+      <button type="button" (click)="closeDialog()" class="cancel-btn">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

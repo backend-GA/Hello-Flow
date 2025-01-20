@@ -110,25 +110,57 @@ export class PastCampaignsComponent {
     this.selectedCampaignId = campaignId;
   }
 
-  editCampaign(campaignId: string | number): void {
-    const campaign = this.ActiveCampaigns.find((c) => c.id === campaignId);
-    if (campaign) {
-      this.campaignForm.patchValue({
-        search_terms: campaign.search_terms.join(' ') || '',
-        is_active: campaign.is_active || false,
-        is_draft: campaign.is_draft || true,
-        include_retweets: campaign.include_retweets || true,
-        end_date: campaign.end_date || '',
-      });
-      this.displayEditDialog = true; // Open the dialog when editing
-    }
-  }
   closeDialog(): void {
     this.displayEditDialog = false;
   }
-  addSearchTerm(): void {
+  editCampaign(campaignId: string | number): void {
+    // ابحث عن الحملة في ActiveCampaigns أو PastCampaigns
+    const campaign =
+      this.ActiveCampaigns.find(
+        (c) => c.id.toString() === campaignId.toString()
+      ) ||
+      this.PastCampaigns.find(
+        (c: { id: { toString: () => string } }) =>
+          c.id.toString() === campaignId.toString()
+      );
+
+    if (campaign) {
+      console.log('Selected Campaign:', campaign); // تحقق من الحملة المحددة
+
+      // تحويل التاريخ إلى تنسيق مناسب (مثلاً: Date أو ISO String)
+      const endDate = campaign.end_date
+        ? new Date(campaign.end_date).toISOString().split('T')[0]
+        : '';
+
+      // تعيين القيم في النموذج
+      this.campaignForm.patchValue({
+        search_terms: campaign.search_terms
+          ? campaign.search_terms.join(' ')
+          : '',
+        is_active: campaign.is_active || true,
+        is_draft: campaign.is_draft || false,
+        include_retweets: campaign.include_retweets || true,
+        end_date: endDate, // تعيين التاريخ
+      });
+
+      console.log('Form Values:', this.campaignForm.value); // تحقق من القيم في النموذج
+
+      // تعيين searchTermsList بالقيم الموجودة في campaign
+      this.searchTermsList = campaign.search_terms || [];
+
+      // فتح الديلوج بعد تعيين القيم
+      setTimeout(() => {
+        this.displayEditDialog = true; // فتح الديلوج بعد تعيين القيم
+      }, 0);
+    } else {
+      console.error('Campaign not found with ID:', campaignId); // تحقق إذا كانت الحملة غير موجودة
+    }
+  }
+
+  addSearchTerm(event: KeyboardEvent): void {
     const inputValue = this.campaignForm.get('search_terms')?.value.trim();
     if (inputValue) {
+      // تقسيم المدخلات باستخدام المسافات أو الفواصل
       const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/)));
       this.searchTermsList = uniqueTerms; // تحديث قائمة المصطلحات
     }

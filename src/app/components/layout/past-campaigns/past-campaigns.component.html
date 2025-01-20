@@ -73,7 +73,7 @@
         type="text"
         placeholder="Enter hashtag"
         class="form-control"
-        (input)="addSearchTerm()"
+        (keydown)="addSearchTerm($event)"
       />
     </div>
 

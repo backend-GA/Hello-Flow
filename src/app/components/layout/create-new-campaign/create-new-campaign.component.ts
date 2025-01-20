@@ -11,6 +11,7 @@ import { TabsModule } from 'primeng/tabs';
 import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-create-new-campaign',
@@ -21,6 +22,7 @@ import { CookieService } from 'ngx-cookie-service';
     CommonModule,
     FormsModule,
     AutoComplete,
+    RouterLink,
   ],
   templateUrl: './create-new-campaign.component.html',
   styleUrl: './create-new-campaign.component.scss',
@@ -34,7 +36,8 @@ export class CreateNewCampaignComponent {
   constructor(
     private fb: FormBuilder,
     private campaignService: CampaignsService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private router: Router
   ) {
     this.hashtagForm = this.fb.group({
       hashtag: ['', [Validators.required, Validators.maxLength(500)]],
@@ -81,6 +84,8 @@ export class CreateNewCampaignComponent {
         this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
+            this.router.navigate(['/Active_Campaigns']);
+
             this.hashtagForm.reset();
           },
           (error) => {
@@ -126,6 +131,8 @@ export class CreateNewCampaignComponent {
         this.campaignService.createCampaign(this.accountId, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
+            this.router.navigate(['/Draft_Campaigns']);
+
             this.hashtagForm.reset();
           },
           (error) => {

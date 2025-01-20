@@ -1,6 +1,21 @@
-<div class="app-layout">
+<div class="app-layout" *ngIf="!loading">
   <app-sidebar *ngIf="sidebarshow"></app-sidebar>
   <div class="main-content">
     <router-outlet></router-outlet>
+  </div>
+</div>
+<div
+  *ngIf="loading"
+  class="loading-container justify-content-center align-items-center d-flex py-5"
+>
+  <!-- Simple loading spinner -->
+  <div
+    class="spinner justify-content-center align-items-center d-flex flex-column"
+  >
+    <p>Loading, please wait...</p>
+    <i
+      class="pi pi-spin pi-spinner fs-1"
+      style="font-size: 2rem; color: whitesmoke"
+    ></i>
   </div>
 </div>

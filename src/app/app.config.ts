@@ -20,6 +20,6 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
       },
     }),
-    provideHttpClient(withFetch(), withJsonpSupport()),
+    provideHttpClient(withFetch(), withJsonpSupport()), provideAnimationsAsync(),
   ],
 };

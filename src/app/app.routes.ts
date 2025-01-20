@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     loadComponent: () =>
       import('./components/auth/login/login.component').then(
         (m) => m.LoginComponent
@@ -44,7 +44,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'Settings',
+    path: 'profile',
     loadComponent: () =>
       import('./components/setting/settings/settings.component').then(
         (m) => m.SettingsComponent

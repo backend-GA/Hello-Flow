@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CommonModule } from '@angular/common';
@@ -7,6 +12,7 @@ import { MenuItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -63,13 +69,15 @@ export class ActiveCampaignsComponent {
       },
     ];
   }
+
   getActiveCampaigns() {
     const accountIdFromCookie = this.cookieService.get('accountId');
     if (accountIdFromCookie) {
       this.accountId = Number(accountIdFromCookie);
       this.campaignService.getActiveCampaigns(this.accountId).subscribe(
         (data) => {
-          this.ActiveCampaigns = data.campaigns || [];
+          this.ActiveCampaigns = data.campaigns;
+          console.log(this.ActiveCampaigns);
         },
         (error) => {
           console.error('Error fetching active campaigns:', error);
@@ -103,45 +111,112 @@ export class ActiveCampaignsComponent {
   selectCampaign(campaignId: string | number): void {
     this.selectedCampaignId = campaignId;
   }
+  // editCampaign(campaignId: string | number): void {
+  //   const campaign = this.ActiveCampaigns.find((c) => c.id === campaignId);
+  //   if (campaign) {
+  //     // Set the form values
+  //     this.campaignForm.patchValue({
+  //       search_terms: campaign.search_terms.join(' ') || '', // Join the array into a string for display
+  //       is_active: campaign.is_active || true,
+  //       is_draft: campaign.is_draft || false,
+  //       include_retweets: campaign.include_retweets || true,
+  //       end_date: campaign.end_date || '',
+  //     });
 
+  //     // Set the searchTermsList to the array of terms (split by space)
+  //     this.searchTermsList = campaign.search_terms || [];
+
+  //     this.displayEditDialog = true; // Open the dialog when editing
+  //   }
+  // }
+  // editCampaign(campaignId: string | number): void {
+  //   const campaign = this.ActiveCampaigns.find(
+  //     (c) => c.id.toString() === campaignId.toString()
+  //   );
+
+  //   if (campaign) {
+  //     console.log('Selected Campaign:', campaign); // تحقق من الحملة المحددة
+
+  //     // تحقق من وجود search_terms في الحملة
+  //     const searchTerms =
+  //       campaign.search_terms && campaign.search_terms.length > 0
+  //         ? campaign.search_terms.join(' ')
+  //         : ''; // إذا كانت فارغة نعينها كـ فارغة
+
+  //     // تعيين القيم في النموذج
+  //     this.campaignForm.patchValue({
+  //       search_terms: searchTerms,
+  //       is_active: campaign.is_active || true,
+  //       is_draft: campaign.is_draft || false,
+  //       include_retweets: campaign.include_retweets || true,
+  //       end_date: campaign.end_date || '',
+  //     });
+
+  //     console.log('Form Values:', this.campaignForm.value); // تحقق من القيم في النموذج
+
+  //     // تعيين searchTermsList بالقيم الموجودة في campaign
+  //     this.searchTermsList = campaign.search_terms || [];
+
+  //     // تأكد من فتح الديلوج بعد تعيين القيم
+  //     setTimeout(() => {
+  //       this.displayEditDialog = true; // فتح الديلوج بعد تعيين القيم
+  //     }, 0);
+  //   } else {
+  //     console.error('Campaign not found with ID:', campaignId); // تحقق إذا كانت الحملة غير موجودة
+  //   }
+  // }
   editCampaign(campaignId: string | number): void {
-    const campaign = this.ActiveCampaigns.find((c) => c.id === campaignId);
+    const campaign = this.ActiveCampaigns.find(
+      (c) => c.id.toString() === campaignId.toString()
+    );
+
     if (campaign) {
+      console.log('Selected Campaign:', campaign); // تحقق من الحملة المحددة
+
+      // تحويل التاريخ إلى تنسيق مناسب (مثلاً: Date أو ISO String)
+      const endDate = campaign.end_date
+        ? new Date(campaign.end_date).toISOString().split('T')[0]
+        : '';
+
+      // تعيين القيم في النموذج
       this.campaignForm.patchValue({
-        search_terms: campaign.search_terms.join(' ') || '',
-        is_active: campaign.is_active || false,
-        is_draft: campaign.is_draft || true,
+        search_terms: campaign.search_terms
+          ? campaign.search_terms.join(' ')
+          : '',
+        is_active: campaign.is_active || true,
+        is_draft: campaign.is_draft || false,
         include_retweets: campaign.include_retweets || true,
-        end_date: campaign.end_date || '',
+        end_date: endDate, // تعيين التاريخ
       });
-      this.displayEditDialog = true; // Open the dialog when editing
+
+      console.log('Form Values:', this.campaignForm.value); // تحقق من القيم في النموذج
+
+      // تعيين searchTermsList بالقيم الموجودة في campaign
+      this.searchTermsList = campaign.search_terms || [];
+
+      // تأكد من فتح الديلوج بعد تعيين القيم
+      setTimeout(() => {
+        this.displayEditDialog = true; // فتح الديلوج بعد تعيين القيم
+      }, 0);
+    } else {
+      console.error('Campaign not found with ID:', campaignId); // تحقق إذا كانت الحملة غير موجودة
     }
   }
 
-  // Add search terms from input to the searchTermsList
-  // addSearchTerm(): void {
-  //   const inputValue = this.campaignForm.get('search_terms')?.value.trim();
-  //   if (inputValue) {
-  //     // Split the input value into terms based on spaces
-  //     const terms = inputValue.split(/\s+/);
-  //     this.searchTermsList.push(...terms); // Add terms to the list
-  //     this.campaignForm.get('search_terms')?.setValue(''); // Clear the input field after adding
-  //   }
-  // }
-  addSearchTerm(): void {
+  addSearchTerm(event: KeyboardEvent): void {
     const inputValue = this.campaignForm.get('search_terms')?.value.trim();
     if (inputValue) {
+      // تقسيم المدخلات باستخدام المسافات أو الفواصل
       const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/)));
       this.searchTermsList = uniqueTerms; // تحديث قائمة المصطلحات
     }
   }
 
-  // Submit the form to update campaign
   submitCampaignForm(): void {
     if (this.campaignForm.valid) {
       const payload = {
         ...this.campaignForm.value,
-        search_terms: this.searchTermsList,
+        search_terms: this.searchTermsList, // Ensure search_terms is passed as an array
       };
       const accountId = this.accountId?.toString() || '';
       const campaignId = this.selectedCampaignId?.toString() || '';
