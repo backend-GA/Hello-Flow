@@ -39,7 +39,7 @@ export class SidebarComponent {
     const accountIdFromCookie = this.cookieService.get('accountId'); // Assuming the cookie name is 'accountId'
 
     // Check if accountId exists in cookies
-    if (accountIdFromCookie) {
+    if (accountIdFromCookie && accountIdFromCookie !== 'null') {
       const accountId = accountIdFromCookie; // Use accountId as string
 
       this.campaignService.getCampaignCounts(accountId).subscribe(
