@@ -59,7 +59,7 @@ export class AppComponent {
 
         console.log('User data refreshed:', data);
         // التوجيه إلى الصفحة الرئيسية إذا تم جلب البيانات بنجاح
-        this.Router.navigate(['/overview']);
+        // this.Router.navigate(['/overview']);
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
