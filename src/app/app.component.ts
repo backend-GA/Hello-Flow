@@ -58,6 +58,7 @@ export class AppComponent {
         this.userData = data;
         this.loading = false; // Start loading
         this._CookieService.set('accountId', data.user.account_id);
+        this._CookieService.get('accountId');
 
         console.log('User data refreshed:', data);
       },
