@@ -18,7 +18,7 @@ export class SidebarComponent {
   userName: string | null = '';
   userEmail: string | null = '';
   counts: any;
-  usage: any;
+  usage: string | null = '';
 
   constructor(
     private authService: AuthService,
