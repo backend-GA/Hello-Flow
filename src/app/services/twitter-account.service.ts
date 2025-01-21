@@ -10,17 +10,17 @@ import { CookieService } from 'ngx-cookie-service';
 export class TwitterAccountService {
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
-  // getTwitterAccounts(): Observable<any> {
-  //   const token = this.cookieService.get('token');
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${token}`,
-  //     'Content-Type': 'application/json',
-  //   });
+  getTwitterAccounts(): Observable<any> {
+    const token = this.cookieService.get('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
 
-  //   return this.http.get<any>(`${environment.apiUrl}accounts/twitter`, {
-  //     headers,
-  //   });
-  // }
+    return this.http.get<any>(`${environment.apiUrl}accounts/twitter`, {
+      headers,
+    });
+  }
   getPlans(): Observable<any> {
     const token = this.cookieService.get('token');
     const headers = new HttpHeaders({
@@ -68,11 +68,6 @@ export class TwitterAccountService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.get<any>(`${environment.apiUrl}accounts/twitter`, {
-      headers,
-    });
-  }
-  getTwitterAccounts(headers: HttpHeaders): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}accounts/twitter`, {
       headers,
     });

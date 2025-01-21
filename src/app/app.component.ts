@@ -52,21 +52,5 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.loading = true; // Start loading
-
-    this.authService.fetchUserData().subscribe({
-      next: (data: any) => {
-        this.userData = data;
-        this.loading = false; // Start loading
-        this._CookieService.set('accountId', data.user.account_id);
-        this._CookieService.get('accountId');
-
-        console.log('User data refreshed:', data);
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-
-        this.Router.navigate(['/login']);
-      },
-    });
   }
 }

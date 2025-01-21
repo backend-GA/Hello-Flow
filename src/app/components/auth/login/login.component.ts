@@ -42,13 +42,16 @@ export class LoginComponent {
           console.log('Login successful:', response);
           this._CookieService.set('token', response.token);
           this._CookieService.set('accountId', response.user.account_id);
-
+          this._CookieService.set('userName', response.user.username); // Save user name
+          this._CookieService.set('userEmail', response.user.email); // Save user email
           if (response.token) {
             localStorage.setItem('userName', response.user.username); // Save user name
             localStorage.setItem('userEmail', response.user.email); // Save user email
           }
 
           if (response.user.isSubscribed === true) {
+            this._CookieService.set('accountId', response.user.account_id);
+
             this.router.navigate(['/overview']);
           } else {
             this.router.navigate(['/plans']);

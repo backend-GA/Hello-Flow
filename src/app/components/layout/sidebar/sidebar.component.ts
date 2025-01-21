@@ -15,12 +15,9 @@ import { CampaignsService } from '../../../services/campaigns.service';
 })
 export class SidebarComponent {
   isOpen: boolean = true;
-  userName: string = ''; // Initialize with an empty string
-  userEmail: string = ''; // Initialize with an empty string
-  account_id: string = ''; // Initialize account_id
+  userName: string | null = '';
+  userEmail: string | null = '';
   counts: any;
-  userData: any;
-  loading: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -36,35 +33,29 @@ export class SidebarComponent {
   }
 
   ngOnInit(): void {
-    // Fetch user data once
-    this.authService.fetchUserData().subscribe({
-      next: (response) => {
-        this.userData = response;
-        const user = response?.user;
-        if (user) {
-          const accountId = user.account_id;
-          this.userName = user.username || ''; // Assign username
-          this.userEmail = user.email || ''; // Assign email
+    const accountIdFromCookie = this.cookieService.get('accountId');
 
-          // Store data in localStorage
-          localStorage.setItem('userName', this.userName);
-          localStorage.setItem('userEmail', this.userEmail);
-          localStorage.setItem('accountId', accountId.toString()); // Use accountId for storage
-
-          // Set accountId in cookies
-          this.cookieService.set('accountId', accountId.toString());
-
-          // Load campaign counts using accountId
-          this.loadCampaignCounts(accountId.toString());
-        } else {
-          console.error('User data not found.');
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching user data:', error);
-        this.router.navigate(['/login']);
-      },
-    });
+    if (accountIdFromCookie) {
+      this.loadCampaignCounts(accountIdFromCookie);
+    } else {
+      this.authService.fetchUserData().subscribe({
+        next: (response) => {
+          const accountId = response?.user?.account_id;
+          if (accountId) {
+            this.cookieService.set('accountId', accountId.toString());
+            this.loadCampaignCounts(accountId);
+          } else {
+            console.error('Account ID not found in user data.');
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching user data:', error);
+          this.router.navigate(['/login']);
+        },
+      });
+    }
+    this.userName = localStorage.getItem('userName'); // Retrieve name
+    this.userEmail = localStorage.getItem('userEmail'); // Retrieve name
   }
 
   private loadCampaignCounts(accountId: string): void {
@@ -78,7 +69,6 @@ export class SidebarComponent {
       },
     });
   }
-
   closeUpgrade() {
     this.isOpen = false;
   }
