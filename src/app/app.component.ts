@@ -24,6 +24,8 @@ export class AppComponent {
   title = 'hello-flow';
   isOpen: boolean = true;
   loading: boolean = false; // Flag for loading state
+  userName: any;
+  userEmail: any;
 
   sidebarshow: boolean = false;
   constructor(
@@ -52,5 +54,28 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.loading = true; // Start loading
+    this.authService.fetchUserData().subscribe({
+      next: (response) => {
+        this.loading = false; // Stop loading after data is fetched
+        // Handle the response here, for example, assigning user data
+        this.userData = response;
+        const user = response?.user;
+        if (user) {
+          const accountId = user.account_id;
+          this.userName = user.username || '';
+          this.userEmail = user.email || '';
+          // Store in localStorage
+          localStorage.setItem('userName', this.userName);
+          localStorage.setItem('userEmail', this.userEmail);
+          localStorage.setItem('accountId', accountId?.toString()); // Store accountId
+          this._CookieService.set('accountId', accountId?.toString()); // Set accountId in cookies
+        }
+      },
+      error: (error) => {
+        this.loading = false; // Stop loading in case of error
+        console.error('Error fetching user data:', error);
+        this.Router.navigate(['/login']);
+      },
+    });
   }
 }
