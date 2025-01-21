@@ -9,6 +9,7 @@ import {
 import { MessageService } from 'primeng/api';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { AuthService } from './services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,8 @@ export class AppComponent {
   constructor(
     private Router: Router,
     public _ActivatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private _CookieService: CookieService
   ) {}
 
   closeUpgrade() {
@@ -39,7 +41,6 @@ export class AppComponent {
       this.Router.url == '/login' ||
       this.Router.url == '/register' ||
       this.Router.url == '/plans' ||
-      this.Router.url == '/' ||
       this.Router.url == '/twitter-account'
     ) {
       this.sidebarshow = false;
@@ -53,17 +54,16 @@ export class AppComponent {
     this.loading = true; // Start loading
 
     this.authService.fetchUserData().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.userData = data;
         this.loading = false; // Start loading
+        this._CookieService.set('accountId', data.user.account_id);
 
         console.log('User data refreshed:', data);
-        // التوجيه إلى الصفحة الرئيسية إذا تم جلب البيانات بنجاح
-        // this.Router.navigate(['/overview']);
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
-        // إذا فشلنا في جلب البيانات، يمكننا إعادة التوجيه لتسجيل الدخول
+
         this.Router.navigate(['/login']);
       },
     });

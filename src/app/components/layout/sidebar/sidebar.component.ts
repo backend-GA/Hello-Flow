@@ -15,44 +15,71 @@ import { CampaignsService } from '../../../services/campaigns.service';
 })
 export class SidebarComponent {
   isOpen: boolean = true;
-  userName: string | null = '';
-  userEmail: string | null = '';
+  userName: string = ''; // Initialize with an empty string
+  userEmail: string = ''; // Initialize with an empty string
+  account_id: string = ''; // Initialize account_id
   counts: any;
-  closeUpgrade() {
-    this.isOpen = false;
-  }
+  userData: any;
+  loading: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private cookieService: CookieService,
     private campaignService: CampaignsService
   ) {}
+
   logout(): void {
-    this.authService.logout(); // Clear session
-    this.router.navigate(['/login']); // Redirect to login
-    localStorage.clear(); // Clear storage on logout
+    this.authService.logout();
+    this.router.navigate(['/login']);
+    localStorage.clear();
   }
+
   ngOnInit(): void {
-    this.userName = localStorage.getItem('userName'); // Retrieve name
-    this.userEmail = localStorage.getItem('userEmail'); // Retrieve email
-    // Retrieve accountId from cookies
-    const accountIdFromCookie = this.cookieService.get('accountId'); // Assuming the cookie name is 'accountId'
+    // Fetch user data once
+    this.authService.fetchUserData().subscribe({
+      next: (response) => {
+        this.userData = response;
+        const user = response?.user;
+        if (user) {
+          const accountId = user.account_id;
+          this.userName = user.username || ''; // Assign username
+          this.userEmail = user.email || ''; // Assign email
 
-    // Check if accountId exists in cookies
-    if (accountIdFromCookie && accountIdFromCookie !== 'null') {
-      const accountId = accountIdFromCookie; // Use accountId as string
+          // Store data in localStorage
+          localStorage.setItem('userName', this.userName);
+          localStorage.setItem('userEmail', this.userEmail);
+          localStorage.setItem('accountId', accountId.toString()); // Use accountId for storage
 
-      this.campaignService.getCampaignCounts(accountId).subscribe(
-        (data) => {
-          this.counts = data.counts;
-          console.log('Campaign counts:', data); // Handle the campaign counts data
-        },
-        (error) => {
-          console.error('Error fetching campaign counts:', error); // Handle error
+          // Set accountId in cookies
+          this.cookieService.set('accountId', accountId.toString());
+
+          // Load campaign counts using accountId
+          this.loadCampaignCounts(accountId.toString());
+        } else {
+          console.error('User data not found.');
         }
-      );
-    } else {
-      console.error('Account ID not found in cookies.');
-    }
+      },
+      error: (error) => {
+        console.error('Error fetching user data:', error);
+        this.router.navigate(['/login']);
+      },
+    });
+  }
+
+  private loadCampaignCounts(accountId: string): void {
+    this.campaignService.getCampaignCounts(accountId).subscribe({
+      next: (data) => {
+        console.log('Full campaign data response:', data);
+        this.counts = data?.counts;
+      },
+      error: (error) => {
+        console.error('Error fetching campaign counts:', error);
+      },
+    });
+  }
+
+  closeUpgrade() {
+    this.isOpen = false;
   }
 }
