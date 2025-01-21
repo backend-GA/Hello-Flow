@@ -44,6 +44,7 @@ export class LoginComponent {
           this._CookieService.set('accountId', response.user.account_id);
           this._CookieService.set('userName', response.user.username); // Save user name
           this._CookieService.set('userEmail', response.user.email); // Save user email
+          this._CookieService.set('usage', response.user.usage);
           if (response.token) {
             localStorage.setItem('userName', response.user.username); // Save user name
             localStorage.setItem('userEmail', response.user.email); // Save user email

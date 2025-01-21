@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CampaignsService } from '../../../services/campaigns.service';
+import { ShareDataService } from '../../../services/share-data.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,7 +25,8 @@ export class SidebarComponent {
     private authService: AuthService,
     private router: Router,
     private cookieService: CookieService,
-    private campaignService: CampaignsService
+    private campaignService: CampaignsService,
+    private sharedDataService: ShareDataService
   ) {}
 
   logout(): void {
@@ -41,11 +43,12 @@ export class SidebarComponent {
     } else {
       this.authService.fetchUserData().subscribe({
         next: (response) => {
+          this.usage = response.user.usage;
+
           const accountId = response?.user?.account_id;
           if (accountId) {
             this.cookieService.set('accountId', accountId.toString());
             this.cookieService.set('usage', response.user.usage);
-            this.usage = response.user.usage;
 
             this.loadCampaignCounts(accountId);
           } else {
@@ -60,13 +63,31 @@ export class SidebarComponent {
     }
     this.userName = localStorage.getItem('userName'); // Retrieve name
     this.userEmail = localStorage.getItem('userEmail'); // Retrieve name
+    this.usage = this.cookieService.get('usage'); // قراءة أي قيمة أخرى مثل completed
+    console.log(this.usage);
+    this.sharedDataService.counts$.subscribe((newCounts) => {
+      if (newCounts) {
+        this.counts = newCounts;
+      }
+    });
   }
 
+  // private loadCampaignCounts(accountId: string): void {
+  //   this.campaignService.getCampaignCounts(accountId).subscribe({
+  //     next: (data) => {
+  //       console.log('Full campaign data response:', data);
+  //       this.counts = data?.counts;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching campaign counts:', error);
+  //     },
+  //   });
+  // }
   private loadCampaignCounts(accountId: string): void {
     this.campaignService.getCampaignCounts(accountId).subscribe({
       next: (data) => {
-        console.log('Full campaign data response:', data);
         this.counts = data?.counts;
+        this.sharedDataService.updateCounts(this.counts);
       },
       error: (error) => {
         console.error('Error fetching campaign counts:', error);
