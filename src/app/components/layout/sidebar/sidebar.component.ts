@@ -45,6 +45,8 @@ export class SidebarComponent {
           const accountId = response?.user?.account_id;
           if (accountId) {
             this.cookieService.set('accountId', accountId.toString());
+            this.cookieService.set('usage', response.user.usage);
+
             this.loadCampaignCounts(accountId);
           } else {
             console.error('Account ID not found in user data.');
