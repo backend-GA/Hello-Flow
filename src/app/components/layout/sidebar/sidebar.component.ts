@@ -41,11 +41,11 @@ export class SidebarComponent {
     } else {
       this.authService.fetchUserData().subscribe({
         next: (response) => {
-          this.usage = response.user.usage;
           const accountId = response?.user?.account_id;
           if (accountId) {
             this.cookieService.set('accountId', accountId.toString());
             this.cookieService.set('usage', response.user.usage);
+            this.usage = response.user.usage;
 
             this.loadCampaignCounts(accountId);
           } else {
