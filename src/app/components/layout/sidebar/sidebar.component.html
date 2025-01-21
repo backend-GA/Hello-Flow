@@ -77,7 +77,7 @@
         <i *ngIf="isOpen" class="pi pi-times" (click)="closeUpgrade()"></i>
       </div>
       <small style="font-size: 13px; font-weight: 300"
-        >You have used 80% of your free campaign credits.</small
+        >You have used {{ usage }} of your free campaign credits.</small
       >
       <progress value="80" max="100" class="custom-progress">70 %</progress>
     </div>
