@@ -38,7 +38,6 @@ export class PlansComponent {
       },
       (error) => {
         console.error('Error creating plan:', error);
-        this.router.navigate(['/twitter-account']);
       }
     );
   }

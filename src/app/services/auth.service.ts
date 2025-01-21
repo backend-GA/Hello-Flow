@@ -33,18 +33,18 @@ export class AuthService {
     sessionStorage.clear(); // Clear session storage
     this.cookieService.deleteAll(); // Clear cookies if necessary
   }
+  private tokenKey = 'token';
+
   saveToken(token: string): void {
-    const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); // 24 hours
-    this.cookieService.set(this.tokenName, token, expirationDate, '/overview'); // Set cookie path to root
+    this.cookieService.set(this.tokenKey, token);
   }
 
-  getToken(): string | null {
-    return this.cookieService.get(this.tokenName) || null;
+  getToken(): string {
+    return this.cookieService.get(this.tokenKey);
   }
 
-  isTokenValid(): boolean {
-    const token = this.getToken();
-    return !!token; // Checks if token exists
+  updateToken(newToken: string): void {
+    this.saveToken(newToken);
   }
 
   fetchUserData(): Observable<any> {

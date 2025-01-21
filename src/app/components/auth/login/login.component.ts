@@ -33,6 +33,38 @@ export class LoginComponent {
     });
   }
 
+  // onSubmit(): void {
+  //   this.submitted = true;
+  //   if (this.loginForm.valid) {
+  //     const formData = this.loginForm.value;
+  //     this._AuthService.login(formData).subscribe({
+  //       next: (response) => {
+  //         console.log('Login successful:', response);
+  //         this._CookieService.set('token', response.token);
+  //         this._CookieService.set('accountId', response.user.account_id);
+  //         this._CookieService.set('userName', response.user.username); // Save user name
+  //         this._CookieService.set('userEmail', response.user.email); // Save user email
+  //         this._CookieService.set('usage', response.user.usage);
+  //         if (response.token) {
+  //           localStorage.setItem('userName', response.user.username); // Save user name
+  //           localStorage.setItem('userEmail', response.user.email); // Save user email
+  //         }
+
+  //         if (response.user.isSubscribed === true) {
+  //           this._CookieService.set('accountId', response.user.account_id);
+
+  //           this.router.navigate(['/overview']);
+  //         } else {
+  //           this.router.navigate(['/plans']);
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.error('Login failed:', err);
+  //         // Handle login failure (e.g., show an error message)
+  //       },
+  //     });
+  //   }
+  // }
   onSubmit(): void {
     this.submitted = true;
     if (this.loginForm.valid) {
@@ -40,19 +72,21 @@ export class LoginComponent {
       this._AuthService.login(formData).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
-          this._CookieService.set('token', response.token);
+
+          // استخدمي authService لحفظ التوكن
+          this._AuthService.saveToken(response.token);
+
           this._CookieService.set('accountId', response.user.account_id);
           this._CookieService.set('userName', response.user.username); // Save user name
           this._CookieService.set('userEmail', response.user.email); // Save user email
           this._CookieService.set('usage', response.user.usage);
+
           if (response.token) {
             localStorage.setItem('userName', response.user.username); // Save user name
             localStorage.setItem('userEmail', response.user.email); // Save user email
           }
 
           if (response.user.isSubscribed === true) {
-            this._CookieService.set('accountId', response.user.account_id);
-
             this.router.navigate(['/overview']);
           } else {
             this.router.navigate(['/plans']);
