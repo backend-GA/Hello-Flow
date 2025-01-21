@@ -145,6 +145,29 @@ export class DraftCampaignsComponent {
 
   ngOnInit(): void {
     this.draftCampaign();
+    const accountIdFromCookie = this.cookieService.get('accountId');
+    if (accountIdFromCookie) {
+      this.accountId = parseInt(accountIdFromCookie, 10);
+    } else {
+      console.error('Account ID not found in cookies.');
+    }
+
+    this.items = [
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () =>
+          this.deleteCampaign(this.selectedCampaignId?.toString() ?? ''),
+      },
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => {
+          this.editCampaign(this.selectedCampaignId?.toString() ?? '');
+          this.displayEditDialog = true; // Open the dialog after editing
+        },
+      },
+    ];
   }
 
   deleteCampaign(campaignId: string): void {
@@ -175,67 +198,61 @@ export class DraftCampaignsComponent {
   closeDialog(): void {
     this.displayEditDialog = false;
   }
-  openDialog(): void {
-    this.displayEditDialog = true;
-  }
   editCampaign(campaignId: string | number): void {
-    const campaign = this.draftArray.find(
-      (c: { id: { toString: () => string } }) =>
-        c.id.toString() === campaignId.toString()
-    );
+    const campaign =
+      this.ActiveCampaigns.find(
+        (c) => c.id.toString() === campaignId.toString()
+      ) ||
+      this.draftArray.find(
+        (c: { id: { toString: () => string } }) =>
+          c.id.toString() === campaignId.toString()
+      );
 
     if (campaign) {
-      console.log('Selected Campaign:', campaign);
+      console.log('Selected Campaign:', campaign); // تحقق من الحملة المحددة
 
       const endDate = campaign.end_date
         ? new Date(campaign.end_date).toISOString().split('T')[0]
         : '';
 
-      // Ensure search_terms is an array, split it by space or any other delimiter if needed
-      const searchTerms = campaign.search_terms
-        ? campaign.search_terms.join(' ')
-        : ''; // Join array to string for the input field
-
-      // Patch form values
+      // تعيين القيم في النموذج
       this.campaignForm.patchValue({
-        search_terms: searchTerms, // If it's a string, we just patch it
+        search_terms: campaign.search_terms
+          ? campaign.search_terms.join(' ')
+          : '',
         is_active: campaign.is_active || true,
         is_draft: campaign.is_draft || false,
         include_retweets: campaign.include_retweets || true,
-        end_date: endDate,
+        end_date: endDate, // تعيين التاريخ
       });
 
-      // Set internal list for search terms
-      this.searchTermsList = campaign.search_terms || []; // Use the array as internal list
+      console.log('Form Values:', this.campaignForm.value); // تحقق من القيم في النموذج
 
-      // Open the dialog after patching values
+      // تعيين searchTermsList بالقيم الموجودة في campaign
+      this.searchTermsList = campaign.search_terms || [];
+
+      // فتح الديلوج بعد تعيين القيم
       setTimeout(() => {
-        this.displayEditDialog = true;
+        this.displayEditDialog = true; // فتح الديلوج بعد تعيين القيم
       }, 0);
     } else {
-      console.error('Campaign not found with ID:', campaignId);
+      console.error('Campaign not found with ID:', campaignId); // تحقق إذا كانت الحملة غير موجودة
     }
   }
 
   addSearchTerm(event: KeyboardEvent): void {
     const inputValue = this.campaignForm.get('search_terms')?.value.trim();
     if (inputValue) {
-      // Split input text into unique terms
-      const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/))); // Unique terms (by space)
-      this.searchTermsList = uniqueTerms; // Update internal list with unique terms
-
-      // Update form value (as a string)
-      this.campaignForm.patchValue({
-        search_terms: uniqueTerms.join(' '), // Convert back to string with space separator
-      });
+      // تقسيم المدخلات باستخدام المسافات أو الفواصل
+      const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/)));
+      this.searchTermsList = uniqueTerms; // تحديث قائمة المصطلحات
     }
   }
-
   submitCampaignForm(): void {
     if (this.campaignForm.valid) {
       const payload = {
         ...this.campaignForm.value,
-        search_terms: this.searchTermsList, // Ensure search_terms is passed as an array
+        search_terms: this.searchTermsList,
       };
       const accountId = this.accountId?.toString() || '';
       const campaignId = this.selectedCampaignId?.toString() || '';
@@ -246,7 +263,7 @@ export class DraftCampaignsComponent {
           (response) => {
             console.log('Campaign updated successfully:', response);
             this.displayEditDialog = false;
-            this.draftCampaign(); // Reload campaigns after update
+            this.draftCampaign();
           },
           (error) => {
             console.error('Error updating campaign:', error);

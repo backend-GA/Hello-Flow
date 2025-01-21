@@ -26,6 +26,7 @@ export class AppComponent {
   loading: boolean = false; // Flag for loading state
   userName: any;
   userEmail: any;
+  accountId: number | undefined; // تعريف الخاصية
 
   sidebarshow: boolean = false;
   constructor(
@@ -77,5 +78,11 @@ export class AppComponent {
         this.Router.navigate(['/login']);
       },
     });
+    const accountIdFromCookie = this._CookieService.get('accountId');
+    if (accountIdFromCookie) {
+      this.accountId = parseInt(accountIdFromCookie, 10);
+    } else {
+      console.error('Account ID not found in cookies.');
+    }
   }
 }
