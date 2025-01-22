@@ -75,17 +75,25 @@ export class SidebarComponent {
     });
     this.getAllCookies();
     this.accountId = this.cookieService.get('account_id'); // Retrieve account_id from cookies
-    const newAccountId = '123456'; // Example new account_id value
-
-    this.updateAccountId(newAccountId); // Update account_id in cookies
+    this.updateAccountId();
   }
-  updateAccountId(accountId: string) {
-    this.cookieService.set('account_id', accountId, {
-      path: '/',
-      secure: true,
-      sameSite: 'Lax',
-    });
-    console.log('Updated account_id:', accountId);
+  updateAccountId() {
+    this.authService.fetchUserData().subscribe(
+      (response) => {
+        const accountId = response.account_id; // Ensure this matches your API response
+        if (accountId) {
+          this.cookieService.set('account_id', accountId, {
+            path: '/',
+            secure: true,
+            sameSite: 'Lax',
+          });
+          console.log('Account ID updated in cookies:', accountId);
+        }
+      },
+      (error) => {
+        console.error('Failed to fetch user data:', error);
+      }
+    );
   }
   private loadCampaignCounts(): void {
     const accountIdFromCookie = this.cookieService.get('accountId');
