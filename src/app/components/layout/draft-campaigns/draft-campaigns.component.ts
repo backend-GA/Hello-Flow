@@ -37,7 +37,7 @@ export class DraftCampaignsComponent {
   campaignForm: FormGroup;
   ActiveCampaigns: any[] = [];
   items: MenuItem[] = [];
-  accountId?: number;
+  account_id?: number;
   selectedCampaignId?: string | number;
   displayEditDialog = false; // Control dialog visibility
   campaignData: any = {}; // Campaign data for editing
@@ -145,9 +145,9 @@ export class DraftCampaignsComponent {
 
   ngOnInit(): void {
     this.draftCampaign();
-    const accountIdFromCookie = this.cookieService.get('accountId');
+    const accountIdFromCookie = this.cookieService.get('account_id');
     if (accountIdFromCookie) {
-      this.accountId = parseInt(accountIdFromCookie, 10);
+      this.account_id = parseInt(accountIdFromCookie, 10);
     } else {
       console.error('Account ID not found in cookies.');
     }
@@ -171,12 +171,12 @@ export class DraftCampaignsComponent {
   }
 
   deleteCampaign(campaignId: string): void {
-    if (!this.accountId) {
+    if (!this.account_id) {
       console.error('Account ID is not set.');
       return;
     }
     this.campaignService
-      .deleteCampaign(this.accountId.toString(), campaignId)
+      .deleteCampaign(this.account_id.toString(), campaignId)
       .subscribe(
         (response) => {
           console.log('Campaign deleted successfully:', response);
@@ -254,11 +254,11 @@ export class DraftCampaignsComponent {
         ...this.campaignForm.value,
         search_terms: this.searchTermsList,
       };
-      const accountId = this.accountId?.toString() || '';
+      const account_id = this.account_id?.toString() || '';
       const campaignId = this.selectedCampaignId?.toString() || '';
 
       this.campaignService
-        .updateCampaign(accountId, campaignId, payload)
+        .updateCampaign(account_id, campaignId, payload)
         .subscribe(
           (response) => {
             console.log('Campaign updated successfully:', response);

@@ -20,7 +20,7 @@ import {
   styleUrl: './past-campaigns.component.scss',
 })
 export class PastCampaignsComponent {
-  private accountId?: number; // accountId type as number
+  private account_id?: number; // accountId type as number
   PastCampaigns: any;
   ActiveCampaigns: any[] = [];
   campaignForm: FormGroup;
@@ -66,13 +66,13 @@ export class PastCampaignsComponent {
   }
   GetPAST() {
     // Retrieve accountId from cookies
-    const accountIdFromCookie = this.cookieService.get('accountId'); // Assuming the cookie name is 'accountId'
+    const accountIdFromCookie = this.cookieService.get('account_id'); // Assuming the cookie name is 'accountId'
 
     // Convert to a number and assign it to the accountId property
-    this.accountId = Number(accountIdFromCookie);
+    this.account_id = Number(accountIdFromCookie);
 
-    if (this.accountId) {
-      this.campaignService.getPastCampaign(this.accountId).subscribe(
+    if (this.account_id) {
+      this.campaignService.getPastCampaign(this.account_id).subscribe(
         (data) => {
           this.PastCampaigns = data.campaigns;
           console.log(this.PastCampaigns); // Handle campaign data
@@ -86,12 +86,12 @@ export class PastCampaignsComponent {
     }
   }
   deleteCampaign(campaignId: string): void {
-    if (!this.accountId) {
+    if (!this.account_id) {
       console.error('Account ID is not set.');
       return;
     }
     this.campaignService
-      .deleteCampaign(this.accountId.toString(), campaignId)
+      .deleteCampaign(this.account_id.toString(), campaignId)
       .subscribe(
         (response) => {
           console.log('Campaign deleted successfully:', response);
@@ -171,7 +171,7 @@ export class PastCampaignsComponent {
         ...this.campaignForm.value,
         search_terms: this.searchTermsList,
       };
-      const accountId = this.accountId?.toString() || '';
+      const accountId = this.account_id?.toString() || '';
       const campaignId = this.selectedCampaignId?.toString() || '';
 
       this.campaignService

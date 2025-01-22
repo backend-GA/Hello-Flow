@@ -30,7 +30,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class CreateNewCampaignComponent {
   hashtagForm: FormGroup;
-  accountId: number | null = null;
+  account_id: number | null = null;
   searchTermsList: any[] = [];
 
   constructor(
@@ -49,8 +49,8 @@ export class CreateNewCampaignComponent {
     });
   }
   ngOnInit(): void {
-    this.accountId = Number(this.cookieService.get('accountId')); // Convert to number
-    if (!this.accountId) {
+    this.account_id = Number(this.cookieService.get('account_id')); // Convert to number
+    if (!this.account_id) {
       console.error('Account ID is not available or invalid');
     }
   }
@@ -80,8 +80,8 @@ export class CreateNewCampaignComponent {
         end_date: this.hashtagForm.value.end_date,
       };
 
-      if (this.accountId) {
-        this.campaignService.createCampaign(this.accountId, payload).subscribe(
+      if (this.account_id) {
+        this.campaignService.createCampaign(this.account_id, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
             this.router.navigate(['/Active_Campaigns']);
@@ -127,8 +127,8 @@ export class CreateNewCampaignComponent {
         end_date: this.hashtagForm.value.end_date,
       };
 
-      if (this.accountId) {
-        this.campaignService.createCampaign(this.accountId, payload).subscribe(
+      if (this.account_id) {
+        this.campaignService.createCampaign(this.account_id, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
             this.router.navigate(['/Draft_Campaigns']);

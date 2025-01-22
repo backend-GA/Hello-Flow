@@ -76,7 +76,7 @@ export class LoginComponent {
           // استخدمي authService لحفظ التوكن
           this._AuthService.saveToken(response.token);
 
-          this._CookieService.set('accountId', response.user.account_id);
+          this._CookieService.set('account_id', response.user.account_id);
           this._CookieService.set('userName', response.user.username); // Save user name
           this._CookieService.set('userEmail', response.user.email); // Save user email
           this._CookieService.set('usage', response.user.usage);

@@ -22,7 +22,7 @@ export class SidebarComponent {
   counts: any;
   usage: string | null = '';
   sidebarVisible: boolean = false; // To control Sidebar visibility
-  accountId: string | null = '';
+  account_id: string | null = '';
 
   constructor(
     private authService: AuthService,
@@ -39,7 +39,7 @@ export class SidebarComponent {
   }
 
   ngOnInit(): void {
-    const accountIdFromCookie = this.cookieService.get('accountId');
+    const accountIdFromCookie = this.cookieService.get('account_id');
 
     if (accountIdFromCookie) {
       this.loadCampaignCounts(); // لا تمرر معلمة إذا كانت لا تحتاج إليها
@@ -74,20 +74,20 @@ export class SidebarComponent {
       }
     });
     this.getAllCookies();
-    this.accountId = this.cookieService.get('account_id'); // Retrieve account_id from cookies
+    this.account_id = this.cookieService.get('account_id'); // Retrieve account_id from cookies
     this.updateAccountId();
   }
   updateAccountId() {
     this.authService.fetchUserData().subscribe(
       (response) => {
-        const accountId = response.account_id; // Ensure this matches your API response
-        if (accountId) {
-          this.cookieService.set('account_id', accountId, {
+        const account_id = response.account_id; // Ensure this matches your API response
+        if (account_id) {
+          this.cookieService.set('account_id', account_id, {
             path: '/',
             secure: true,
             sameSite: 'Lax',
           });
-          console.log('Account ID updated in cookies:', accountId);
+          console.log('Account ID updated in cookies:', account_id);
         }
       },
       (error) => {

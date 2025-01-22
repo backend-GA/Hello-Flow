@@ -30,7 +30,7 @@ export class ActiveCampaignsComponent {
   campaignForm: FormGroup;
   ActiveCampaigns: any[] = [];
   items: MenuItem[] = [];
-  accountId?: number;
+  account_id?: number;
   selectedCampaignId?: string | number;
   displayEditDialog = false; // Control dialog visibility
   campaignData: any = {}; // Campaign data for editing
@@ -71,10 +71,10 @@ export class ActiveCampaignsComponent {
   }
 
   getActiveCampaigns() {
-    const accountIdFromCookie = this.cookieService.get('accountId');
+    const accountIdFromCookie = this.cookieService.get('account_id');
     if (accountIdFromCookie) {
-      this.accountId = Number(accountIdFromCookie);
-      this.campaignService.getActiveCampaigns(this.accountId).subscribe(
+      this.account_id = Number(accountIdFromCookie);
+      this.campaignService.getActiveCampaigns(this.account_id).subscribe(
         (data) => {
           this.ActiveCampaigns = data.campaigns;
           console.log(this.ActiveCampaigns);
@@ -89,12 +89,12 @@ export class ActiveCampaignsComponent {
   }
 
   deleteCampaign(campaignId: string): void {
-    if (!this.accountId) {
+    if (!this.account_id) {
       console.error('Account ID is not set.');
       return;
     }
     this.campaignService
-      .deleteCampaign(this.accountId.toString(), campaignId)
+      .deleteCampaign(this.account_id.toString(), campaignId)
       .subscribe(
         (response) => {
           console.log('Campaign deleted successfully:', response);
@@ -218,7 +218,7 @@ export class ActiveCampaignsComponent {
         ...this.campaignForm.value,
         search_terms: this.searchTermsList, // Ensure search_terms is passed as an array
       };
-      const accountId = this.accountId?.toString() || '';
+      const accountId = this.account_id?.toString() || '';
       const campaignId = this.selectedCampaignId?.toString() || '';
 
       this.campaignService

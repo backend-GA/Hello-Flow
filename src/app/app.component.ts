@@ -26,7 +26,7 @@ export class AppComponent {
   loading: boolean = false; // Flag for loading state
   userName: any;
   userEmail: any;
-  accountId: number | undefined; // تعريف الخاصية
+  account_id: number | undefined; // تعريف الخاصية
 
   sidebarshow: boolean = false;
   constructor(
@@ -62,14 +62,14 @@ export class AppComponent {
         this.userData = response;
         const user = response?.user;
         if (user) {
-          const accountId = user.account_id;
+          const account_id = user.account_id;
           this.userName = user.username || '';
           this.userEmail = user.email || '';
           // Store in localStorage
           localStorage.setItem('userName', this.userName);
           localStorage.setItem('userEmail', this.userEmail);
-          localStorage.setItem('accountId', accountId?.toString()); // Store accountId
-          this._CookieService.set('accountId', accountId?.toString()); // Set accountId in cookies
+          localStorage.setItem('account_id', account_id?.toString()); // Store accountId
+          this._CookieService.set('account_id', account_id?.toString()); // Set accountId in cookies
         }
       },
       error: (error) => {
@@ -78,9 +78,9 @@ export class AppComponent {
         this.Router.navigate(['/login']);
       },
     });
-    const accountIdFromCookie = this._CookieService.get('accountId');
+    const accountIdFromCookie = this._CookieService.get('account_id');
     if (accountIdFromCookie) {
-      this.accountId = parseInt(accountIdFromCookie, 10);
+      this.account_id = parseInt(accountIdFromCookie, 10);
     } else {
       console.error('Account ID not found in cookies.');
     }
