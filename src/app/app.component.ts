@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ActivatedRoute,
@@ -10,15 +10,25 @@ import { MessageService } from 'primeng/api';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
+import { SidebarModule } from 'primeng/sidebar';
+import { CampaignsService } from './services/campaigns.service';
+import { ShareDataService } from './services/share-data.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule, SidebarComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterModule,
+    SidebarComponent,
+    SidebarModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   host: { ngSkipHydration: 'true' },
   providers: [MessageService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
   title = 'hello-flow';
@@ -26,14 +36,18 @@ export class AppComponent {
   loading: boolean = false; // Flag for loading state
   userName: any;
   userEmail: any;
-  account_id: number | undefined; // تعريف الخاصية
+  account_id: number | undefined;
+  sidebarVisible: boolean = false;
+  counts: any;
 
   sidebarshow: boolean = false;
   constructor(
     private Router: Router,
     public _ActivatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private _CookieService: CookieService
+    private _CookieService: CookieService,
+    private campaignService: CampaignsService,
+    private sharedDataService: ShareDataService
   ) {}
 
   closeUpgrade() {
@@ -84,5 +98,19 @@ export class AppComponent {
     } else {
       console.error('Account ID not found in cookies.');
     }
+  }
+  private loadCampaignCounts(): void {
+    const accountIdFromCookie = this._CookieService.get('account_id');
+
+    this.campaignService.getCampaignCounts(accountIdFromCookie).subscribe({
+      next: (data) => {
+        console.log('Full campaign data response:', data);
+        this.counts = data?.counts;
+        this.sharedDataService.updateCounts(this.counts);
+      },
+      error: (error) => {
+        console.error('Error fetching campaign counts:', error);
+      },
+    });
   }
 }

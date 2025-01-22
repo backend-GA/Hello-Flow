@@ -3,9 +3,11 @@
     <div class="justify-content-between align-items-center gap-1 d-flex">
       <div>
         <h3>Welcome back, {{ userName }}</h3>
-        <small>Track, manage and forecast campaign performance here.</small>
+        <small class="d-none d-md-block"
+          >Track, manage and forecast campaign performance here.</small
+        >
       </div>
-      <div>
+      <div class="d-none d-md-block">
         <i class="pi pi-search mx-3 fs-5"></i>
         <button class="btn-top mx-2">
           <i class="pi pi-filter fs-6 mx-1"></i> Filters
@@ -64,7 +66,7 @@
           />
           <hr />
           <div
-            class="d-flex gap-5 align-items-start justify-content-between mx-5"
+            class="d-flex align-items-md-start justify-content-md-between mx-5 gap-3 gap-md-5 justify-content-center align-items-center"
           >
             <div
               class="d-flex flex-column gap-3 align-items-center justify-content-start"
@@ -85,7 +87,7 @@
                 class="d-flex gap-2 justify-content-center align-items-center"
               >
                 <i class="pi pi-comment"></i>
-                <small>Replies / Comments</small>
+                <small> Comments</small>
               </div>
               <div>
                 <h3 class="fw-bold">342</h3>
@@ -143,7 +145,10 @@
           </p-table>
         </div>
       </div>
-      <div class="col-md-2 bg-white p-3 rounded" style="flex-grow: 1">
+      <div
+        class="col-md-2 bg-white p-3 rounded"
+        style="flex-grow: 1; margin: 15px 0"
+      >
         <div class="d-flex justify-content-between align-items-center py-3">
           <h6 class="fw-bold">Activity</h6>
           <small>View all</small>

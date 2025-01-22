@@ -5,12 +5,11 @@ import { AuthService } from '../../../services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { ShareDataService } from '../../../services/share-data.service';
-import { SidebarModule } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, SidebarModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   host: { ngSkipHydration: 'true' },
@@ -76,6 +75,7 @@ export class SidebarComponent {
     this.getAllCookies();
     this.account_id = this.cookieService.get('account_id'); // Retrieve account_id from cookies
     this.updateAccountId();
+    this.loadCampaignCounts();
   }
   updateAccountId() {
     this.authService.fetchUserData().subscribe(
