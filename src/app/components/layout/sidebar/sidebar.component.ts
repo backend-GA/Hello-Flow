@@ -5,11 +5,12 @@ import { AuthService } from '../../../services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { ShareDataService } from '../../../services/share-data.service';
+import { SidebarModule } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SidebarModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   host: { ngSkipHydration: 'true' },
@@ -20,6 +21,8 @@ export class SidebarComponent {
   userEmail: string | null = '';
   counts: any;
   usage: string | null = '';
+  accountId: any;
+  sidebarVisible: boolean = false; // To control Sidebar visibility
 
   constructor(
     private authService: AuthService,
@@ -39,7 +42,7 @@ export class SidebarComponent {
     const accountIdFromCookie = this.cookieService.get('accountId');
 
     if (accountIdFromCookie) {
-      this.loadCampaignCounts(accountIdFromCookie);
+      this.loadCampaignCounts(); // لا تمرر معلمة إذا كانت لا تحتاج إليها
     } else {
       this.authService.fetchUserData().subscribe({
         next: (response) => {
@@ -50,7 +53,7 @@ export class SidebarComponent {
             this.cookieService.set('accountId', accountId.toString());
             this.cookieService.set('usage', response.user.usage);
 
-            this.loadCampaignCounts(accountId);
+            this.loadCampaignCounts(); // لا تمرر معلمة إذا كانت لا تحتاج إليها
           } else {
             console.error('Account ID not found in user data.');
           }
@@ -72,20 +75,12 @@ export class SidebarComponent {
     });
   }
 
-  // private loadCampaignCounts(accountId: string): void {
-  //   this.campaignService.getCampaignCounts(accountId).subscribe({
-  //     next: (data) => {
-  //       console.log('Full campaign data response:', data);
-  //       this.counts = data?.counts;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching campaign counts:', error);
-  //     },
-  //   });
-  // }
-  private loadCampaignCounts(accountId: string): void {
-    this.campaignService.getCampaignCounts(accountId).subscribe({
+  private loadCampaignCounts(): void {
+    const accountIdFromCookie = this.cookieService.get('accountId');
+
+    this.campaignService.getCampaignCounts(accountIdFromCookie).subscribe({
       next: (data) => {
+        console.log('Full campaign data response:', data);
         this.counts = data?.counts;
         this.sharedDataService.updateCounts(this.counts);
       },
@@ -94,7 +89,12 @@ export class SidebarComponent {
       },
     });
   }
+
   closeUpgrade() {
     this.isOpen = false;
+  }
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible; // Toggle the visibility of Sidebar
   }
 }

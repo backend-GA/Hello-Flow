@@ -36,13 +36,12 @@ export class AuthService {
   private tokenKey = 'token';
 
   saveToken(token: string): void {
-    this.cookieService.set(this.tokenKey, token);
+    this.cookieService.set('token', token); // Or store in any other way you want
   }
 
-  getToken(): string {
-    return this.cookieService.get(this.tokenKey);
+  getToken(): string | null {
+    return this.cookieService.get('token');
   }
-
   updateToken(newToken: string): void {
     this.saveToken(newToken);
   }

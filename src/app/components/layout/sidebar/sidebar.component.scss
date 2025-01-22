@@ -105,3 +105,42 @@ hr,
 .pi-times {
     color: white;
 }
+
+/* Hide Sidebar on Mobile and show Navbar */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+        /* Hide Sidebar on mobile */
+    }
+
+    .mobile-navbar {
+        display: flex;
+        /* Show Navbar on mobile */
+        background-color: #39a6d3;
+        /* Navbar background */
+        padding: 10px 20px;
+    }
+
+    .logo {
+        width: 100px;
+    }
+
+    .menu-icon {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+}
+
+/* Show Sidebar on Larger Screens */
+@media (min-width: 769px) {
+    .sidebar {
+        display: block;
+        /* Show Sidebar on larger screens */
+    }
+
+    .mobile-navbar {
+        display: none;
+        /* Hide Navbar on larger screens */
+    }
+}

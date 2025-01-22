@@ -43,11 +43,15 @@ export class TwitterAccountComponent {
   }
 
   ngOnInit(): void {
-    const updatedToken = this.authService.getToken(); // استخدمي التوكن الأحدث
+    const updatedToken = this.authService.getToken(); // Get the latest token
+
     if (!updatedToken) {
       console.error('Token not found. Please log in again.');
       this.router.navigate(['/login']);
+    } else {
+      this.loadTwitterAccounts();
     }
+
     this.loadTwitterAccounts();
   }
 }
