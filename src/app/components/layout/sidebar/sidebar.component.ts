@@ -21,8 +21,8 @@ export class SidebarComponent {
   userEmail: string | null = '';
   counts: any;
   usage: string | null = '';
-  accountId: any;
   sidebarVisible: boolean = false; // To control Sidebar visibility
+  accountId: string | null = '';
 
   constructor(
     private authService: AuthService,
@@ -73,8 +73,20 @@ export class SidebarComponent {
         this.counts = newCounts;
       }
     });
-  }
+    this.getAllCookies();
+    this.accountId = this.cookieService.get('account_id'); // Retrieve account_id from cookies
+    const newAccountId = '123456'; // Example new account_id value
 
+    this.updateAccountId(newAccountId); // Update account_id in cookies
+  }
+  updateAccountId(accountId: string) {
+    this.cookieService.set('account_id', accountId, {
+      path: '/',
+      secure: true,
+      sameSite: 'Lax',
+    });
+    console.log('Updated account_id:', accountId);
+  }
   private loadCampaignCounts(): void {
     const accountIdFromCookie = this.cookieService.get('accountId');
 
@@ -96,5 +108,13 @@ export class SidebarComponent {
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible; // Toggle the visibility of Sidebar
+  }
+
+  updateTokenInCookies(token: string) {
+    this.cookieService.set('authToken', token, 1, '/'); // Set token with 7-day expiry
+  }
+  getAllCookies() {
+    const allCookies = this.cookieService.getAll();
+    console.log('All Cookies:', allCookies); // Display all cookies
   }
 }

@@ -12,6 +12,7 @@ import {
 import { AutoComplete } from 'primeng/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-overview',
@@ -53,12 +54,21 @@ export class OverviewComponent {
 
     // Add more campaigns as needed
   ];
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private cookieService: CookieService
+  ) {}
 
   ngOnInit() {
     this.initChart();
 
     this.userName = localStorage.getItem('userName'); // Retrieve name
+    this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
+    this.getAllCookies(); //
+  }
+  getAllCookies() {
+    const allCookies = this.cookieService.getAll();
+    console.log('All Cookies:', allCookies); // Display all cookies
   }
 
   initChart() {
@@ -137,5 +147,9 @@ export class OverviewComponent {
       };
       this.cd.markForCheck();
     }
+  }
+
+  updateTokenInCookies(token: string) {
+    this.cookieService.set('authToken', token, 1, '/'); // Set token with 7-day expiry
   }
 }
