@@ -96,7 +96,7 @@ export class SidebarComponent {
     );
   }
   private loadCampaignCounts(): void {
-    const accountIdFromCookie = this.cookieService.get('accountId');
+    const accountIdFromCookie = this.cookieService.get('account_id');
 
     this.campaignService.getCampaignCounts(accountIdFromCookie).subscribe({
       next: (data) => {
