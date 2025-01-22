@@ -1,12 +1,14 @@
 <div class="login-container">
-  <div class="welcome-section">
+  <div class="welcome-section d-block d-md-block d-none">
     <div class="py-5">
       <img src="../../../../assets/logo/logo.png" alt="" />
     </div>
   </div>
   <div class="form-section">
     <h1 class="text-start py3">Login</h1>
-    <small class="text-muted">Secure access to your dashboard.</small>
+    <small class="text-muted" style="white-space: nowrap"
+      >Secure access to your dashboard.</small
+    >
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <label for="email">Email</label>
