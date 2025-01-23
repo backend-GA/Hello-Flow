@@ -32,6 +32,7 @@ export class CreateNewCampaignComponent {
   hashtagForm: FormGroup;
   account_id: number | null = null;
   searchTermsList: any[] = [];
+  showCommentInput = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,11 +42,13 @@ export class CreateNewCampaignComponent {
   ) {
     this.hashtagForm = this.fb.group({
       hashtag: ['', [Validators.required, Validators.maxLength(500)]],
-      action: ['', Validators.required],
-      comment: ['', [Validators.required, Validators.maxLength(500)]],
-      duration: ['', Validators.required],
+      // action: ['', Validators.required],
+      // comment: ['', [Validators.required, Validators.maxLength(500)]],
+      duration: ['untilCancelled', Validators.required],
       end_date: ['', Validators.required],
-      include_retweets: [false], // Boolean for include_retweets
+      include_retweets: [false], // Boolean for include_retweets,
+      action: ['autoLike'], // Default action
+      comment: ['', [Validators.maxLength(500)]],
     });
   }
   ngOnInit(): void {
@@ -99,6 +102,32 @@ export class CreateNewCampaignComponent {
       console.error('Form is invalid');
     }
   }
+  onDurationChange(): void {
+    if (this.hashtagForm.value.duration === 'untilCancelled') {
+      this.hashtagForm.get('end_date')?.setValue(null); // Clear stop date
+      this.hashtagForm.get('end_date')?.disable(); // Disable end_date
+    } else {
+      this.hashtagForm.get('end_date')?.enable(); // Enable end_date
+    }
+  }
+  onActionChange(): void {
+    const selectedAction = this.hashtagForm.value.action;
+
+    if (selectedAction === 'autoReply' || selectedAction === 'autoLikeReply') {
+      // Show comment input and set it as required
+      this.showCommentInput = true;
+      this.hashtagForm
+        .get('comment')
+        ?.setValidators([Validators.required, Validators.maxLength(500)]);
+    } else {
+      // Hide comment input and clear its value and validators
+      this.showCommentInput = false;
+      this.hashtagForm.get('comment')?.setValue('');
+      this.hashtagForm.get('comment')?.clearValidators();
+    }
+
+    this.hashtagForm.get('comment')?.updateValueAndValidity(); // Update validators
+  }
 
   saveDraft(): void {
     if (this.hashtagForm.valid) {
@@ -149,9 +178,8 @@ export class CreateNewCampaignComponent {
   addSearchTerm(): void {
     const inputValue = this.hashtagForm.get('hashtag')?.value.trim();
     if (inputValue) {
-      // تقسيم المدخلات باستخدام المسافات أو الفواصل
       const uniqueTerms = Array.from(new Set(inputValue.split(/\s+/)));
-      this.searchTermsList = uniqueTerms; // تحديث قائمة المصطلحات
+      this.searchTermsList = uniqueTerms;
     }
   }
 }

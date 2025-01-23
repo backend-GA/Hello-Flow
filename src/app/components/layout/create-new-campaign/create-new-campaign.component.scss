@@ -126,3 +126,13 @@ label {
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
 }
+
+@media (max-width: 769px) {
+    .radio-group {
+        display: flex !important;
+        gap: 20px !important;
+        justify-content: start !important;
+        align-items: start !important;
+        flex-direction: column !important;
+    }
+}

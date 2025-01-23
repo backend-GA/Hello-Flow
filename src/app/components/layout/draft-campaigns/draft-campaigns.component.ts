@@ -45,9 +45,9 @@ export class DraftCampaignsComponent {
   confirmationService: any;
 
   confirm2(event: Event, campaignId: string): void {
-    const accountId = this.cookieService.get('accountId'); // Retrieve accountId from cookies
+    const account_id = this.cookieService.get('account_id'); // Retrieve accountId from cookies
 
-    if (!accountId) {
+    if (!account_id) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -74,7 +74,7 @@ export class DraftCampaignsComponent {
       },
       accept: () => {
         this.campaignService
-          .deleteCampaign(String(accountId), campaignId) // Convert accountId to number
+          .deleteCampaign(String(account_id), campaignId) // Convert accountId to number
           .subscribe(
             (response) => {
               this.messageService.add({
@@ -107,7 +107,7 @@ export class DraftCampaignsComponent {
 
   draftCampaign() {
     // Retrieve accountId from cookies
-    const accountIdFromCookie = this.cookieService.get('accountId'); // Assuming the cookie name is 'accountId'
+    const accountIdFromCookie = this.cookieService.get('account_id'); // Assuming the cookie name is 'accountId'
 
     // Check if accountId exists in cookies
     if (accountIdFromCookie) {
@@ -168,6 +168,7 @@ export class DraftCampaignsComponent {
         },
       },
     ];
+    this.draftCampaign();
   }
 
   deleteCampaign(campaignId: string): void {

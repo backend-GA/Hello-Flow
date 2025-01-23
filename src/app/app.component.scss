@@ -46,9 +46,9 @@
 .num {
     width: 32px;
     height: 22px;
-    color: white !important;
-    background-color: #002726 !important;
-    border: 2px solid #004E4C !important;
+    color: white;
+    border: #002726 solid 1px;
+    background-color: #004E4C;
     border-radius: 15px;
     font-size: 14px;
     display: flex;
@@ -62,12 +62,12 @@ ul {
     margin: 0;
 }
 
-ul li {
+.m {
     margin: 20px 0;
+    /* Adjust margin as needed */
 }
 
 a {
-    color: white !important;
     text-decoration: none !important;
     display: block !important;
 }

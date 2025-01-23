@@ -41,7 +41,7 @@ export class SidebarComponent {
     const accountIdFromCookie = this.cookieService.get('account_id');
 
     if (accountIdFromCookie) {
-      this.loadCampaignCounts(); // لا تمرر معلمة إذا كانت لا تحتاج إليها
+      this.loadCampaignCounts();
     } else {
       this.authService.fetchUserData().subscribe({
         next: (response) => {

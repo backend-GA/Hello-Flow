@@ -44,7 +44,12 @@
             </p>
             <div class="radio-group py-3">
               <label class="styled-radio">
-                <input type="radio" formControlName="action" value="autoLike" />
+                <input
+                  type="radio"
+                  formControlName="action"
+                  value="autoLike"
+                  (change)="onActionChange()"
+                />
                 <span class="custom-radio-box"></span>
                 <span class="custom-radio-label">Auto like</span>
               </label>
@@ -53,6 +58,7 @@
                   type="radio"
                   formControlName="action"
                   value="autoReply"
+                  (change)="onActionChange()"
                 />
                 <span class="custom-radio-box"></span>
                 <span class="custom-radio-label"
@@ -64,13 +70,14 @@
                   type="radio"
                   formControlName="action"
                   value="autoLikeReply"
+                  (change)="onActionChange()"
                 />
                 <span class="custom-radio-box"></span>
                 <span class="custom-radio-label">Auto Like & Reply</span>
               </label>
             </div>
 
-            <div class="py-3 d-flex flex-column">
+            <div class="py-3 d-flex flex-column" *ngIf="showCommentInput">
               <p class="fw-bold">
                 What comment reply do you want automatically posted?
               </p>
@@ -105,14 +112,17 @@
                     type="radio"
                     formControlName="duration"
                     value="untilCancelled"
+                    (change)="onDurationChange()"
                   />
                   Run until cancelled
                 </label>
+
                 <label>
                   <input
                     type="radio"
                     formControlName="duration"
                     value="stopDate"
+                    (change)="onDurationChange()"
                   />
                   Choose stop date
                 </label>

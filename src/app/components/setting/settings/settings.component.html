@@ -11,7 +11,7 @@
         </div>
         <div>
           <h3 class="m-0">{{ dataarray.username }}</h3>
-          <p class="text-muted mb-1">{{ dataarray.email }}</p>
+          <p class="text-muted mb-1 email">{{ dataarray.email }}</p>
           <span class="badge bg-success text-white">Active Subscription</span>
         </div>
       </div>
@@ -25,7 +25,9 @@
           </tr>
           <tr>
             <th>Subscription Status</th>
-            <td>{{ dataarray.isSubscribed }}</td>
+            <td class="badge bg-success text-white mt-1">
+              {{ dataarray.isSubscribed }}
+            </td>
           </tr>
           <tr>
             <th>Account ID</th>

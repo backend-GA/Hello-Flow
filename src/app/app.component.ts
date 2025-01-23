@@ -98,6 +98,7 @@ export class AppComponent {
     } else {
       console.error('Account ID not found in cookies.');
     }
+    this.loadCampaignCounts();
   }
   private loadCampaignCounts(): void {
     const accountIdFromCookie = this._CookieService.get('account_id');
@@ -112,5 +113,13 @@ export class AppComponent {
         console.error('Error fetching campaign counts:', error);
       },
     });
+  }
+  logout(): void {
+    localStorage.clear();
+
+    this._CookieService.deleteAll();
+
+    // Navigate to the login page
+    this.Router.navigate(['/login']);
   }
 }

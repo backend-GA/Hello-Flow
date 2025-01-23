@@ -25,5 +25,31 @@ body {
 .p-ripple {
     background-color: transparent !important;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media (max-width: 769px) {
+    h3 {
+        font-size: 18px;
+    }
+
+    h5 {
+        font-size: 15px;
+    }
+
+    button {
+        font-size: 13px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+}

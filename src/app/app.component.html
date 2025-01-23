@@ -1,9 +1,10 @@
 <div
   class="bg-white justify-content-between align-items-start d-flex p-3 d-block d-md-none"
+  *ngIf="sidebarshow"
 >
   <img src="../assets/logo/logo-dark.png" alt="" width="100px" />
   <div class="d-flex gap-3 justify-content-center align-items-center">
-    <i class="pi pi-user fs-5"></i>
+    <i class="pi pi-user fs-5" (click)="logout()"></i>
     <i class="pi pi-bars fs-5" (click)="sidebarVisible = true"></i>
   </div>
 </div>
@@ -23,62 +24,66 @@
     </div>
     <ul>
       <li
-        class="d-flex gap-2 justify-content-start align-items-center"
+        class="d-flex gap-2 justify-content-start align-items-center m"
         routerLinkActive="back-G"
       >
         <img src="../assets/overview/icon-1.svg" alt="img" />
-        <a routerLink="/overview">Overview</a>
+        <a routerLink="/overview" class="text-white">Overview</a>
       </li>
       <li
-        class="d-flex gap-2 justify-content-between align-items-center"
+        class="d-flex gap-2 justify-content-between align-items-center m"
         routerLinkActive="back-G"
       >
         <div class="d-flex gap-2">
           <img src="../assets/overview/icon-2.svg" alt="img" />
-          <a routerLink="/Active_Campaigns">Active Campaigns</a>
+          <a routerLink="/Active_Campaigns" class="text-white"
+            >Active Campaigns</a
+          >
         </div>
         <div class="num">
           <small>{{ counts?.active }}</small>
         </div>
       </li>
       <li
-        class="d-flex gap-2 justify-content-between align-items-center"
+        class="d-flex gap-2 justify-content-between align-items-center m"
         routerLinkActive="back-G"
       >
         <div class="d-flex gap-2">
           <img src="../assets/overview/icon-3.svg" alt="img" />
-          <a routerLink="/Past_Campaigns">Past Campaigns</a>
+          <a routerLink="/Past_Campaigns" class="text-white">Past Campaigns</a>
         </div>
         <div class="num">
           <small>{{ counts?.inactive }}</small>
         </div>
       </li>
       <li
-        class="d-flex gap-2 justify-content-between align-items-center"
+        class="d-flex gap-2 justify-content-between align-items-center m"
         routerLinkActive="back-G"
       >
         <div class="d-flex gap-2">
           <img src="../assets/overview/icon-4.svg" alt="img" />
-          <a routerLink="/Draft_Campaigns">Draft Campaigns</a>
+          <a routerLink="/Draft_Campaigns" class="text-white"
+            >Draft Campaigns</a
+          >
         </div>
         <div class="num">
           <small>{{ counts?.draft }}</small>
         </div>
       </li>
       <li
-        class="d-flex gap-2 justify-content-start align-items-center"
+        class="d-flex gap-2 justify-content-start align-items-center m"
         routerLinkActive="back-G"
       >
         <img src="../assets/overview/icon-5.svg" alt="img" />
-        <a routerLink="Billing">Billing</a>
+        <a routerLink="Billing" class="text-white">Billing</a>
       </li>
       <li
-        class="d-flex gap-2 justify-content-start align-items-center"
+        class="d-flex gap-2 justify-content-start align-items-center m"
         routerLinkActive="back-G"
       >
         <i class="pi pi-user" style="font-size: 1.2rem; color: white"></i>
 
-        <a routerLink="/profile">Profile</a>
+        <a routerLink="/profile" class="text-white">Profile</a>
       </li>
     </ul>
   </div>
