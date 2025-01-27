@@ -1,5 +1,5 @@
 import { ChartModule } from 'primeng/chart';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -17,7 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [ChartModule, AutoComplete, FormsModule, TableModule],
+  imports: [ChartModule, AutoComplete, FormsModule, TableModule, CommonModule],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -26,16 +26,16 @@ export class OverviewComponent {
   data: any;
   userName: string | null = '';
   options: any;
+  showComingSoon = false;
+
   value = 'Justice Campaign';
   suggestions: string[] = []; // Should be an array
   platformId = inject(PLATFORM_ID);
   Active_Campaigns: any[] = [
     {
-      code: 'Facebook',
-      name: 'Justice for Jack',
-      like: '2512',
+      name: 'Active Campaigns',
+      like: 91,
       Comments: 1012,
-      share: 91,
     },
     {
       code: 'Twitter (X)',
@@ -59,6 +59,9 @@ export class OverviewComponent {
     private cookieService: CookieService
   ) {}
 
+  showMessage() {
+    this.showComingSoon = !this.showComingSoon; // Toggle the visibility
+  }
   ngOnInit() {
     this.initChart();
 

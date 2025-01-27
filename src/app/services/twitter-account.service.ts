@@ -82,4 +82,17 @@ export class TwitterAccountService {
       { headers }
     );
   }
+  cancelPaln(): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.delete<any>(
+      `${environment.apiUrl}payments/subscriptions`,
+
+      { headers }
+    );
+  }
 }

@@ -20,7 +20,7 @@
 
 
 .View_All {
-    background-color: #FFFFFF;
+    background-color: transparent;
     border: #D0D5DD 1px solid;
     outline: none;
     color: #344054;
@@ -29,4 +29,14 @@
     -moz-border-radius: 8px;
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
+}
+
+
+
+
+
+.message {
+    margin-top: 10px;
+    font-size: 16px;
+    color: green;
 }

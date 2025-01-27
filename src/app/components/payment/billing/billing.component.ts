@@ -55,4 +55,15 @@ export class BillingComponent {
       }
     );
   }
+  deleteSubscription(): void {
+    this.TwitterAccountService.cancelPaln().subscribe({
+      next: (response) => {
+        console.log('Subscription deleted successfully:', response);
+        this.fetchSubscriptions();
+      },
+      error: (error) => {
+        console.error('Error deleting subscription:', error);
+      },
+    });
+  }
 }

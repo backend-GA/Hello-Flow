@@ -11,6 +11,20 @@
     white-space: nowrap;
 }
 
+.cancel-btn {
+    background-color: red;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    height: 40px;
+    white-space: nowrap;
+    color: white;
+}
+
 .bg-img {
     background-color: #FEF3F2;
     height: 75px;

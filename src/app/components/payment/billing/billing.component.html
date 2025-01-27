@@ -6,7 +6,7 @@
     </div>
   </div>
 </section>
-<section class="plan">
+<section class="plan" *ngIf="subscriptions > 0">
   <div class="container">
     <div
       class="d-flex justify-content-between align-items-center gap-4 bg-white p-4 rounded-4"
@@ -27,22 +27,22 @@
           >
         </div>
       </div>
-      <div>
+      <div class="d-flex gap-2">
         <button class="edit-btn">
-          <i class="pi pi-pencil me-1" routerLink="/plans"></i>Edit Plan
+          <i class="pi pi-pencil me-1"></i>Edit Plan
+        </button>
+        <button class="cancel-btn me-2" (click)="deleteSubscription()">
+          <i class="pi pi-times me-1"></i>Cancel Plan
         </button>
       </div>
     </div>
   </div>
 </section>
-<section class="table">
+<section class="table" *ngIf="subscriptions > 0">
   <div class="container">
     <div class="table bg-white p-3 rounded" style="margin: 15px 0">
       <div class="d-flex justify-content-between align-items-center py-3">
         <h6 class="fw-bold">Billing History</h6>
-        <button class="btn-top mx-2">
-          <i class="pi pi-filter fs-6 mx-1"></i> Filters
-        </button>
       </div>
       <p-table [value]="subscriptions" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header">
@@ -51,7 +51,6 @@
             <th>Plan</th>
             <th>Amount</th>
             <th>Type</th>
-            <th>Download Invoice</th>
 
             <th style="width: 5rem"></th>
           </tr>
@@ -62,42 +61,9 @@
             <td>{{ product.plan.name }}</td>
             <td>${{ product.plan.price }}</td>
             <td>{{ product.plan.type }}</td>
-
-            <td>
-              <button class="edit-btn">
-                <i class="pi pi-download me-2"></i> Download Invoice
-              </button>
-            </td>
           </tr>
         </ng-template>
       </p-table>
-    </div>
-  </div>
-</section>
-<section class="footer py-3">
-  <div class="container">
-    <div
-      class="d-flex justify-content-between align-items-center gap-4 bg-white p-4 rounded-4"
-    >
-      <div class="d-flex justify-content-start align-items-center gap-3">
-        <div class="bg-img2">
-          <img
-            src="../../../../assets/overview/mastercard.png"
-            alt=""
-            style="width: 30px; height: 30px"
-          />
-        </div>
-
-        <div>
-          <h5 class="fw-bold">Mastercard</h5>
-          <small>xxxx xxxx xxxx 9876</small>
-        </div>
-      </div>
-      <div>
-        <button class="edit-btn">
-          <i class="pi pi-pencil me-1"></i>Edit Payment Method
-        </button>
-      </div>
     </div>
   </div>
 </section>
