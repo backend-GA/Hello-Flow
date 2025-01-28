@@ -149,155 +149,57 @@
           <small>View all</small>
         </div>
         <div class="side-info d-flex flex-column gap-3">
-          <div class="d-flex gap-2">
+          <div
+            *ngFor="let activity of recentActivity"
+            class="d-flex gap-2 mb-3"
+          >
+            <!-- User Avatar -->
             <img
               src="../../../assets/overview/Avatar.png"
-              alt=""
+              alt="User Avatar"
               style="width: 40px; height: 40px; border-radius: 50%"
             />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Demi Wikinson</small>
 
-                <img src="../../../assets/overview/facebook.png" alt="" />
-              </div>
-              <small
-                >commented <strong>Supporting #justiceforJack 💪</strong></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
+            <!-- Activity Content -->
             <div>
+              <!-- Username and Platform Icon -->
               <div class="d-flex align-items-start gap-2">
-                <small>Demi Wikinson</small>
-
-                <img src="../../../assets/overview/facebook.png" alt="" />
+                <small>{{ activity.account.username }}</small>
+                <img
+                  src="../../../assets/overview/facebook.png"
+                  alt="Platform Icon"
+                  *ngIf="activity.platform === 'facebook'"
+                />
               </div>
-              <small
-                >commented <strong>Supporting #justiceforJack 💪</strong></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Demi Wikinson</small>
 
-                <img src="../../../assets/overview/facebook.png" alt="" />
-              </div>
-              <small
-                >commented <strong>Supporting #justiceforJack 💪</strong></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Mark21</small>
-
-                <img src="../../../assets/overview/insta.png" alt="" />
-              </div>
-              <small
-                >posted
-                <strong>
-                  ustice will prevail! #justiceforJack 🙏💪</strong
-                ></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Mark21</small>
-
-                <img src="../../../assets/overview/insta.png" alt="" />
-              </div>
-              <small
-                >posted
-                <strong>
-                  ustice will prevail! #justiceforJack 🙏💪</strong
-                ></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Mark21</small>
-
-                <img src="../../../assets/overview/insta.png" alt="" />
-              </div>
-              <small
-                >posted
-                <strong>
-                  ustice will prevail! #justiceforJack 🙏💪</strong
-                ></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Mark21</small>
-
-                <img src="../../../assets/overview/insta.png" alt="" />
-              </div>
-              <small
-                >posted
-                <strong>
-                  ustice will prevail! #justiceforJack 🙏💪</strong
-                ></small
-              >
-            </div>
-          </div>
-          <div class="d-flex gap-2">
-            <img
-              src="../../../assets/overview/Avatar.png"
-              alt=""
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div>
-              <div class="d-flex align-items-start gap-2">
-                <small>Mark21</small>
-
-                <img src="../../../assets/overview/Social icon.png" alt="" />
-              </div>
-              <small
-                >posted
-                <strong>
-                  ustice will prevail! #justiceforJack 🙏💪</strong
-                ></small
-              >
+              <!-- Action Message -->
+              <small>
+                <ng-container
+                  *ngIf="
+                    activity.liked === 'done' &&
+                    activity.comments_done === 'done'
+                  "
+                >
+                  liked & commented
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    activity.liked === 'done' &&
+                    activity.comments_done !== 'done'
+                  "
+                >
+                  liked
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    activity.comments_done === 'done' &&
+                    activity.liked !== 'done'
+                  "
+                >
+                  commented
+                </ng-container>
+                <strong>{{ activity.text }}</strong>
+              </small>
             </div>
           </div>
         </div>

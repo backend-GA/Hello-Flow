@@ -13,6 +13,7 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { CookieService } from 'ngx-cookie-service';
+import { CampaignsService } from '../../../services/campaigns.service';
 
 @Component({
   selector: 'app-overview',
@@ -27,6 +28,7 @@ export class OverviewComponent {
   userName: string | null = '';
   options: any;
   showComingSoon = false;
+  recentActivity: any[] = [];
 
   value = 'Justice Campaign';
   suggestions: string[] = []; // Should be an array
@@ -56,7 +58,8 @@ export class OverviewComponent {
   ];
   constructor(
     private cd: ChangeDetectorRef,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private CampaignsService: CampaignsService
   ) {}
 
   showMessage() {
@@ -68,6 +71,7 @@ export class OverviewComponent {
     this.userName = localStorage.getItem('userName'); // Retrieve name
     this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
     this.getAllCookies(); //
+    this.fetchRecentActivity();
   }
   getAllCookies() {
     const allCookies = this.cookieService.getAll();
@@ -154,5 +158,26 @@ export class OverviewComponent {
 
   updateTokenInCookies(token: string) {
     this.cookieService.set('authToken', token, 1, '/'); // Set token with 7-day expiry
+  }
+
+  fetchRecentActivity(): void {
+    const accountId = this.cookieService.get('account_id'); // Retrieve account ID from cookies
+
+    if (!accountId) {
+      console.error('Account ID is missing in cookies.');
+      return;
+    }
+
+    // Call the service method to fetch recent activity
+    this.CampaignsService.GetrecentActivity(Number(accountId)).subscribe({
+      next: (data) => {
+        this.recentActivity = data.records; // Assign the fetched data
+        console.log('Recent Activity:', this.recentActivity);
+      },
+      error: (err) => {
+        // Enhanced error logging for debugging
+        console.error('Error fetching recent activity:', err.message || err);
+      },
+    });
   }
 }

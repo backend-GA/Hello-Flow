@@ -2,7 +2,7 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TwitterAccountService } from '../../../services/twitter-account.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-billing',
@@ -38,7 +38,10 @@ export class BillingComponent {
   ];
   subscriptions: any;
 
-  constructor(private TwitterAccountService: TwitterAccountService) {}
+  constructor(
+    private TwitterAccountService: TwitterAccountService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchSubscriptions();
@@ -59,7 +62,7 @@ export class BillingComponent {
     this.TwitterAccountService.cancelPaln().subscribe({
       next: (response) => {
         console.log('Subscription deleted successfully:', response);
-        this.fetchSubscriptions();
+        this.router.navigate(['/overview']);
       },
       error: (error) => {
         console.error('Error deleting subscription:', error);

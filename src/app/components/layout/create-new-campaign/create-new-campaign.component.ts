@@ -33,6 +33,7 @@ export class CreateNewCampaignComponent {
   account_id: number | null = null;
   searchTermsList: any[] = [];
   showCommentInput = false;
+  selectedTab = '0'; // Default to the first tab (#hashtag campaign)
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +58,11 @@ export class CreateNewCampaignComponent {
       console.error('Account ID is not available or invalid');
     }
   }
+  onDropdownChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedTab = target.value;
+  }
+
   onSubmit(): void {
     if (this.hashtagForm.valid) {
       const actionMap: { [key: string]: string } = {
