@@ -173,19 +173,17 @@ export class ActiveCampaignsComponent {
     if (campaign) {
       console.log('Selected Campaign:', campaign); // تحقق من الحملة المحددة
 
-      // تحويل التاريخ إلى تنسيق مناسب (مثلاً: Date أو ISO String)
       const endDate = campaign.end_date
         ? new Date(campaign.end_date).toISOString().split('T')[0]
         : '';
 
-      // تعيين القيم في النموذج
       this.campaignForm.patchValue({
         search_terms: campaign.search_terms
           ? campaign.search_terms.join(' ')
           : '',
-        is_active: campaign.is_active || true,
-        is_draft: campaign.is_draft || false,
-        include_retweets: campaign.include_retweets || true,
+        is_active: campaign.is_active,
+        is_draft: campaign.is_draft,
+        include_retweets: campaign.include_retweets,
         end_date: endDate, // تعيين التاريخ
       });
 

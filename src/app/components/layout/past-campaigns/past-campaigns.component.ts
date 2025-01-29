@@ -137,9 +137,9 @@ export class PastCampaignsComponent {
         search_terms: campaign.search_terms
           ? campaign.search_terms.join(' ')
           : '',
-        is_active: campaign.is_active || true,
-        is_draft: campaign.is_draft || false,
-        include_retweets: campaign.include_retweets || true,
+        is_active: campaign.is_active,
+        is_draft: campaign.is_draft,
+        include_retweets: campaign.include_retweets,
         end_date: endDate, // تعيين التاريخ
       });
 

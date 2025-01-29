@@ -29,33 +29,12 @@ export class OverviewComponent {
   options: any;
   showComingSoon = false;
   recentActivity: any[] = [];
+  account_id?: number;
 
   value = 'Justice Campaign';
   suggestions: string[] = []; // Should be an array
   platformId = inject(PLATFORM_ID);
-  Active_Campaigns: any[] = [
-    {
-      name: 'Active Campaigns',
-      like: 91,
-      Comments: 1012,
-    },
-    {
-      code: 'Twitter (X)',
-      name: '#Masterclass2029',
-      like: '2512',
-      Comments: 1012,
-      share: 91,
-    },
-    {
-      code: 'Tiktok',
-      name: '#Masterclass2029',
-      like: '2512',
-      Comments: 1012,
-      share: 91,
-    },
-
-    // Add more campaigns as needed
-  ];
+  ActiveCampaigns: any;
   constructor(
     private cd: ChangeDetectorRef,
     private cookieService: CookieService,
@@ -72,6 +51,7 @@ export class OverviewComponent {
     this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
     this.getAllCookies(); //
     this.fetchRecentActivity();
+    this.getActiveCampaigns();
   }
   getAllCookies() {
     const allCookies = this.cookieService.getAll();
@@ -179,5 +159,22 @@ export class OverviewComponent {
         console.error('Error fetching recent activity:', err.message || err);
       },
     });
+  }
+  getActiveCampaigns() {
+    const accountIdFromCookie = this.cookieService.get('account_id');
+    if (accountIdFromCookie) {
+      this.account_id = Number(accountIdFromCookie);
+      this.CampaignsService.getActiveCampaigns(this.account_id).subscribe(
+        (data) => {
+          this.ActiveCampaigns = data.campaigns.slice(0, 3);
+          console.log('overrrrrrrrrrview active', this.ActiveCampaigns);
+        },
+        (error) => {
+          console.error('Error fetching active campaigns:', error);
+        }
+      );
+    } else {
+      console.error('Account ID not found in cookies.');
+    }
   }
 }

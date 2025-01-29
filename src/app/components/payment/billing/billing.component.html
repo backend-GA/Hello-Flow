@@ -9,10 +9,10 @@
 <section class="plan">
   <div class="container">
     <div
-      class="d-flex justify-content-center align-items-center gap-1 gap-md-4 bg-white p-3 rounded-4"
+      class="d-flex justify-content-between align-items-between gap-1 gap-md-4 bg-white p-3 rounded-4"
     >
       <div class="d-flex justify-content-start align-items-center gap-3">
-        <div class="bg-img d-md-block d-none">
+        <div class="bg-img">
           <img
             src="../../../assets/overview/plan.png"
             alt=""
@@ -21,7 +21,7 @@
         </div>
 
         <div>
-          <h5 class="fw-bold">{{ subscriptions[0]?.plan.name }} Plan</h5>
+          <h5 class="fw-bold">{{ subscriptions?.[0].plan.name }} Plan</h5>
           <small *ngIf="subscriptions?.length > 0"
             >Expires on: {{ subscriptions[0]?.expires_at | date }}</small
           >
@@ -40,27 +40,39 @@
 </section>
 <section class="table">
   <div class="container">
-    <div class="table bg-white p-3 rounded" style="margin: 15px 0">
+    <div class="bg-white p-3 rounded" style="margin: 15px 0">
       <div class="d-flex justify-content-between align-items-center py-3">
         <h6 class="fw-bold">Billing History</h6>
       </div>
-      <p-table [value]="subscriptions" [tableStyle]="{ 'min-width': '50rem' }">
+
+      <!-- Show this message if there are no subscriptions -->
+      <div *ngIf="subscriptions?.length === 0" class="text-center py-3">
+        <p class="text-muted">No billing history available.</p>
+      </div>
+
+      <!-- Show table only if there are subscriptions -->
+      <p-table
+        *ngIf="subscriptions?.length > 0"
+        [value]="subscriptions"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
         <ng-template pTemplate="header">
           <tr>
             <th>Date</th>
             <th>Plan</th>
             <th>Amount</th>
             <th>Type</th>
-
             <th style="width: 5rem"></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
-            <td>{{ product.created_at | date }}</td>
-            <td>{{ product.plan.name }}</td>
-            <td>${{ product.plan.price }}</td>
-            <td>{{ product.plan.type }}</td>
+            <td>
+              {{ product.created_at ? (product.created_at | date) : "N/A" }}
+            </td>
+            <td>{{ product.plan?.name || "N/A" }}</td>
+            <td>${{ product.plan?.price || "0.00" }}</td>
+            <td>{{ product.plan?.type || "N/A" }}</td>
           </tr>
         </ng-template>
       </p-table>

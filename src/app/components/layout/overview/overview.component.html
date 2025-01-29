@@ -115,7 +115,7 @@
             <button class="View_All p-2">View All</button>
           </div>
           <p-table
-            [value]="Active_Campaigns"
+            [value]="ActiveCampaigns"
             [tableStyle]="{ 'min-width': '50rem' }"
           >
             <ng-template pTemplate="header">
@@ -129,9 +129,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-product>
               <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.like }}</td>
-                <td>{{ product.Comments }}</td>
+                <td>{{ product.search_terms[0] }}</td>
+                <td>{{ product.likesCount }}</td>
+                <td>{{ product.commentsCount }}</td>
                 <td>
                   <i class="pi"></i>
                 </td>
