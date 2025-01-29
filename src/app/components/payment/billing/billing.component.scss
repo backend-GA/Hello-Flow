@@ -153,3 +153,13 @@
 .check-details:hover {
     background: #5A3EC8;
 }
+
+/* Media query for devices with a max width of 600px */
+@media (min-width: 769px) {
+
+    .edit-btn,
+    .cancel-btn {
+        font-size: 10px !important;
+
+    }
+}

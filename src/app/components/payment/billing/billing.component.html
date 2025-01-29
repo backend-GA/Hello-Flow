@@ -9,10 +9,10 @@
 <section class="plan">
   <div class="container">
     <div
-      class="d-flex justify-content-between align-items-center gap-4 bg-white p-4 rounded-4"
+      class="d-flex justify-content-center align-items-center gap-1 gap-md-4 bg-white p-3 rounded-4"
     >
       <div class="d-flex justify-content-start align-items-center gap-3">
-        <div class="bg-img">
+        <div class="bg-img d-md-block d-none">
           <img
             src="../../../assets/overview/plan.png"
             alt=""
@@ -27,11 +27,11 @@
           >
         </div>
       </div>
-      <div class="d-flex gap-2">
-        <button class="edit-btn">
+      <div class="button-container gap-2 d-flex flex-column flex-md-row">
+        <button class="edit-btn me-2 p-1">
           <i class="pi pi-pencil me-1"></i>Edit Plan
         </button>
-        <button class="cancel-btn me-2" (click)="deleteSubscription()">
+        <button class="cancel-btn me-2 p-1" (click)="deleteSubscription()">
           <i class="pi pi-times me-1"></i>Cancel Plan
         </button>
       </div>

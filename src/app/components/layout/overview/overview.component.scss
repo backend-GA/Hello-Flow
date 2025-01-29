@@ -40,3 +40,15 @@
     font-size: 16px;
     color: green;
 }
+
+.truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Add ellipsis (...) */
+    word-break: none;
+    /* Ensure words break correctly */
+}

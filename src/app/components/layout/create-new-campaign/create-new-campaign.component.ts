@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TabsModule } from 'primeng/tabs';
-import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CampaignsService } from '../../../services/campaigns.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router, RouterLink } from '@angular/router';
@@ -21,7 +21,7 @@ import { Router, RouterLink } from '@angular/router';
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
-    AutoComplete,
+    AutoCompleteModule,
     RouterLink,
   ],
   templateUrl: './create-new-campaign.component.html',
@@ -33,7 +33,7 @@ export class CreateNewCampaignComponent {
   account_id: number | null = null;
   searchTermsList: any[] = [];
   showCommentInput = false;
-  selectedTab = '0'; // Default to the first tab (#hashtag campaign)
+  selectedTab = '0'; // Default to the first tab
 
   constructor(
     private fb: FormBuilder,
@@ -43,21 +43,21 @@ export class CreateNewCampaignComponent {
   ) {
     this.hashtagForm = this.fb.group({
       hashtag: ['', [Validators.required, Validators.maxLength(500)]],
-      // action: ['', Validators.required],
-      // comment: ['', [Validators.required, Validators.maxLength(500)]],
       duration: ['untilCancelled', Validators.required],
-      end_date: ['', Validators.required],
-      include_retweets: [false], // Boolean for include_retweets,
-      action: ['autoLike'], // Default action
+      end_date: [{ value: null, disabled: true }], // Initially disabled
+      include_retweets: [false],
+      action: [''],
       comment: ['', [Validators.maxLength(500)]],
     });
   }
+
   ngOnInit(): void {
-    this.account_id = Number(this.cookieService.get('account_id')); // Convert to number
+    this.account_id = Number(this.cookieService.get('account_id')) || null;
     if (!this.account_id) {
       console.error('Account ID is not available or invalid');
     }
   }
+
   onDropdownChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.selectedTab = target.value;
@@ -80,26 +80,28 @@ export class CreateNewCampaignComponent {
 
       const hashtagsArray = this.hashtagForm.value.hashtag.split(/\s+/);
 
-      const payload = {
+      const payload: any = {
         search_terms: hashtagsArray,
         action: action,
         draft: false,
         comments: [this.hashtagForm.value.comment],
         include_retweets: this.hashtagForm.value.include_retweets,
-        end_date: this.hashtagForm.value.end_date,
       };
+
+      // Only include end_date if it's not null or empty
+      const endDate = this.hashtagForm.get('end_date')?.value;
+      if (endDate) {
+        payload.end_date = endDate;
+      }
 
       if (this.account_id) {
         this.campaignService.createCampaign(this.account_id, payload).subscribe(
           (response) => {
             console.log('Campaign created successfully', response);
             this.router.navigate(['/Active_Campaigns']);
-
             this.hashtagForm.reset();
           },
-          (error) => {
-            console.error('Error creating campaign:', error);
-          }
+          (error) => console.error('Error creating campaign:', error)
         );
       } else {
         console.error('Account ID is not available');
@@ -108,31 +110,30 @@ export class CreateNewCampaignComponent {
       console.error('Form is invalid');
     }
   }
+
   onDurationChange(): void {
-    if (this.hashtagForm.value.duration === 'untilCancelled') {
-      this.hashtagForm.get('end_date')?.setValue(null); // Clear stop date
-      this.hashtagForm.get('end_date')?.disable(); // Disable end_date
+    const duration = this.hashtagForm.get('duration')?.value;
+    if (duration === 'untilCancelled') {
+      this.hashtagForm.get('end_date')?.setValue(undefined);
+      this.hashtagForm.get('end_date')?.disable();
     } else {
-      this.hashtagForm.get('end_date')?.enable(); // Enable end_date
+      this.hashtagForm.get('end_date')?.enable();
     }
   }
+
   onActionChange(): void {
     const selectedAction = this.hashtagForm.value.action;
-
     if (selectedAction === 'autoReply' || selectedAction === 'autoLikeReply') {
-      // Show comment input and set it as required
       this.showCommentInput = true;
       this.hashtagForm
         .get('comment')
         ?.setValidators([Validators.required, Validators.maxLength(500)]);
     } else {
-      // Hide comment input and clear its value and validators
       this.showCommentInput = false;
-      this.hashtagForm.get('comment')?.setValue('');
+      this.hashtagForm.get('comment')?.setValue(null);
       this.hashtagForm.get('comment')?.clearValidators();
     }
-
-    this.hashtagForm.get('comment')?.updateValueAndValidity(); // Update validators
+    this.hashtagForm.get('comment')?.updateValueAndValidity();
   }
 
   saveDraft(): void {
@@ -152,6 +153,12 @@ export class CreateNewCampaignComponent {
 
       const hashtagsArray = this.hashtagForm.value.hashtag.split(/\s+/);
 
+      // Set end_date to undefined if "Run until cancelled" is selected
+      const endDate =
+        this.hashtagForm.get('duration')?.value === 'end_date'
+          ? this.hashtagForm.get('end_date')?.value
+          : undefined;
+
       const payload = {
         search_terms: hashtagsArray,
         action: action,
@@ -159,20 +166,17 @@ export class CreateNewCampaignComponent {
         is_active: true,
         comments: [this.hashtagForm.value.comment],
         include_retweets: this.hashtagForm.value.include_retweets,
-        end_date: this.hashtagForm.value.end_date,
+        end_date: endDate, // Send undefined if "Run until cancelled"
       };
 
       if (this.account_id) {
         this.campaignService.createCampaign(this.account_id, payload).subscribe(
           (response) => {
-            console.log('Campaign created successfully', response);
+            console.log('Campaign saved as draft successfully', response);
             this.router.navigate(['/Draft_Campaigns']);
-
             this.hashtagForm.reset();
           },
-          (error) => {
-            console.error('Error creating campaign:', error);
-          }
+          (error) => console.error('Error saving draft:', error)
         );
       } else {
         console.error('Account ID is not available');
@@ -181,6 +185,7 @@ export class CreateNewCampaignComponent {
       console.error('Form is invalid');
     }
   }
+
   addSearchTerm(): void {
     const inputValue = this.hashtagForm.get('hashtag')?.value.trim();
     if (inputValue) {
