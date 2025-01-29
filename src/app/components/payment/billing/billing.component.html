@@ -21,7 +21,7 @@
         </div>
 
         <div>
-          <h5 class="fw-bold">{{ subscriptions?.[0].plan.name }} Plan</h5>
+          <h5 class="fw-bold">{{ subscriptions?.[0]?.plan.name }} Plan</h5>
           <small *ngIf="subscriptions?.length > 0"
             >Expires on: {{ subscriptions[0]?.expires_at | date }}</small
           >
@@ -70,9 +70,9 @@
             <td>
               {{ product.created_at ? (product.created_at | date) : "N/A" }}
             </td>
-            <td>{{ product.plan?.name || "N/A" }}</td>
-            <td>${{ product.plan?.price || "0.00" }}</td>
-            <td>{{ product.plan?.type || "N/A" }}</td>
+            <td>{{ product.plan?.name }}</td>
+            <td>${{ product.plan?.price }}</td>
+            <td>{{ product.plan?.type }}</td>
           </tr>
         </ng-template>
       </p-table>
