@@ -1,19 +1,18 @@
-import { ChartModule } from 'primeng/chart';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
-  ChangeDetectorRef,
   Component,
-  effect,
-  inject,
   OnInit,
+  ChangeDetectorRef,
+  inject,
   PLATFORM_ID,
   ViewEncapsulation,
 } from '@angular/core';
-import { AutoComplete } from 'primeng/autocomplete';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
 import { CookieService } from 'ngx-cookie-service';
 import { CampaignsService } from '../../../services/campaigns.service';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ChartModule } from 'primeng/chart';
+import { AutoComplete } from 'primeng/autocomplete';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-overview',
@@ -23,36 +22,44 @@ import { CampaignsService } from '../../../services/campaigns.service';
   styleUrl: './overview.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
   data: any;
   userName: string | null = '';
   options: any;
   showComingSoon = false;
+  selectedCampaign: any = null; // Define selectedCampaign to hold the selected campaign object
+
   recentActivity: any[] = [];
   account_id?: number;
-
+  credits: string = '0';
+  remainingCredits: string = '0';
+  usedCredits: string = '0';
+  campaigns: any; // Store search campaign results
+  campaignID: any;
   value = 'Justice Campaign';
   suggestions: string[] = []; // Should be an array
   platformId = inject(PLATFORM_ID);
   ActiveCampaigns: any;
+
   constructor(
     private cd: ChangeDetectorRef,
     private cookieService: CookieService,
     private CampaignsService: CampaignsService
   ) {}
 
-  showMessage() {
-    this.showComingSoon = !this.showComingSoon; // Toggle the visibility
-  }
   ngOnInit() {
     this.initChart();
 
-    this.userName = localStorage.getItem('userName'); // Retrieve name
     this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
-    this.getAllCookies(); //
+    this.credits = this.cookieService.get('credits') || '0';
+    this.remainingCredits = this.cookieService.get('remainingCredits') || '0';
+    this.usedCredits = this.cookieService.get('usedCredits') || '0';
+    this.getAllCookies();
     this.fetchRecentActivity();
     this.getActiveCampaigns();
+    this.getSarche();
   }
+
   getAllCookies() {
     const allCookies = this.cookieService.getAll();
     console.log('All Cookies:', allCookies); // Display all cookies
@@ -61,14 +68,6 @@ export class OverviewComponent {
   initChart() {
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
-      const textColor = documentStyle.getPropertyValue('--p-text-color');
-      const textColorSecondary = documentStyle.getPropertyValue(
-        '--p-text-muted-color'
-      );
-      const surfaceBorder = documentStyle.getPropertyValue(
-        '--p-content-border-color'
-      );
-
       this.data = {
         labels: [
           'January',
@@ -94,39 +93,33 @@ export class OverviewComponent {
           },
         ],
       };
-
       this.options = {
         maintainAspectRatio: false,
         aspectRatio: 0.8,
         plugins: {
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-          },
+          tooltip: { mode: 'index', intersect: false },
           legend: {
-            labels: {
-              color: textColor,
-            },
+            labels: { color: documentStyle.getPropertyValue('--p-text-color') },
           },
         },
         scales: {
           x: {
             stacked: true,
             ticks: {
-              color: textColorSecondary,
+              color: documentStyle.getPropertyValue('--p-text-muted-color'),
             },
             grid: {
-              color: surfaceBorder,
+              color: documentStyle.getPropertyValue('--p-content-border-color'),
               drawBorder: false,
             },
           },
           y: {
             stacked: true,
             ticks: {
-              color: textColorSecondary,
+              color: documentStyle.getPropertyValue('--p-text-muted-color'),
             },
             grid: {
-              color: surfaceBorder,
+              color: documentStyle.getPropertyValue('--p-content-border-color'),
               drawBorder: false,
             },
           },
@@ -136,30 +129,24 @@ export class OverviewComponent {
     }
   }
 
-  updateTokenInCookies(token: string) {
-    this.cookieService.set('authToken', token, 1, '/'); // Set token with 7-day expiry
-  }
-
-  fetchRecentActivity(): void {
+  fetchRecentActivity() {
     const accountId = this.cookieService.get('account_id'); // Retrieve account ID from cookies
-
     if (!accountId) {
       console.error('Account ID is missing in cookies.');
       return;
     }
 
-    // Call the service method to fetch recent activity
     this.CampaignsService.GetrecentActivity(Number(accountId)).subscribe({
       next: (data) => {
-        this.recentActivity = data.records; // Assign the fetched data
+        this.recentActivity = data.records;
         console.log('Recent Activity:', this.recentActivity);
       },
       error: (err) => {
-        // Enhanced error logging for debugging
         console.error('Error fetching recent activity:', err.message || err);
       },
     });
   }
+
   getActiveCampaigns() {
     const accountIdFromCookie = this.cookieService.get('account_id');
     if (accountIdFromCookie) {
@@ -167,7 +154,7 @@ export class OverviewComponent {
       this.CampaignsService.getActiveCampaigns(this.account_id).subscribe(
         (data) => {
           this.ActiveCampaigns = data.campaigns.slice(0, 3);
-          console.log('overrrrrrrrrrview active', this.ActiveCampaigns);
+          console.log('Active Campaigns:', this.ActiveCampaigns);
         },
         (error) => {
           console.error('Error fetching active campaigns:', error);
@@ -176,5 +163,44 @@ export class OverviewComponent {
     } else {
       console.error('Account ID not found in cookies.');
     }
+  }
+
+  getSarche() {
+    const accountId = Number(this.cookieService.get('account_id')); // Retrieve accountId from cookies
+    if (!accountId) {
+      console.error('Account ID is missing or invalid');
+      return;
+    }
+
+    this.CampaignsService.getSearchCam(accountId).subscribe({
+      next: (response) => {
+        this.campaigns = response.campaigns; // Store campaigns array
+        if (this.campaigns.length > 0) {
+          this.campaignID = this.campaigns[0].id; // Ensure you're correctly setting the campaign ID from the first campaign
+        }
+        console.log('Campaign ID:', this.campaignID);
+      },
+      error: (err) => {
+        console.error('Error fetching search campaigns:', err);
+      },
+    });
+  }
+
+  onCampaignSelect(selectedCampaign: any) {
+    const accountId = Number(localStorage.getItem('account_id')); // Get account ID from localStorage or cookies
+    const campaignId = this.campaignID; // Get the selected campaign's ID
+
+    console.log('Selected Campaign ID:', campaignId);
+
+    // Call the getCampaignById method from the service
+    this.CampaignsService.getCampaignById(accountId, campaignId).subscribe({
+      next: (response) => {
+        console.log('Campaign Details:', response);
+        // Handle the response here
+      },
+      error: (err) => {
+        console.error('Error fetching campaign details:', err);
+      },
+    });
   }
 }

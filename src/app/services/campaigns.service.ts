@@ -149,4 +149,31 @@ export class CampaignsService {
       }
     );
   }
+
+  getSearchCam(accountId: number): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.get<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns/search`, // Use dynamic accountId here
+      {
+        headers,
+      }
+    );
+  }
+  getCampaignById(accountId: number, campaignId: number): Observable<any> {
+    const token = localStorage.getItem('token'); // Retrieve token from storage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.get<any>(
+      `${environment.apiUrl}accounts/${accountId}/campaigns/${campaignId}`,
+      { headers }
+    );
+  }
 }

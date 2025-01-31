@@ -39,7 +39,9 @@ export class AppComponent {
   account_id: number | undefined;
   sidebarVisible: boolean = false;
   counts: any;
-
+  credits: any;
+  remainingCredits: any;
+  usedCredits: any;
   sidebarshow: boolean = false;
   constructor(
     private Router: Router,
@@ -74,16 +76,22 @@ export class AppComponent {
         this.loading = false; // Stop loading after data is fetched
         // Handle the response here, for example, assigning user data
         this.userData = response;
-        const user = response?.user;
+        const user = response;
         if (user) {
           const account_id = user.account_id;
           this.userName = user.username || '';
           this.userEmail = user.email || '';
+          this.usedCredits = this.usedCredits;
+          this.remainingCredits = this.remainingCredits;
+          this.credits = this.credits;
           // Store in localStorage
           localStorage.setItem('userName', this.userName);
           localStorage.setItem('userEmail', this.userEmail);
-          localStorage.setItem('account_id', account_id?.toString()); // Store accountId
-          this._CookieService.set('account_id', account_id?.toString()); // Set accountId in cookies
+          localStorage.setItem('account_id', account_id); // Store accountId
+          this._CookieService.set('credits', this.credits);
+          this._CookieService.set('remainingCredits', this.remainingCredits);
+          this._CookieService.set('usedCredits', this.usedCredits);
+          this._CookieService.set('account_id', account_id); // Set accountId in cookies
         }
       },
       error: (error) => {

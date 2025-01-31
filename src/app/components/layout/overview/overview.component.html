@@ -10,7 +10,7 @@
       <div class="d-none d-md-flex gap-2">
         <div class="d-flex align-items-center flex-column">
           <!-- Added align-items-center for vertical centering -->
-          <button class="edit-btn View_All p-2" (click)="showMessage()">
+          <button class="edit-btn View_All p-2">
             <i class="pi pi-pencil me-1"></i>Edit Plan
           </button>
           <p *ngIf="showComingSoon" class="message mb-0">Coming Soon!</p>
@@ -30,20 +30,20 @@
     >
       <div class="col-md-3 p-3">
         <h5>Actions per month</h5>
-        <h3 class="bold">10,000</h3>
+        <h3 class="bold">{{ credits }}</h3>
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions used this month</h5>
         <div class="d-flex gap-2 justify-content-start align-items-center">
-          <h3 class="bold">4,345</h3>
-          <i class="pi pi-arrow-up fs-5" style="color: green"></i>
+          <h3 class="bold">{{ usedCredits }}</h3>
+          <!-- <i class="pi pi-arrow-up fs-5" style="color: green"></i>
           <p class="m-0" style="color: green">40%</p>
-          <small class="text-white">vs last month</small>
+          <small class="text-white">vs last month</small> -->
         </div>
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions remaining</h5>
-        <h3 class="bold">5,6855</h3>
+        <h3 class="bold">{{ remainingCredits }}</h3>
       </div>
     </div>
   </div>
@@ -57,7 +57,14 @@
             class="d-flex justify-content-between align-items-center py-3 bg-white p-3 rounded"
           >
             <h6 class="fw-bold">Campaigns Performance</h6>
-            <p-autocomplete [(ngModel)]="value" [dropdown]="true" />
+            <p-autocomplete
+              [(ngModel)]="selectedCampaign"
+              [dropdown]="true"
+              [suggestions]="campaigns"
+              (completeMethod)="getSarche()"
+              (onSelect)="onCampaignSelect(campaigns.id)"
+              field="name"
+            ></p-autocomplete>
           </div>
           <p-chart
             type="bar"
