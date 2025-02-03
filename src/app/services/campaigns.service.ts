@@ -165,7 +165,7 @@ export class CampaignsService {
     );
   }
   getCampaignById(accountId: number, campaignId: number): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve token from storage
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

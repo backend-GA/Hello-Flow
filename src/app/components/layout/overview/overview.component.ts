@@ -13,6 +13,7 @@ import { ChartModule } from 'primeng/chart';
 import { AutoComplete } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-overview',
@@ -40,24 +41,39 @@ export class OverviewComponent implements OnInit {
   suggestions: string[] = []; // Should be an array
   platformId = inject(PLATFORM_ID);
   ActiveCampaigns: any;
-
+  userData: any;
   constructor(
     private cd: ChangeDetectorRef,
     private cookieService: CookieService,
-    private CampaignsService: CampaignsService
+    private CampaignsService: CampaignsService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.initChart();
 
     this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
-    this.credits = this.cookieService.get('credits') || '0';
-    this.remainingCredits = this.cookieService.get('remainingCredits') || '0';
-    this.usedCredits = this.cookieService.get('usedCredits') || '0';
+    this.credits = this.cookieService.get('credits');
+    this.remainingCredits = this.cookieService.get('remainingCredits');
+    this.usedCredits = this.cookieService.get('usedCredits');
     this.getAllCookies();
     this.fetchRecentActivity();
     this.getActiveCampaigns();
     this.getSarche();
+    this.authService.fetchUserData().subscribe({
+      next: (response) => {
+        this.userData = response;
+        const user = response;
+        if (user) {
+          const account_id = user.account_id;
+          this.userName = user.username || '';
+          this.usedCredits = this.usedCredits;
+          this.remainingCredits = this.remainingCredits;
+          this.credits = this.credits;
+        }
+      },
+      error: (error) => {},
+    });
   }
 
   getAllCookies() {
@@ -176,7 +192,8 @@ export class OverviewComponent implements OnInit {
       next: (response) => {
         this.campaigns = response.campaigns; // Store campaigns array
         if (this.campaigns.length > 0) {
-          this.campaignID = this.campaigns[0].id; // Ensure you're correctly setting the campaign ID from the first campaign
+          this.campaignID = this.campaigns[0].id;
+          this.selectedCampaign = this.campaigns[0];
         }
         console.log('Campaign ID:', this.campaignID);
       },
@@ -187,9 +204,17 @@ export class OverviewComponent implements OnInit {
   }
 
   onCampaignSelect(selectedCampaign: any) {
-    const accountId = Number(localStorage.getItem('account_id')); // Get account ID from localStorage or cookies
-    const campaignId = this.campaignID; // Get the selected campaign's ID
+    const accountId = Number(this.cookieService.get('account_id')); // Retrieve accountId from cookies
+    if (!accountId) {
+      console.error('Account ID is missing or invalid');
+      return;
+    }
+    if (!selectedCampaign || !selectedCampaign.id) {
+      console.error('Invalid campaign selected:', selectedCampaign);
+      return;
+    }
 
+    const campaignId = selectedCampaign.id; // Get the selected campaign's ID
     console.log('Selected Campaign ID:', campaignId);
 
     // Call the getCampaignById method from the service

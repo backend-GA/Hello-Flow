@@ -30,12 +30,12 @@
     >
       <div class="col-md-3 p-3">
         <h5>Actions per month</h5>
-        <h3 class="bold">{{ credits }}</h3>
+        <h3 class="bold">{{ userData.credits }}</h3>
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions used this month</h5>
         <div class="d-flex gap-2 justify-content-start align-items-center">
-          <h3 class="bold">{{ usedCredits }}</h3>
+          <h3 class="bold">{{ userData.usedCredits }}</h3>
           <!-- <i class="pi pi-arrow-up fs-5" style="color: green"></i>
           <p class="m-0" style="color: green">40%</p>
           <small class="text-white">vs last month</small> -->
@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions remaining</h5>
-        <h3 class="bold">{{ remainingCredits }}</h3>
+        <h3 class="bold">{{ userData.remainingCredits }}</h3>
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@
               [dropdown]="true"
               [suggestions]="campaigns"
               (completeMethod)="getSarche()"
-              (onSelect)="onCampaignSelect(campaigns.id)"
+              (onSelect)="onCampaignSelect(selectedCampaign)"
               field="name"
             ></p-autocomplete>
           </div>
