@@ -14,11 +14,19 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '../../../services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [ChartModule, AutoComplete, FormsModule, TableModule, CommonModule],
+  imports: [
+    ChartModule,
+    AutoComplete,
+    FormsModule,
+    TableModule,
+    CommonModule,
+    RouterLink,
+  ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
   encapsulation: ViewEncapsulation.None,

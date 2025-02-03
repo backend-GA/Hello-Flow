@@ -119,7 +119,9 @@
         <div class="table bg-white p-3 rounded" style="margin: 15px 0">
           <div class="d-flex justify-content-between align-items-center py-3">
             <h6 class="fw-bold">Active Campaigns</h6>
-            <button class="View_All p-2">View All</button>
+            <button class="View_All p-2" routerLink="/Active_Campaigns">
+              View All
+            </button>
           </div>
           <p-table
             [value]="ActiveCampaigns"
@@ -153,7 +155,7 @@
       >
         <div class="d-flex justify-content-between align-items-center py-3">
           <h6 class="fw-bold">Activity</h6>
-          <small>View all</small>
+          <small routerLink="/all-activity">View all</small>
         </div>
         <div class="side-info d-flex flex-column gap-3">
           <div
@@ -162,7 +164,7 @@
           >
             <!-- User Avatar -->
             <img
-              src="../../../assets/overview/Avatar.png"
+              src="../../../../assets/tw/x.avif"
               alt="User Avatar"
               style="width: 40px; height: 40px; border-radius: 50%"
             />

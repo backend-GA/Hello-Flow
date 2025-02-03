@@ -143,6 +143,20 @@ export class CampaignsService {
     });
 
     return this._HttpClient.get<any>(
+      `${environment.apiUrl}accounts/${accountId}/recent-activity?limit=10`, // Use dynamic accountId here
+      {
+        headers,
+      }
+    );
+  }
+  GetrecentActivityinPage(accountId: number): Observable<any> {
+    const token = this.cookieService.get('token'); // Retrieve token from cookies
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this._HttpClient.get<any>(
       `${environment.apiUrl}accounts/${accountId}/recent-activity`, // Use dynamic accountId here
       {
         headers,

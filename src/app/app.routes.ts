@@ -93,4 +93,11 @@ export const routes: Routes = [
         (m) => m.PlansComponent
       ),
   },
+  {
+    path: 'all-activity',
+    loadComponent: () =>
+      import('./components/layout/all-activity/all-activity.component').then(
+        (m) => m.AllActivityComponent
+      ),
+  },
 ];
