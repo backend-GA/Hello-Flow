@@ -16,6 +16,15 @@
         <p-tabpanel value="0">
           <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
             <div class="py-3 d-flex flex-column">
+              <p class="fw-bold">Campaign Name</p>
+              <input
+                id="hashtag"
+                formControlName="name"
+                placeholder="Enter Name"
+                maxlength="50"
+              />
+            </div>
+            <div class="py-3 d-flex flex-column">
               <p class="fw-bold">Type in the #hashtag you want discovered</p>
               <input
                 formControlName="hashtag"
@@ -163,6 +172,15 @@
         <p-tabpanel value="1">
           <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
             <div class="py-3 d-flex flex-column">
+              <p class="fw-bold">Campaign Name</p>
+              <input
+                id="hashtag"
+                formControlName="name"
+                placeholder="Enter Name"
+                maxlength="50"
+              />
+            </div>
+            <div class="py-3 d-flex flex-column">
               <p class="fw-bold">Type in the exact phase you want discovered</p>
               <input
                 id="hashtag"
@@ -278,6 +296,15 @@
         </p-tabpanel>
         <p-tabpanel value="2">
           <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+            <div class="py-3 d-flex flex-column">
+              <p class="fw-bold">Campaign Name</p>
+              <input
+                id="hashtag"
+                formControlName="name"
+                placeholder="Enter Name"
+                maxlength="50"
+              />
+            </div>
             <div class="py-3 d-flex flex-column">
               <p class="fw-bold">
                 Type in the &#64;username(s) you want to engage with
@@ -409,6 +436,16 @@
 
     <div *ngIf="selectedTab === '0'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+        <div class="py-3 d-flex flex-column">
+          <p class="fw-bold">Campaign Name</p>
+          <input
+            id="hashtag"
+            formControlName="name"
+            placeholder="Enter Name"
+            maxlength="50"
+          />
+        </div>
+
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Type in the #hashtag you want discovered</p>
           <input
@@ -547,6 +584,15 @@
     </div>
     <div *ngIf="selectedTab === '1'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+        <div class="py-3 d-flex flex-column">
+          <p class="fw-bold">Campaign Name</p>
+          <input
+            id="hashtag"
+            formControlName="name"
+            placeholder="Enter Name"
+            maxlength="50"
+          />
+        </div>
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Type in the exact phase you want discovered</p>
           <input
@@ -688,6 +734,15 @@
     </div>
     <div *ngIf="selectedTab === '2'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+        <div class="py-3 d-flex flex-column">
+          <p class="fw-bold">Campaign Name</p>
+          <input
+            id="hashtag"
+            formControlName="name"
+            placeholder="Enter Name"
+            maxlength="50"
+          />
+        </div>
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">
             Type in the &#64;username(s) you want to engage with

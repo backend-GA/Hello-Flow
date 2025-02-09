@@ -42,6 +42,7 @@ export class CreateNewCampaignComponent {
     private router: Router
   ) {
     this.hashtagForm = this.fb.group({
+      name: ['', [Validators.required, Validators.maxLength(50)]],
       hashtag: ['', [Validators.required, Validators.maxLength(500)]],
       duration: ['untilCancelled', Validators.required],
       end_date: [{ value: null, disabled: true }], // Initially disabled
@@ -81,6 +82,7 @@ export class CreateNewCampaignComponent {
       const hashtagsArray = this.hashtagForm.value.hashtag.split(/\s+/);
 
       const payload: any = {
+        name: this.hashtagForm.value.name,
         search_terms: hashtagsArray,
         action: action,
         draft: false,
@@ -160,6 +162,7 @@ export class CreateNewCampaignComponent {
           : undefined;
 
       const payload = {
+        name: this.hashtagForm.value.name,
         search_terms: hashtagsArray,
         action: action,
         is_draft: true,

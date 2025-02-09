@@ -9,6 +9,7 @@
     -o-border-radius: 8px;
     height: 40px;
     white-space: nowrap;
+    font-size: 15px;
 }
 
 .cancel-btn {
@@ -23,6 +24,7 @@
     height: 40px;
     white-space: nowrap;
     color: white;
+    font-size: 15px;
 }
 
 .bg-img {
@@ -155,7 +157,7 @@
 }
 
 /* Media query for devices with a max width of 600px */
-@media (min-width: 769px) {
+@media (max-width: 769px) {
 
     .edit-btn,
     .cancel-btn {

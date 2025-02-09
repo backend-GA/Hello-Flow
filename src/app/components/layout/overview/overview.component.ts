@@ -37,7 +37,6 @@ export class OverviewComponent implements OnInit {
   options: any;
   showComingSoon = false;
   selectedCampaign: any = null; // Define selectedCampaign to hold the selected campaign object
-
   recentActivity: any[] = [];
   account_id?: number;
   credits: string = '0';
@@ -50,6 +49,8 @@ export class OverviewComponent implements OnInit {
   platformId = inject(PLATFORM_ID);
   ActiveCampaigns: any;
   userData: any;
+  likesCount: any;
+  commentsCount: any;
   constructor(
     private cd: ChangeDetectorRef,
     private cookieService: CookieService,
@@ -152,6 +153,72 @@ export class OverviewComponent implements OnInit {
       this.cd.markForCheck();
     }
   }
+  updateChart(campaignData: any) {
+    if (!campaignData || !campaignData.months) {
+      console.error('Invalid campaign data:', campaignData);
+      return;
+    }
+
+    const documentStyle = getComputedStyle(document.documentElement);
+
+    // ترتيب الأشهر بالترتيب الزمني الصحيح
+    const monthOrder = [
+      'january',
+      'february',
+      'march',
+      'april',
+      'may',
+      'june',
+      'july',
+      'august',
+      'september',
+      'october',
+      'november',
+      'december',
+    ];
+
+    // استخراج البيانات بالترتيب الصحيح
+    const labels = monthOrder.filter(
+      (month) => campaignData.months[month] !== undefined
+    );
+    const likesData = labels.map(
+      (month) => campaignData.months[month].likes || 0
+    );
+    const commentsData = labels.map(
+      (month) => campaignData.months[month].comments || 0
+    );
+    const consumedCreditsData = labels.map(
+      (month) => campaignData.months[month].consumedCredits || 0
+    );
+
+    this.data = {
+      labels: labels.map(
+        (month) => month.charAt(0).toUpperCase() + month.slice(1)
+      ), // تحويل أول حرف إلى حرف كبير
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Likes',
+          backgroundColor: documentStyle.getPropertyValue('--p-emerald-950'),
+          data: likesData,
+        },
+        {
+          type: 'bar',
+          label: 'Comments',
+          backgroundColor: documentStyle.getPropertyValue('--p-slate-200'),
+          data: commentsData,
+        },
+        {
+          type: 'bar',
+          label: 'Consumed Credits',
+          backgroundColor: documentStyle.getPropertyValue('--p-blue-400'),
+          data: consumedCreditsData,
+        },
+      ],
+    };
+
+    this.cd.markForCheck(); // تحديث الرسم البياني
+  }
 
   fetchRecentActivity() {
     const accountId = this.cookieService.get('account_id'); // Retrieve account ID from cookies
@@ -229,7 +296,9 @@ export class OverviewComponent implements OnInit {
     this.CampaignsService.getCampaignById(accountId, campaignId).subscribe({
       next: (response) => {
         console.log('Campaign Details:', response);
-        // Handle the response here
+        this.likesCount = response.likesCount;
+        this.commentsCount = response.commentsCount;
+        this.updateChart(response);
       },
       error: (err) => {
         console.error('Error fetching campaign details:', err);
