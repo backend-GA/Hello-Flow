@@ -4,7 +4,7 @@
     <p>Create and manage campaigns effortlessly</p>
   </div>
 </section>
-<section class="form p-3 d-md-block d-none">
+<!-- <section class="form p-3 d-md-block d-none">
   <div class="container rounded-3 bg-white p-0">
     <p-tabs value="0">
       <p-tablist>
@@ -25,26 +25,33 @@
               />
             </div>
             <div class="py-3 d-flex flex-column">
-              <p class="fw-bold">Type in the #hashtag you want discovered</p>
-              <input
-                formControlName="hashtag"
-                placeholder="Enter hashtag"
-                (input)="addSearchTerm()"
-              />
+              <p>Type in the #hashtag you want discovered</p>
+              <mat-form-field class="example-form-field">
+                <mat-label class="py-3"></mat-label>
+                <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                  <mat-chip-row
+                    *ngFor="
+                      let hashtag of hashtagControl.value || [];
+                      trackBy: trackByFn
+                    "
+                    (removed)="removeHashtag(hashtag)"
+                  >
+                    {{ hashtag }}
+                    <button
+                      matChipRemove
+                      aria-label="'remove hashtag ' + hashtag"
+                    >
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                </mat-chip-grid>
 
-              <small class="py-1">Less than 500 characters</small>
-              <div
-                *ngIf="
-                  hashtagForm.get('hashtag')?.invalid &&
-                  (hashtagForm.get('hashtag')?.touched ||
-                    hashtagForm.get('hashtag')?.dirty)
-                "
-              >
-                <small class="text-danger"
-                  >Hashtag is required and should be less than 500
-                  characters.</small
-                >
-              </div>
+                <input
+                  placeholder="New hashtag..."
+                  [matChipInputFor]="hashtagChipGrid"
+                  (matChipInputTokenEnd)="addHashtag($event)"
+                />
+              </mat-form-field>
             </div>
 
             <p class="fw-bold">
@@ -182,12 +189,32 @@
             </div>
             <div class="py-3 d-flex flex-column">
               <p class="fw-bold">Type in the exact phase you want discovered</p>
-              <input
-                id="hashtag"
-                formControlName="hashtag"
-                placeholder="Ex. #HoustonTexasCoffee"
-                maxlength="500"
-              />
+              <mat-form-field class="example-form-field">
+                <mat-label class="py-3"></mat-label>
+                <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                  <mat-chip-row
+                    *ngFor="
+                      let hashtag of hashtagControl.value || [];
+                      trackBy: trackByFn
+                    "
+                    (removed)="removeHashtag(hashtag)"
+                  >
+                    {{ hashtag }}
+                    <button
+                      matChipRemove
+                      aria-label="'remove hashtag ' + hashtag"
+                    >
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                </mat-chip-grid>
+
+                <input
+                  placeholder="New hashtag..."
+                  [matChipInputFor]="hashtagChipGrid"
+                  (matChipInputTokenEnd)="addHashtag($event)"
+                />
+              </mat-form-field>
               <small class="py-1">Less than 500 characters</small>
             </div>
             <p class="fw-bold">
@@ -309,13 +336,32 @@
               <p class="fw-bold">
                 Type in the &#64;username(s) you want to engage with
               </p>
-              <input
-                id="hashtag"
-                formControlName="hashtag"
-                placeholder="Ex. #HoustonTexasCoffee"
-                maxlength="500"
-              />
-              <small class="py-1">Less than 500 characters</small>
+              <mat-form-field class="example-form-field">
+                <mat-label class="py-3"></mat-label>
+                <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                  <mat-chip-row
+                    *ngFor="
+                      let hashtag of hashtagControl.value || [];
+                      trackBy: trackByFn
+                    "
+                    (removed)="removeHashtag(hashtag)"
+                  >
+                    {{ hashtag }}
+                    <button
+                      matChipRemove
+                      aria-label="'remove hashtag ' + hashtag"
+                    >
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                </mat-chip-grid>
+
+                <input
+                  placeholder="New hashtag..."
+                  [matChipInputFor]="hashtagChipGrid"
+                  (matChipInputTokenEnd)="addHashtag($event)"
+                />
+              </mat-form-field>
             </div>
             <p class="fw-bold">
               What action do you want to take place when the phrase is
@@ -424,8 +470,170 @@
       </p-tabpanels>
     </p-tabs>
   </div>
-</section>
+</section> -->
+<section class="form p-3 d-md-block d-none">
+  <div class="container rounded-3 bg-white p-0">
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0">#hashtag campaign</p-tab>
+        <p-tab value="1">Phrase campaign</p-tab>
+        <p-tab value="2">&#64;campaign</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+            <!-- Campaign Name -->
+            <div class="py-3 d-flex flex-column">
+              <p class="fw-bold">Campaign Name</p>
+              <input
+                id="hashtag"
+                formControlName="name"
+                placeholder="Enter Name"
+                maxlength="50"
+              />
+            </div>
 
+            <!-- Hashtags Input -->
+            <div class="py-3 d-flex flex-column">
+              <p class="fw-bold">Type in the #hashtag you want discovered</p>
+              <mat-form-field class="example-form-field">
+                <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                  <mat-chip-row
+                    *ngFor="
+                      let hashtag of hashtagControl.value || [];
+                      trackBy: trackByFn
+                    "
+                    (removed)="removeHashtag(hashtag)"
+                  >
+                    {{ hashtag }}
+                    <button matChipRemove aria-label="remove hashtag">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                </mat-chip-grid>
+                <input
+                  placeholder="New hashtag..."
+                  [matChipInputFor]="hashtagChipGrid"
+                  (matChipInputTokenEnd)="addHashtag($event)"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="radio-group py-3">
+              <label class="styled-radio">
+                <input
+                  type="radio"
+                  formControlName="action"
+                  value="autoLike"
+                  (change)="onActionChange()"
+                />
+                <span class="custom-radio-box"></span>
+                <span class="custom-radio-label">Auto like</span>
+              </label>
+              <label class="styled-radio">
+                <input
+                  type="radio"
+                  formControlName="action"
+                  value="autoReply"
+                  (change)="onActionChange()"
+                />
+                <span class="custom-radio-box"></span>
+                <span class="custom-radio-label"
+                  >Auto Reply / comment only</span
+                >
+              </label>
+              <label class="styled-radio">
+                <input
+                  type="radio"
+                  formControlName="action"
+                  value="autoLikeReply"
+                  (change)="onActionChange()"
+                />
+                <span class="custom-radio-box"></span>
+                <span class="custom-radio-label">Auto Like & Reply</span>
+              </label>
+            </div>
+
+            <div class="py-3 d-flex flex-column" *ngIf="showCommentInput">
+              <p class="fw-bold">
+                What comment reply do you want automatically posted?
+              </p>
+              <input
+                id="comment"
+                formControlName="comment"
+                placeholder="Ex. We love country music too!"
+                maxlength="500"
+              />
+              <small class="py-1">Less than 500 characters</small>
+              <div
+                *ngIf="
+                  hashtagForm.get('comment')?.invalid &&
+                  (hashtagForm.get('comment')?.touched ||
+                    hashtagForm.get('comment')?.dirty)
+                "
+              >
+                <small class="text-danger"
+                  >Comment is required and should be less than 500
+                  characters.</small
+                >
+              </div>
+            </div>
+
+            <div class="d-flex gap-5 justify-content-start align-items-start">
+              <div
+                class="d-flex flex-column justify-content-start align-items-start"
+              >
+                <p class="fw-bold">Duration</p>
+
+                <label>
+                  <input
+                    type="radio"
+                    formControlName="duration"
+                    value="untilCancelled"
+                    (change)="onDurationChange()"
+                  />
+                  Run until cancelled
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    formControlName="duration"
+                    value="end_date"
+                    (change)="onDurationChange()"
+                  />
+                  Choose stop date
+                </label>
+              </div>
+            </div>
+
+            <div
+              class="d-flex flex-column"
+              *ngIf="hashtagForm.get('duration')?.value === 'end_date'"
+            >
+              <p class="fw-bold">Stop Date</p>
+              <input type="date" class="" formControlName="end_date" />
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex justify-content-end gap-3">
+              <button type="button" (click)="saveDraft()" class="save-btn p-2">
+                Save as draft
+              </button>
+              <button
+                type="submit"
+                class="p-2 draft-btn"
+                [disabled]="hashtagForm.invalid"
+              >
+                Save & Launch
+              </button>
+            </div>
+          </form>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</section>
 <div class="d-md-none d-block py-2">
   <div class="container">
     <select class="dropdown" (change)="onDropdownChange($event)">
@@ -448,25 +656,29 @@
 
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Type in the #hashtag you want discovered</p>
-          <input
-            formControlName="hashtag"
-            placeholder="Enter hashtag"
-            (input)="addSearchTerm()"
-          />
+          <mat-form-field class="example-form-field">
+            <mat-label class="py-3"></mat-label>
+            <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+              <mat-chip-row
+                *ngFor="
+                  let hashtag of hashtagControl.value || [];
+                  trackBy: trackByFn
+                "
+                (removed)="removeHashtag(hashtag)"
+              >
+                {{ hashtag }}
+                <button matChipRemove aria-label="'remove hashtag ' + hashtag">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
 
-          <small class="py-1">Less than 500 characters</small>
-          <div
-            *ngIf="
-              hashtagForm.get('hashtag')?.invalid &&
-              (hashtagForm.get('hashtag')?.touched ||
-                hashtagForm.get('hashtag')?.dirty)
-            "
-          >
-            <small class="text-danger"
-              >Hashtag is required and should be less than 500
-              characters.</small
-            >
-          </div>
+            <input
+              placeholder="New hashtag..."
+              [matChipInputFor]="hashtagChipGrid"
+              (matChipInputTokenEnd)="addHashtag($event)"
+            />
+          </mat-form-field>
         </div>
 
         <p class="fw-bold">
@@ -595,25 +807,29 @@
         </div>
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Type in the exact phase you want discovered</p>
-          <input
-            formControlName="hashtag"
-            placeholder="Ex. I love country music"
-            (input)="addSearchTerm()"
-          />
+          <mat-form-field class="example-form-field">
+            <mat-label class="py-3"></mat-label>
+            <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+              <mat-chip-row
+                *ngFor="
+                  let hashtag of hashtagControl.value || [];
+                  trackBy: trackByFn
+                "
+                (removed)="removeHashtag(hashtag)"
+              >
+                {{ hashtag }}
+                <button matChipRemove aria-label="'remove hashtag ' + hashtag">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
 
-          <small class="py-1">Less than 500 characters</small>
-          <div
-            *ngIf="
-              hashtagForm.get('hashtag')?.invalid &&
-              (hashtagForm.get('hashtag')?.touched ||
-                hashtagForm.get('hashtag')?.dirty)
-            "
-          >
-            <small class="text-danger"
-              >Hashtag is required and should be less than 500
-              characters.</small
-            >
-          </div>
+            <input
+              placeholder="New hashtag..."
+              [matChipInputFor]="hashtagChipGrid"
+              (matChipInputTokenEnd)="addHashtag($event)"
+            />
+          </mat-form-field>
         </div>
 
         <p class="fw-bold">
@@ -747,13 +963,29 @@
           <p class="fw-bold">
             Type in the &#64;username(s) you want to engage with
           </p>
-          <input
-            formControlName="hashtag"
-            placeholder="Ex. &#64;ElonMusk, &#64;Space"
-            (input)="addSearchTerm()"
-          />
+          <mat-form-field class="example-form-field">
+            <mat-label class="py-3"></mat-label>
+            <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+              <mat-chip-row
+                *ngFor="
+                  let hashtag of hashtagControl.value || [];
+                  trackBy: trackByFn
+                "
+                (removed)="removeHashtag(hashtag)"
+              >
+                {{ hashtag }}
+                <button matChipRemove aria-label="'remove hashtag ' + hashtag">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
 
-          <small class="py-1">Less than 500 characters</small>
+            <input
+              placeholder="New hashtag..."
+              [matChipInputFor]="hashtagChipGrid"
+              (matChipInputTokenEnd)="addHashtag($event)"
+            />
+          </mat-form-field>
           <div
             *ngIf="
               hashtagForm.get('hashtag')?.invalid &&
