@@ -45,7 +45,15 @@ export class CreateNewCampaignComponent {
   account_id: number | null = null;
   searchTermsList: any[] = [];
   showCommentInput = false;
-  selectedTab = '0'; // Default to the first tab
+  selectedTab = '0';
+  selectedTab2: string = '0';
+  // tabs = [
+  //   { label: '#Hashtag Campaign', value: 'hashtag' },
+  //   { label: 'Phrase Campaign', value: 'phrase' },
+  //   { label: '@Mention Campaign', value: 'mention' },
+  // ];
+  // activeTab = 'hashtag';
+
   hashtagInput = new FormControl('');
   separatorKeysCodes: number[] = [ENTER, COMMA]; // السماح بإضافة العنصر عند الضغط على Enter أو الفاصلة
   constructor(
@@ -75,6 +83,9 @@ export class CreateNewCampaignComponent {
   onDropdownChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.selectedTab = target.value;
+  }
+  selectTab(index: number) {
+    this.selectedTab2 = index.toString();
   }
 
   // onSubmit(): void {
