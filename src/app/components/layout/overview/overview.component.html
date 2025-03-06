@@ -30,12 +30,12 @@
     >
       <div class="col-md-3 p-3">
         <h5>Actions per month</h5>
-        <h3 class="bold">{{ userData.credits }}</h3>
+        <h3 class="bold">{{ userData?.credits }}</h3>
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions used this month</h5>
         <div class="d-flex gap-2 justify-content-start align-items-center">
-          <h3 class="bold">{{ userData.usedCredits }}</h3>
+          <h3 class="bold">{{ userData?.usedCredits }}</h3>
           <!-- <i class="pi pi-arrow-up fs-5" style="color: green"></i>
           <p class="m-0" style="color: green">40%</p>
           <small class="text-white">vs last month</small> -->
@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-3 p-3">
         <h5>Actions remaining</h5>
-        <h3 class="bold">{{ userData.remainingCredits }}</h3>
+        <h3 class="bold">{{ userData?.remainingCredits }}</h3>
       </div>
     </div>
   </div>
@@ -61,13 +61,15 @@
               [(ngModel)]="selectedCampaign"
               [dropdown]="true"
               [suggestions]="campaigns"
-              (completeMethod)="getSarche()"
+              (completeMethod)="getSearchCampaigns()"
               (onSelect)="onCampaignSelect(selectedCampaign)"
               field="name"
             ></p-autocomplete>
           </div>
+
           <p-chart
             type="bar"
+            type="line"
             [data]="data"
             [options]="options"
             class="h-[30rem]"
@@ -130,7 +132,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-product>
               <tr>
-                <td>{{ product.search_terms[0] }}</td>
+                <td>{{ product.name }}</td>
                 <td>{{ product.likesCount }}</td>
                 <td>{{ product.commentsCount }}</td>
                 <td>

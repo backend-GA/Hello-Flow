@@ -28,7 +28,7 @@ import { RouterLink } from '@angular/router';
     RouterLink,
   ],
   templateUrl: './overview.component.html',
-  styleUrl: './overview.component.scss',
+  styleUrls: ['./overview.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class OverviewComponent implements OnInit {
@@ -36,21 +36,28 @@ export class OverviewComponent implements OnInit {
   userName: string | null = '';
   options: any;
   showComingSoon = false;
-  selectedCampaign: any = null; // Define selectedCampaign to hold the selected campaign object
+  selectedCampaign: any = null;
   recentActivity: any[] = [];
   account_id?: number;
   credits: string = '0';
   remainingCredits: string = '0';
   usedCredits: string = '0';
-  campaigns: any; // Store search campaign results
+  campaigns: any[] = [];
   campaignID: any;
   value = 'Justice Campaign';
-  suggestions: string[] = []; // Should be an array
+  suggestions: string[] = [];
   platformId = inject(PLATFORM_ID);
-  ActiveCampaigns: any;
+  ActiveCampaigns: any[] = [];
   userData: any;
-  likesCount: any;
-  commentsCount: any;
+  likesCount: number = 0;
+  commentsCount: number = 0;
+  creditsline: number = 0;
+  months: Record<
+    string,
+    { likes: number; comments: number; consumedCredits: number }
+  > = {};
+  labels: string[] = [];
+
   constructor(
     private cd: ChangeDetectorRef,
     private cookieService: CookieService,
@@ -60,67 +67,68 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit() {
     this.initChart();
-
-    this.userName = this.cookieService.get('userName'); // Retrieve name from cookies
-    this.credits = this.cookieService.get('credits');
-    this.remainingCredits = this.cookieService.get('remainingCredits');
-    this.usedCredits = this.cookieService.get('usedCredits');
-    this.getAllCookies();
+    this.loadCookies();
     this.fetchRecentActivity();
     this.getActiveCampaigns();
-    this.getSarche();
+    this.getSearchCampaigns();
+    this.fetchUserData();
+  }
+
+  loadCookies() {
+    this.userName = this.cookieService.get('userName') || '';
+    this.credits = this.cookieService.get('credits') || '0';
+    this.remainingCredits = this.cookieService.get('remainingCredits') || '0';
+    this.usedCredits = this.cookieService.get('usedCredits') || '0';
+    console.log('All Cookies:', this.cookieService.getAll());
+  }
+
+  fetchUserData() {
     this.authService.fetchUserData().subscribe({
       next: (response) => {
         this.userData = response;
-        const user = response;
-        if (user) {
-          const account_id = user.account_id;
-          this.userName = user.username || '';
-          this.usedCredits = this.usedCredits;
-          this.remainingCredits = this.remainingCredits;
-          this.credits = this.credits;
+        if (response) {
+          this.account_id = response.account_id;
+          this.userName = response.username || '';
+          this.creditsline = response.credits || 0;
         }
       },
-      error: (error) => {},
+      error: (error) => console.error('Error fetching user data:', error),
     });
-  }
-
-  getAllCookies() {
-    const allCookies = this.cookieService.getAll();
-    console.log('All Cookies:', allCookies); // Display all cookies
   }
 
   initChart() {
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
+
       this.data = {
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-        ],
+        labels: this.labels,
         datasets: [
           {
             type: 'bar',
-            label: 'Dataset 1',
+            label: 'Likes',
             backgroundColor: documentStyle.getPropertyValue('--p-emerald-950'),
-            data: [2000, 3500, 5000, 9000, 8000, 10000, 12000],
+            data: this.labels.map((month) => this.months[month]?.likes || 0),
           },
           {
             type: 'bar',
-            label: 'Dataset 2',
+            label: 'Comments',
             backgroundColor: documentStyle.getPropertyValue('--p-slate-200'),
-            data: [4000, 5000, 13000, 16000, 17000, 18000, 2000],
+            data: this.labels.map((month) => this.months[month]?.comments || 0),
+          },
+          {
+            type: 'line',
+            label: 'Credits',
+            backgroundColor: documentStyle.getPropertyValue('--blue-500'),
+            borderColor: 'red',
+            borderWidth: 2,
+            spanGaps: false,
+            data: this.labels.map(() => this.creditsline || 0),
           },
         ],
       };
+
       this.options = {
         maintainAspectRatio: false,
-        aspectRatio: 0.8,
         plugins: {
           tooltip: { mode: 'index', intersect: false },
           legend: {
@@ -150,136 +158,51 @@ export class OverviewComponent implements OnInit {
           },
         },
       };
+
       this.cd.markForCheck();
     }
   }
-  updateChart(campaignData: any) {
-    if (!campaignData || !campaignData.months) {
-      console.error('Invalid campaign data:', campaignData);
-      return;
-    }
-
-    const documentStyle = getComputedStyle(document.documentElement);
-
-    // ترتيب الأشهر بالترتيب الزمني الصحيح
-    const monthOrder = [
-      'january',
-      'february',
-      'march',
-      'april',
-      'may',
-      'june',
-      'july',
-      'august',
-      'september',
-      'october',
-      'november',
-      'december',
-    ];
-
-    // استخراج البيانات بالترتيب الصحيح
-    const labels = monthOrder.filter(
-      (month) => campaignData.months[month] !== undefined
-    );
-    const likesData = labels.map(
-      (month) => campaignData.months[month].likes || 0
-    );
-    const commentsData = labels.map(
-      (month) => campaignData.months[month].comments || 0
-    );
-    const consumedCreditsData = labels.map(
-      (month) => campaignData.months[month].consumedCredits || 0
-    );
-
-    this.data = {
-      labels: labels.map(
-        (month) => month.charAt(0).toUpperCase() + month.slice(1)
-      ), // تحويل أول حرف إلى حرف كبير
-      datasets: [
-        {
-          type: 'bar',
-          label: 'Likes',
-          backgroundColor: documentStyle.getPropertyValue('--p-emerald-950'),
-          data: likesData,
-        },
-        {
-          type: 'bar',
-          label: 'Comments',
-          backgroundColor: documentStyle.getPropertyValue('--p-slate-200'),
-          data: commentsData,
-        },
-        {
-          type: 'bar',
-          label: 'Consumed Credits',
-          backgroundColor: documentStyle.getPropertyValue('--p-blue-400'),
-          data: consumedCreditsData,
-        },
-      ],
-    };
-
-    this.cd.markForCheck(); // تحديث الرسم البياني
-  }
 
   fetchRecentActivity() {
-    const accountId = this.cookieService.get('account_id'); // Retrieve account ID from cookies
-    if (!accountId) {
-      console.error('Account ID is missing in cookies.');
-      return;
-    }
+    const accountId = this.cookieService.get('account_id');
+    if (!accountId) return console.error('Account ID is missing in cookies.');
 
     this.CampaignsService.GetrecentActivity(Number(accountId)).subscribe({
-      next: (data) => {
-        this.recentActivity = data.records;
-        console.log('Recent Activity:', this.recentActivity);
-      },
-      error: (err) => {
-        console.error('Error fetching recent activity:', err.message || err);
-      },
+      next: (data) => (this.recentActivity = data.records || []),
+      error: (err) => console.error('Error fetching recent activity:', err),
     });
   }
 
   getActiveCampaigns() {
-    const accountIdFromCookie = this.cookieService.get('account_id');
-    if (accountIdFromCookie) {
-      this.account_id = Number(accountIdFromCookie);
-      this.CampaignsService.getActiveCampaigns(this.account_id).subscribe(
-        (data) => {
-          this.ActiveCampaigns = data.campaigns.slice(0, 3);
-          console.log('Active Campaigns:', this.ActiveCampaigns);
-        },
-        (error) => {
-          console.error('Error fetching active campaigns:', error);
-        }
-      );
-    } else {
-      console.error('Account ID not found in cookies.');
-    }
+    const accountId = Number(this.cookieService.get('account_id'));
+    if (!accountId) return console.error('Account ID not found in cookies.');
+
+    this.CampaignsService.getActiveCampaigns(accountId).subscribe({
+      next: (data) =>
+        (this.ActiveCampaigns = data.campaigns?.slice(0, 3) || []),
+      error: (error) =>
+        console.error('Error fetching active campaigns:', error),
+    });
   }
 
-  getSarche() {
-    const accountId = Number(this.cookieService.get('account_id')); // Retrieve accountId from cookies
-    if (!accountId) {
-      console.error('Account ID is missing or invalid');
-      return;
-    }
+  getSearchCampaigns() {
+    const accountId = Number(this.cookieService.get('account_id'));
+    if (!accountId) return console.error('Account ID is missing or invalid.');
 
     this.CampaignsService.getSearchCam(accountId).subscribe({
       next: (response) => {
-        this.campaigns = response.campaigns; // Store campaigns array
-        if (this.campaigns.length > 0) {
-          this.campaignID = this.campaigns[0].id;
+        this.campaigns = response.campaigns || [];
+        this.months = response.months || {};
+        if (this.campaigns.length) {
           this.selectedCampaign = this.campaigns[0];
+          this.campaignID = this.selectedCampaign.id;
         }
-        console.log('Campaign ID:', this.campaignID);
-      },
-      error: (err) => {
-        console.error('Error fetching search campaigns:', err);
       },
     });
   }
 
   onCampaignSelect(selectedCampaign: any) {
-    const accountId = Number(this.cookieService.get('account_id')); // Retrieve accountId from cookies
+    const accountId = Number(this.cookieService.get('account_id'));
     if (!accountId) {
       console.error('Account ID is missing or invalid');
       return;
@@ -289,20 +212,32 @@ export class OverviewComponent implements OnInit {
       return;
     }
 
-    const campaignId = selectedCampaign.id; // Get the selected campaign's ID
+    const campaignId = selectedCampaign.id;
     console.log('Selected Campaign ID:', campaignId);
 
-    // Call the getCampaignById method from the service
     this.CampaignsService.getCampaignById(accountId, campaignId).subscribe({
       next: (response) => {
-        console.log('Campaign Details:', response);
+        console.log('API Response:', response);
+
         this.likesCount = response.likesCount;
         this.commentsCount = response.commentsCount;
-        this.updateChart(response);
+
+        if (response?.months) {
+          console.log('Months from API:', response.months);
+
+          // تحديث البيانات
+          this.months = response.months;
+          this.labels = Object.keys(response.months); // استخراج الأشهر
+
+          // إعادة تهيئة الرسم البياني بعد استلام البيانات
+          this.initChart();
+        } else {
+          console.warn('Months data is missing in the response.');
+          this.months = {};
+          this.labels = [];
+        }
       },
-      error: (err) => {
-        console.error('Error fetching campaign details:', err);
-      },
+      error: (err) => console.error('Error fetching campaign data:', err),
     });
   }
 }
