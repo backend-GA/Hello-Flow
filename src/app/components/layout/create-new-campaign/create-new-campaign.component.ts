@@ -45,8 +45,9 @@ export class CreateNewCampaignComponent {
   account_id: number | null = null;
   searchTermsList: any[] = [];
   showCommentInput = false;
-  selectedTab = '0';
-  selectedTab2: string = '0';
+  // selectedTab = '0';
+  selectedTab2 = '0';
+  selectedTab: string = 'hashtag'; // افتراضيًا اجعل تبويب الهاشتاج نشطًا
   // tabs = [
   //   { label: '#Hashtag Campaign', value: 'hashtag' },
   //   { label: 'Phrase Campaign', value: 'phrase' },
@@ -69,7 +70,7 @@ export class CreateNewCampaignComponent {
       end_date: [{ value: null, disabled: true }], // Initially disabled
       include_retweets: [false],
       action: [''],
-      comment: ['', [Validators.maxLength(500)]],
+      comments: ['', [Validators.maxLength(500)]],
     });
   }
 
@@ -84,9 +85,9 @@ export class CreateNewCampaignComponent {
     const target = event.target as HTMLSelectElement;
     this.selectedTab = target.value;
   }
-  selectTab(index: number) {
-    this.selectedTab2 = index.toString();
-  }
+  // selectTab(index: number) {
+  //   this.selectedTab2 = index.toString();
+  // }
 
   // onSubmit(): void {
   //   console.log('Submit button clicked!');
@@ -157,7 +158,6 @@ export class CreateNewCampaignComponent {
       return;
     }
 
-    // التأكد من أن `search_terms` تحتوي على مصفوفة صحيحة
     const hashtagsArray: string[] = this.hashtagForm.value.hashtagControl || [];
 
     const payload: any = {
@@ -165,11 +165,10 @@ export class CreateNewCampaignComponent {
       search_terms: hashtagsArray,
       action: action,
       draft: false,
-      comments: [this.hashtagForm.value.comment],
+      comments: [this.hashtagForm.value.comments],
       include_retweets: this.hashtagForm.value.include_retweets,
     };
 
-    // إضافة `end_date` فقط إذا كانت موجودة
     const endDate = this.hashtagForm.get('end_date')?.value;
     if (endDate) {
       payload.end_date = endDate;
@@ -188,12 +187,11 @@ export class CreateNewCampaignComponent {
       console.error('Account ID is not available');
     }
 
-    // تأكد من أن `this.hashtagControl.value` مصفوفة لتجنب الأخطاء
-    if (Array.isArray(this.hashtagControl.value)) {
-      alert(`Submitted Hashtags: ${this.hashtagControl.value.join(', ')}`);
-    } else {
-      console.error('Invalid hashtag format');
-    }
+    // if (Array.isArray(this.hashtagControl.value)) {
+    //   alert(`Submitted Hashtags: ${this.hashtagControl.value.join(', ')}`);
+    // } else {
+    //   console.error('Invalid hashtag format');
+    // }
   }
 
   onDurationChange(): void {
@@ -342,5 +340,8 @@ export class CreateNewCampaignComponent {
 
   trackByFn(index: number, item: any): number {
     return index;
+  }
+  selectTab(tab: string) {
+    this.selectedTab = tab;
   }
 }

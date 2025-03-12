@@ -6,8 +6,8 @@
 </section>
 <section class="form p-3 d-md-block d-none">
   <div class="container rounded-3 bg-white p-0">
-    <p-tabs>
-      <p-tablist>
+    <!-- <p-tabs>
+      <p-tablist class="custom-tabs">
         <p-tab
           (click)="selectTab(0)"
           [ngClass]="{ active: selectedTab2 === '0' }"
@@ -62,11 +62,12 @@
                 </mat-chip-grid>
 
                 <input
-                  placeholder="New hashtag..."
+                  placeholder="Ex. #HoustonTexasCoffee"
                   [matChipInputFor]="hashtagChipGrid"
                   (matChipInputTokenEnd)="addHashtag($event)"
                 />
               </mat-form-field>
+              <small>Less than 500 characters</small>
             </div>
 
             <p class="fw-bold">
@@ -483,7 +484,540 @@
           </form>
         </p-tabpanel>
       </p-tabpanels>
-    </p-tabs>
+    </p-tabs> -->
+    <div
+      class="tabs-container"
+      [ngClass]="{
+        active: true,
+        'hashtag-tab': selectedTab === 'hashtag',
+        'phrase-tab': selectedTab === 'phrase',
+        'mention-tab': selectedTab === 'mention'
+      }"
+    >
+      <div
+        class="tab"
+        [ngClass]="{ active: selectedTab === 'hashtag' }"
+        (click)="selectTab('hashtag')"
+      >
+        #hashtag campaign
+      </div>
+
+      <div
+        class="tab"
+        [ngClass]="{ active: selectedTab === 'phrase' }"
+        (click)="selectTab('phrase')"
+      >
+        Phrase campaign
+      </div>
+
+      <div
+        class="tab"
+        [ngClass]="{ active: selectedTab === 'mention' }"
+        (click)="selectTab('mention')"
+      >
+        &#64;campaign
+      </div>
+    </div>
+
+    <div class="tab-content">
+      <ng-container *ngIf="selectedTab === 'hashtag'">
+        <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+          <div class="py-3 d-flex flex-column">
+            <p class="fw-bold">Campaign Name</p>
+            <input
+              id="hashtag"
+              formControlName="name"
+              placeholder="Enter Name"
+              maxlength="50"
+            />
+          </div>
+
+          <div class="py-3 d-flex flex-column">
+            <p>Type in the #hashtag you want discovered</p>
+            <mat-form-field class="example-form-field">
+              <mat-label class="py-3"></mat-label>
+              <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                <mat-chip-row
+                  *ngFor="
+                    let hashtag of hashtagControl.value || [];
+                    trackBy: trackByFn
+                  "
+                  (removed)="removeHashtag(hashtag)"
+                >
+                  {{ hashtag }}
+                  <button
+                    matChipRemove
+                    aria-label="'remove hashtag ' + hashtag"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+              </mat-chip-grid>
+
+              <input
+                placeholder="Ex. #HoustonTexasCoffee"
+                [matChipInputFor]="hashtagChipGrid"
+                (matChipInputTokenEnd)="addHashtag($event)"
+              />
+            </mat-form-field>
+            <small>Less than 500 characters</small>
+          </div>
+
+          <p class="fw-bold">
+            What action do you want to take place when the phrase is discovered?
+          </p>
+          <div class="radio-group py-3">
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLike"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto like</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Reply / comment only</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLikeReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Like & Reply</span>
+            </label>
+          </div>
+
+          <div class="py-3 d-flex flex-column" *ngIf="showCommentInput">
+            <p class="fw-bold">
+              What comment reply do you want automatically posted?
+            </p>
+            <input
+              id="comment"
+              formControlName="comment"
+              placeholder="Ex. We love country music too!"
+              maxlength="500"
+            />
+            <small class="py-1">Less than 500 characters</small>
+            <div
+              *ngIf="
+                hashtagForm.get('comment')?.invalid &&
+                (hashtagForm.get('comment')?.touched ||
+                  hashtagForm.get('comment')?.dirty)
+              "
+            >
+              <small class="text-danger">
+                Comment is required and should be less than 500 characters.
+              </small>
+            </div>
+          </div>
+
+          <div class="d-flex gap-5 justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <p class="fw-bold">Duration</p>
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="untilCancelled"
+                  (change)="onDurationChange()"
+                />
+                Run until cancelled
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="stopDate"
+                  (change)="onDurationChange()"
+                />
+                Choose stop date
+              </label>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column">
+            <p
+              class="fw-bold"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            >
+              Stop Date
+            </p>
+            <input
+              type="date"
+              class="w-25"
+              formControlName="end_date"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            />
+          </div>
+
+          <hr />
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <button type="button" (click)="saveDraft()" class="save-btn p-2">
+              Save as draft
+            </button>
+            <button
+              type="submit"
+              class="p-2 draft-btn"
+              [disabled]="hashtagForm.invalid"
+            >
+              <img src="../../../../assets/overview/rocket-02.png" alt="" />
+              Save & Launch
+            </button>
+          </div>
+        </form>
+      </ng-container>
+
+      <ng-container *ngIf="selectedTab === 'phrase'">
+        <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+          <div class="py-3 d-flex flex-column">
+            <p class="fw-bold">Campaign Name</p>
+            <input
+              id="hashtag"
+              formControlName="name"
+              placeholder="Enter Name"
+              maxlength="50"
+            />
+          </div>
+          <div class="py-3 d-flex flex-column">
+            <p class="fw-bold">Type in the exact phase you want discovered</p>
+            <mat-form-field class="example-form-field">
+              <mat-label class="py-3"></mat-label>
+              <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                <mat-chip-row
+                  *ngFor="
+                    let hashtag of hashtagControl.value || [];
+                    trackBy: trackByFn
+                  "
+                  (removed)="removeHashtag(hashtag)"
+                >
+                  {{ hashtag }}
+                  <button
+                    matChipRemove
+                    aria-label="'remove hashtag ' + hashtag"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+              </mat-chip-grid>
+
+              <input
+                placeholder="New hashtag..."
+                [matChipInputFor]="hashtagChipGrid"
+                (matChipInputTokenEnd)="addHashtag($event)"
+              />
+            </mat-form-field>
+          </div>
+
+          <p class="fw-bold">
+            What action do you want to take place when the phrase is discovered?
+          </p>
+          <div class="radio-group py-3">
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLike"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto like</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Reply / comment only</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLikeReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Like & Reply</span>
+            </label>
+          </div>
+
+          <div class="py-3 d-flex flex-column" *ngIf="showCommentInput">
+            <p class="fw-bold">
+              What comment reply do you want automatically posted?
+            </p>
+            <input
+              id="comment"
+              formControlName="comments"
+              placeholder="Ex. We love country music too!"
+              maxlength="500"
+            />
+            <small class="py-1">Less than 500 characters</small>
+            <div
+              *ngIf="
+                hashtagForm.get('comments')?.invalid &&
+                (hashtagForm.get('comments')?.touched ||
+                  hashtagForm.get('comments')?.dirty)
+              "
+            >
+              <small class="text-danger"
+                >Comment is required and should be less than 500
+                characters.</small
+              >
+            </div>
+          </div>
+
+          <div class="d-flex gap-5 justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <p class="fw-bold">Duration</p>
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="untilCancelled"
+                  (change)="onDurationChange()"
+                />
+                Run until cancelled
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="stopDate"
+                  (change)="onDurationChange()"
+                />
+                Choose stop date
+              </label>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column">
+            <p
+              class="fw-bold"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            >
+              Stop Date
+            </p>
+            <input
+              type="date"
+              class="w-25"
+              formControlName="end_date"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            />
+          </div>
+
+          <hr />
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <button type="button" (click)="saveDraft()" class="save-btn p-2">
+              Save as draft
+            </button>
+            <button
+              type="submit"
+              class="p-2 draft-btn"
+              [disabled]="hashtagForm.invalid"
+            >
+              <img src="../../../../assets/overview/rocket-02.png" alt="" />
+              Save & Launch
+            </button>
+          </div>
+        </form>
+      </ng-container>
+
+      <ng-container *ngIf="selectedTab === 'mention'">
+        <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
+          <div class="py-3 d-flex flex-column">
+            <p class="fw-bold">Campaign Name</p>
+            <input
+              id="hashtag"
+              formControlName="name"
+              placeholder="Enter Name"
+              maxlength="50"
+            />
+          </div>
+          <div class="py-3 d-flex flex-column">
+            <p class="fw-bold">
+              Type in the &#64;username(s) you want to engage with
+            </p>
+            <mat-form-field class="example-form-field">
+              <mat-label class="py-3"></mat-label>
+              <mat-chip-grid #hashtagChipGrid aria-label="Enter hashtags">
+                <mat-chip-row
+                  *ngFor="
+                    let hashtag of hashtagControl.value || [];
+                    trackBy: trackByFn
+                  "
+                  (removed)="removeHashtag(hashtag)"
+                >
+                  {{ hashtag }}
+                  <button
+                    matChipRemove
+                    aria-label="'remove hashtag ' + hashtag"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+              </mat-chip-grid>
+
+              <input
+                placeholder="New hashtag..."
+                [matChipInputFor]="hashtagChipGrid"
+                (matChipInputTokenEnd)="addHashtag($event)"
+              />
+            </mat-form-field>
+            <div
+              *ngIf="
+                hashtagForm.get('hashtag')?.invalid &&
+                (hashtagForm.get('hashtag')?.touched ||
+                  hashtagForm.get('hashtag')?.dirty)
+              "
+            >
+              <small class="text-danger"
+                >Hashtag is required and should be less than 500
+                characters.</small
+              >
+            </div>
+          </div>
+
+          <p class="fw-bold">
+            What action do you want to take place when the phrase is discovered?
+          </p>
+          <div class="radio-group py-3">
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLike"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto like</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Reply / comment only</span>
+            </label>
+            <label class="styled-radio">
+              <input
+                type="radio"
+                formControlName="action"
+                value="autoLikeReply"
+                (change)="onActionChange()"
+              />
+              <span class="custom-radio-box"></span>
+              <span class="custom-radio-label">Auto Like & Reply</span>
+            </label>
+          </div>
+
+          <div class="py-3 d-flex flex-column" *ngIf="showCommentInput">
+            <p class="fw-bold">
+              What comment reply do you want automatically posted?
+            </p>
+            <input
+              id="comment"
+              formControlName="comment"
+              placeholder="Ex. We love country music too!"
+              maxlength="500"
+            />
+            <small class="py-1">Less than 500 characters</small>
+            <div
+              *ngIf="
+                hashtagForm.get('comment')?.invalid &&
+                (hashtagForm.get('comment')?.touched ||
+                  hashtagForm.get('comment')?.dirty)
+              "
+            >
+              <small class="text-danger"
+                >Comment is required and should be less than 500
+                characters.</small
+              >
+            </div>
+          </div>
+
+          <div class="d-flex gap-5 justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <p class="fw-bold">Duration</p>
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="untilCancelled"
+                  (change)="onDurationChange()"
+                />
+                Run until cancelled
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  formControlName="duration"
+                  value="stopDate"
+                  (change)="onDurationChange()"
+                />
+                Choose stop date
+              </label>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column">
+            <p
+              class="fw-bold"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            >
+              Stop Date
+            </p>
+            <input
+              type="date"
+              class="w-25"
+              formControlName="end_date"
+              *ngIf="hashtagForm.value.duration === 'stopDate'"
+            />
+          </div>
+
+          <hr />
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <button type="button" (click)="saveDraft()" class="save-btn p-2">
+              Save as draft
+            </button>
+            <button
+              type="submit"
+              class="p-2 draft-btn"
+              [disabled]="hashtagForm.invalid"
+            >
+              <img src="../../../../assets/overview/rocket-02.png" alt="" />
+              Save & Launch
+            </button>
+          </div>
+        </form>
+      </ng-container>
+    </div>
   </div>
 </section>
 
@@ -495,7 +1029,7 @@
       <option value="2">&#64; Campaign</option>
     </select>
 
-    <div *ngIf="selectedTab === '0'">
+    <div *ngIf="selectedTab2 === '0'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Campaign Name</p>
@@ -527,7 +1061,7 @@
             </mat-chip-grid>
 
             <input
-              placeholder="New hashtag..."
+              placeholder="Ex. #HoustonTexasCoffee"
               [matChipInputFor]="hashtagChipGrid"
               (matChipInputTokenEnd)="addHashtag($event)"
             />
@@ -647,7 +1181,7 @@
         </div>
       </form>
     </div>
-    <div *ngIf="selectedTab === '1'">
+    <div *ngIf="selectedTab2 === '1'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Campaign Name</p>
@@ -801,7 +1335,7 @@
         </div>
       </form>
     </div>
-    <div *ngIf="selectedTab === '2'">
+    <div *ngIf="selectedTab2 === '2'">
       <form [formGroup]="hashtagForm" (ngSubmit)="onSubmit()">
         <div class="py-3 d-flex flex-column">
           <p class="fw-bold">Campaign Name</p>

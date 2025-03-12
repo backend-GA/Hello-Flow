@@ -42,6 +42,7 @@ export class ActiveCampaignsComponent {
     private fb: FormBuilder
   ) {
     this.campaignForm = this.fb.group({
+      name: ['', Validators.required],
       search_terms: ['', [Validators.required, Validators.maxLength(500)]], // Search terms array or string
       is_active: [false, Validators.required], // Boolean for active status
       is_draft: [true, Validators.required], // Boolean for draft status
@@ -178,6 +179,7 @@ export class ActiveCampaignsComponent {
         : '';
 
       this.campaignForm.patchValue({
+        name: campaign.name,
         search_terms: campaign.search_terms
           ? campaign.search_terms.join(' ')
           : '',

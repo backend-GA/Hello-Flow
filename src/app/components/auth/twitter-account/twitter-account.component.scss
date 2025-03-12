@@ -6,7 +6,7 @@
                     text-decoration: none;
                     outline: none;
                     background-color: #004E4C;
-                    color: white;
+                    color: white !important;
                     font-weight: 400;
                     border: none;
                     border-radius: 8px;
@@ -23,5 +23,24 @@
                 }
             }
         }
+    }
+}
+
+.btu-tw {
+    background-color: #002726;
+    color: white !important;
+    width: 212px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+
+    a {
+        color: white;
     }
 }

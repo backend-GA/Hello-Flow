@@ -1,9 +1,11 @@
 .p-tablist-tab-list {
-    justify-content: space-between !important;
-    align-items: center !important;
-    display: flex !important;
-    gap: 320px;
+    // justify-content: space-between !important;
+    // align-items: center !important;
+    // display: flex !important;
+    // gap: 320px;
 }
+
+
 
 .active {
     background-color: #002726 !important;
@@ -188,4 +190,60 @@ label {
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
 
+}
+
+.tabs-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #f8f9fa;
+    // border-radius: 8px;
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #6c757d;
+    background-color: white;
+    border: 1px solid #EAECF0;
+    border-top: none;
+    font-size: 16px;
+    font-family: 'Inter';
+    font-weight: 500;
+}
+
+.tab:hover {
+    background-color: #e9ecef;
+}
+
+.active {
+    background-color: #002d2d;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+/* التاب الأول - الهاشتاج (hashtag) */
+.hashtag-tab {
+    border-top-left-radius: 8px;
+}
+
+/* التاب الثاني - بدون بوردر */
+.phrase-tab {
+    border-radius: 0;
+}
+
+/* التاب الثالث - المنشن (mention) */
+.mention-tab {
+    border-top-right-radius: 8px;
+}
+
+.tab-content {
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-top: none;
 }
