@@ -108,12 +108,19 @@ export class OverviewComponent implements OnInit {
             label: 'Likes',
             backgroundColor: documentStyle.getPropertyValue('--p-emerald-950'),
             data: this.labels.map((month) => this.months[month]?.likes || 0),
+            borderRadius: 8,
           },
           {
             type: 'bar',
             label: 'Comments',
             backgroundColor: documentStyle.getPropertyValue('--p-slate-200'),
             data: this.labels.map((month) => this.months[month]?.comments || 0),
+            borderRadius: {
+              topLeft: 8,
+              topRight: 8,
+              bottomLeft: 0,
+              bottomRight: 0,
+            },
           },
           {
             type: 'line',
@@ -142,8 +149,7 @@ export class OverviewComponent implements OnInit {
               color: documentStyle.getPropertyValue('--p-text-muted-color'),
             },
             grid: {
-              color: documentStyle.getPropertyValue('--p-content-border-color'),
-              drawBorder: false,
+              display: false, // إخفاء الخطوط العمودية فقط
             },
           },
           y: {
@@ -152,6 +158,7 @@ export class OverviewComponent implements OnInit {
               color: documentStyle.getPropertyValue('--p-text-muted-color'),
             },
             grid: {
+              display: true, // تبقى الخطوط الأفقية ظاهرة
               color: documentStyle.getPropertyValue('--p-content-border-color'),
               drawBorder: false,
             },
@@ -185,6 +192,21 @@ export class OverviewComponent implements OnInit {
     });
   }
 
+  // getSearchCampaigns() {
+  //   const accountId = Number(this.cookieService.get('account_id'));
+  //   if (!accountId) return console.error('Account ID is missing or invalid.');
+
+  //   this.CampaignsService.getSearchCam(accountId).subscribe({
+  //     next: (response) => {
+  //       this.campaigns = response.campaigns || [];
+  //       this.months = response.months || {};
+  //       if (this.campaigns.length) {
+  //         this.selectedCampaign = this.campaigns[0];
+  //         this.campaignID = this.selectedCampaign.id;
+  //       }
+  //     },
+  //   });
+  // }
   getSearchCampaigns() {
     const accountId = Number(this.cookieService.get('account_id'));
     if (!accountId) return console.error('Account ID is missing or invalid.');
@@ -193,11 +215,15 @@ export class OverviewComponent implements OnInit {
       next: (response) => {
         this.campaigns = response.campaigns || [];
         this.months = response.months || {};
+
         if (this.campaigns.length) {
           this.selectedCampaign = this.campaigns[0];
           this.campaignID = this.selectedCampaign.id;
+
+          this.onCampaignSelect(this.selectedCampaign);
         }
       },
+      error: (err) => console.error('Error fetching campaigns:', err),
     });
   }
 
