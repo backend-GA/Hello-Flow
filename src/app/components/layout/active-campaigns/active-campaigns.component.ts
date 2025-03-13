@@ -215,6 +215,7 @@ export class ActiveCampaignsComponent {
   submitCampaignForm(): void {
     if (this.campaignForm.valid) {
       const payload = {
+        name: this.campaignForm.value.name, // تأكد أن الاسم فقط هو الذي يتم إرساله
         ...this.campaignForm.value,
         search_terms: this.searchTermsList, // Ensure search_terms is passed as an array
       };
@@ -241,5 +242,8 @@ export class ActiveCampaignsComponent {
   // Close the edit dialog
   closeDialog(): void {
     this.displayEditDialog = false;
+  }
+  trackById(index: number, item: any): number {
+    return item.id;
   }
 }

@@ -127,3 +127,14 @@ label {
     display: flex;
     justify-content: space-between;
 }
+
+.full-width-border {
+    position: absolute;
+    top: 0;
+    /* يظهر أعلى الأيقونات */
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ccc;
+    /* لون الخط */
+}
